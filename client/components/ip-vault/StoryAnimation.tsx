@@ -77,7 +77,7 @@ export default function StoryAnimation({
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
     // Owner walks to IPFS carrying doc
     tl.to(ownerRef.current, { left: "30%", duration: 1.0 })
-      .to(docRef.current, { left: "30%", duration: 1.0 }, "<")
+      .to(docRef.current, { left: "30%", xPercent: -50, yPercent: -50, duration: 1.0 }, "<")
       // Document stored on IPFS (fade into storage)
       .to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 })
       .to(docRef.current, { opacity: 0, duration: 0.25 })
