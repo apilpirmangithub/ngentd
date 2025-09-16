@@ -11,7 +11,11 @@ export const metadata: Metadata = {
   title: "IP Vault — Cara Kerja",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className="dark">
       <body className="bg-background text-foreground min-h-dvh flex flex-col">
@@ -56,10 +60,16 @@ function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition">
+          <a
+            href="#how-it-works"
+            className="text-muted-foreground hover:text-foreground transition"
+          >
             Cara Kerja
           </a>
-          <a href="#walkthrough" className="text-muted-foreground hover:text-foreground transition inline-flex items-center gap-2">
+          <a
+            href="#walkthrough"
+            className="text-muted-foreground hover:text-foreground transition inline-flex items-center gap-2"
+          >
             <PlayCircle className="size-4" /> Walkthrough
           </a>
         </nav>
@@ -73,9 +83,14 @@ function Footer() {
     <footer className="border-t border-border/60">
       <div className="container py-8 text-sm text-muted-foreground">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p>© {new Date().getFullYear()} IP Vault. Semua hak cipta dilindungi.</p>
+          <p>
+            © {new Date().getFullYear()} IP Vault. Semua hak cipta dilindungi.
+          </p>
           <div className="flex items-center gap-4">
-            <a href="#how-it-works" className="hover:text-foreground transition">
+            <a
+              href="#how-it-works"
+              className="hover:text-foreground transition"
+            >
               Cara Kerja
             </a>
             <a href="#walkthrough" className="hover:text-foreground transition">

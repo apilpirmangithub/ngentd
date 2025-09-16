@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import TabbedFlow from '@/components/ip-vault/TabbedFlow';
+import TabbedFlow from "@/components/ip-vault/TabbedFlow";
 
 export default function Page() {
   return (

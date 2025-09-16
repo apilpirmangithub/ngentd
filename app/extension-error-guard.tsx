@@ -1,22 +1,25 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 export default function ExtensionErrorGuard() {
   useEffect(() => {
     const isExtensionError = (err: unknown) => {
-      const msg = typeof err === 'string' ? err : (err as any)?.message || '';
-      const stack = (err as any)?.stack || '';
+      const msg = typeof err === "string" ? err : (err as any)?.message || "";
+      const stack = (err as any)?.stack || "";
       return (
-        msg.includes('Talisman extension') ||
-        msg.includes('chrome-extension://') ||
-        stack.includes('chrome-extension://')
+        msg.includes("Talisman extension") ||
+        msg.includes("chrome-extension://") ||
+        stack.includes("chrome-extension://")
       );
     };
 
     const onError = (event: ErrorEvent) => {
-      const filename = (event as any).filename || '';
-      if (filename.startsWith('chrome-extension://') || isExtensionError(event.error)) {
+      const filename = (event as any).filename || "";
+      if (
+        filename.startsWith("chrome-extension://") ||
+        isExtensionError(event.error)
+      ) {
         event.preventDefault();
         event.stopImmediatePropagation();
       }
@@ -29,11 +32,11 @@ export default function ExtensionErrorGuard() {
       }
     };
 
-    window.addEventListener('error', onError, true);
-    window.addEventListener('unhandledrejection', onRejection, true);
+    window.addEventListener("error", onError, true);
+    window.addEventListener("unhandledrejection", onRejection, true);
     return () => {
-      window.removeEventListener('error', onError, true);
-      window.removeEventListener('unhandledrejection', onRejection, true);
+      window.removeEventListener("error", onError, true);
+      window.removeEventListener("unhandledrejection", onRejection, true);
     };
   }, []);
 

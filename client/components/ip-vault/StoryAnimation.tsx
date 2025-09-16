@@ -352,7 +352,9 @@ export default function StoryAnimation({
         {/* Debug center dot */}
         <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-2 rounded-full bg-red-500" />
         {/* Debug label */}
-        <div className="absolute left-2 top-2 text-[10px] text-white/70">scene mounted</div>
+        <div className="absolute left-2 top-2 text-[10px] text-white/70">
+          scene mounted
+        </div>
         {/* IPFS node */}
         <div
           className="absolute transform-gpu"
@@ -414,7 +416,11 @@ export default function StoryAnimation({
         <div
           ref={ownerRef}
           className="absolute transform-gpu"
-          style={{ left: positions.owner, top: "62%", transform: "translate(-50%,-50%)" }}
+          style={{
+            left: positions.owner,
+            top: "62%",
+            transform: "translate(-50%,-50%)",
+          }}
         >
           <div className="flex size-14 items-center justify-center rounded-full bg-blue-500">
             <User2 className="size-7" />
@@ -426,7 +432,11 @@ export default function StoryAnimation({
         <div
           ref={buyerRef}
           className="absolute transform-gpu"
-          style={{ left: positions.buyer, top: "62%", transform: "translate(-50%,-50%)" }}
+          style={{
+            left: positions.buyer,
+            top: "62%",
+            transform: "translate(-50%,-50%)",
+          }}
         >
           <div className="flex size-14 items-center justify-center rounded-full bg-white text-black">
             <User2 className="size-7" />
@@ -438,7 +448,11 @@ export default function StoryAnimation({
         <div
           ref={docRef}
           role="button"
-          style={{ left: positions.owner, top: "44%", transform: "translate(-50%,-50%)" }}
+          style={{
+            left: positions.owner,
+            top: "44%",
+            transform: "translate(-50%,-50%)",
+          }}
           onClick={() => {
             gsap.to(docRef.current, {
               left: positions.ipfs,
