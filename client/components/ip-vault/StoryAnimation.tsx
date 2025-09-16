@@ -96,6 +96,7 @@ export default function StoryAnimation({
       // Buyer approaches vault, license check, door opens, doc fetched from IPFS and delivered
       tl.to(buyerRef.current, { left: "56%", duration: 1.1, delay: 0.2 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
         // doc appears from IPFS side and moves to buyer via vault gate
         .to(docRef.current, {
@@ -123,6 +124,7 @@ export default function StoryAnimation({
         .to(attBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .to(buyerRef.current, { left: "56%", duration: 0.9 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
+        .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
         .to(docRef.current, {
           opacity: 1,
@@ -360,7 +362,7 @@ export default function StoryAnimation({
                 );
               }, 900);
               // deliver doc from IPFS to buyer after a short delay
-              setTimeout(() => performDeliver(), 1300);
+              setTimeout(() => performDeliver(), 2400);
             } catch (e) {
               // ignore
             }
