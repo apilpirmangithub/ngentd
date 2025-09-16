@@ -7,6 +7,7 @@ import {
   User2,
   FileText,
   MessageSquare,
+  Database,
 } from "lucide-react";
 
 export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
@@ -22,9 +23,11 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
   const attBadgeRef = useRef<HTMLDivElement | null>(null);
   const talkOwnerRef = useRef<HTMLDivElement | null>(null);
   const talkBuyerRef = useRef<HTMLDivElement | null>(null);
+  const ipfsBadgeRef = useRef<HTMLDivElement | null>(null);
 
   const positions = {
     owner: "12%",
+    ipfs: "35%",
     vault: "50%",
     tee: "70%",
     buyer: "88%",
@@ -55,6 +58,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
     });
     gsap.set(licBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
+    gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(doorRef.current, { width: "100%" }); // door closed
     gsap.set(lockRef.current, { scale: 1, opacity: 1, color: "#0f172a" });
     gsap.set([talkOwnerRef.current, talkBuyerRef.current], {
@@ -65,34 +69,35 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
 
   const playMain = () => {
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-    // Owner walks to Vault carrying doc
-    tl.to(ownerRef.current, { left: "45%", duration: 1.2 })
-      .to(docRef.current, { left: "47%", duration: 1.2 }, "<")
-      // Document goes inside vault
+    // Owner walks to IPFS carrying doc
+    tl.to(ownerRef.current, { left: "30%", duration: 1.0 })
+      .to(docRef.current, { left: "32%", duration: 1.0 }, "<")
+      // Document stored on IPFS (disappear into storage)
       .to(docRef.current, {
-        left: positions.vault,
+        left: positions.ipfs,
         top: "52%",
-        scale: 0.7,
-        duration: 0.6,
+        scale: 0.85,
+        duration: 0.5,
       })
-      .to(doorRef.current, { width: "0%", duration: 0.35 }, "openDoor")
-      .to(docRef.current, { opacity: 0, duration: 0.35 }, "openDoor+=0.05")
-      .to(doorRef.current, { width: "100%", duration: 0.35 })
+      .to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 }, "-=0.1")
+      .to(docRef.current, { opacity: 0, duration: 0.25 })
+      // Key saved in Vault (lock pulse)
       .to(
         lockRef.current,
         { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 },
-        "-=0.15",
+        "+=0.1",
       );
 
     if (mode === "vault") {
-      // Buyer approaches vault, license check, door opens, doc out
+      // Buyer approaches vault, license check, door opens, doc fetched from IPFS and delivered
       tl.to(buyerRef.current, { left: "56%", duration: 1.1, delay: 0.2 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
+        // doc appears from IPFS side and moves to buyer via vault gate
         .to(docRef.current, {
           opacity: 1,
-          scale: 0.7,
-          left: positions.vault,
+          scale: 0.85,
+          left: positions.ipfs,
           top: "52%",
           duration: 0,
         })
@@ -100,11 +105,11 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
           left: "56%",
           top: "62%",
           scale: 1,
-          duration: 0.6,
+          duration: 0.7,
         })
         .to(doorRef.current, { width: "100%", duration: 0.35 });
     } else {
-      // TEE path: buyer goes to safe room first
+      // TEE path: buyer goes to safe room first, then license, then fetch through vault
       tl.to(buyerRef.current, {
         left: positions.tee,
         duration: 1.0,
@@ -116,8 +121,8 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         .to(doorRef.current, { width: "0%", duration: 0.35 })
         .to(docRef.current, {
           opacity: 1,
-          scale: 0.7,
-          left: positions.vault,
+          scale: 0.85,
+          left: positions.ipfs,
           top: "52%",
           duration: 0,
         })
@@ -125,7 +130,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
           left: "56%",
           top: "62%",
           scale: 1,
-          duration: 0.6,
+          duration: 0.7,
         })
         .to(doorRef.current, { width: "100%", duration: 0.35 });
     }
@@ -191,6 +196,16 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         ref={sceneRef}
         className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/10 bg-black"
       >
+        {/* IPFS node */}
+        <div
+          className="absolute"
+          style={{ left: positions.ipfs, top: "22%", transform: "translateX(-50%)" }}
+        >
+          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/20 bg-sky-500/20 px-3 py-1 text-xs text-sky-200">
+            <Database className="size-3" /> IPFS Storage
+          </div>
+        </div>
+
         {/* Vault */}
         <div
           ref={vaultRef}
@@ -208,7 +223,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
             ref={lockRef}
             className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-yellow-300/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow"
           >
-            Locked
+            Key in Vault
           </div>
         </div>
 
@@ -270,6 +285,15 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
             <ShieldCheck className="size-3" /> Attestation OK
+          </div>
+        </div>
+        <div
+          ref={ipfsBadgeRef}
+          className="absolute"
+          style={{ left: positions.ipfs, top: "42%", transform: "translateX(-50%)" }}
+        >
+          <div className="inline-flex items-center gap-1 rounded-md bg-sky-500/20 px-2 py-1 text-sky-200 text-xs">
+            <ShieldCheck className="size-3" /> Stored on IPFS
           </div>
         </div>
       </div>
