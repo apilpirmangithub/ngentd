@@ -73,73 +73,8 @@ export default function Index() {
   const progress = useMemo(() => (active + 1) / STEPS.length, [active]);
 
   return (
-    <div className="relative">
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border/60">
-        <div className="absolute inset-0 -z-10">
-          <GridBackground />
-        </div>
-        <div className="container py-16 md:py-24">
-          <div className="mx-auto max-w-3xl text-center space-y-6">
-            <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/30">IP</span>
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">IP Vault — Cara Kerja (Visual & Animasi)</h1>
-            <p className="text-base md:text-lg text-muted-foreground">Animasi sederhana untuk memahami alur: dari upload → enkripsi → kunci disimpan → akses terkontrol.</p>
-
-            <AnimatedDiagram active={active} />
-
-            <div className="mx-auto mt-6 max-w-2xl">
-              <ProgressBar progress={progress} />
-            </div>
-
-            <div className="pt-2">
-              <FlowControls
-                onPrev={() => setActive((s) => Math.max(0, s - 1))}
-                onNext={() => setActive((s) => Math.min(STEPS.length - 1, s + 1))}
-                onTogglePlay={() => setPlaying((p) => !p)}
-                isPlaying={playing}
-                disablePrev={active === 0}
-                disableNext={active === STEPS.length - 1}
-              />
-              <p className="mt-3 text-xs text-muted-foreground">Tip: tekan Play untuk melihat animasi langkah demi langkah</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section id="how-it-works" className="container py-12 md:py-16">
-        {/* Flow line (animated) */}
-        <div className="relative mx-auto mb-10 w-full max-w-5xl">
-          <motion.svg
-            viewBox="0 0 1000 4"
-            className="h-1 w-full text-primary"
-            initial={false}
-          >
-            <motion.path
-              d="M 0 2 H 1000"
-              stroke="currentColor"
-              strokeWidth="4"
-              strokeLinecap="round"
-              style={{ pathLength: progress }}
-              className="opacity-80"
-            />
-          </motion.svg>
-        </div>
-
-        <div className="grid gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {STEPS.map((step, i) => (
-            <FlowStepCard
-              key={i}
-              index={i + 1}
-              title={step.title}
-              description={step.description}
-              icon={step.icon}
-              active={i === active}
-              onClick={() => setActive(i)}
-            />
-          ))}
-        </div>
-      </section>
+    <div className="container py-12">
+      <TabbedFlow />
     </div>
   );
 }
