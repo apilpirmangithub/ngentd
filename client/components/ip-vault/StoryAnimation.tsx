@@ -102,6 +102,8 @@ export default function StoryAnimation({
       // Document stored on IPFS (fade into storage)
       .to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 })
       .to(docRef.current, { opacity: 0, duration: 0.25 })
+      // trigger upload split animation (file -> ipfs -> lock slides to vault)
+      .call(performUploadSplit)
       // Key saved in Vault (lock pulse)
       .to(
         lockRef.current,
