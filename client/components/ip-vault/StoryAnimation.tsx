@@ -70,6 +70,7 @@ export default function StoryAnimation({
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(doorRef.current, { width: "100%" }); // door closed
     gsap.set(lockRef.current, { scale: 1, opacity: 1, color: "#0f172a" });
+    gsap.set(condRef.current, { opacity: 0, y: 10 });
   };
 
   const playMain = () => {
