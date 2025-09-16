@@ -151,6 +151,14 @@ function DemoPanel({ mode, onVisualEvent }: { mode: "vault" | "tee"; onVisualEve
     setStatus(
       "Selesai: file terenkripsi dan diunggah (mock). Simpan kunci ke Vault untuk akses pembeli.",
     );
+    // trigger visual: file to IPFS and key to vault
+    try {
+      onVisualEvent?.("upload");
+      // clear shortly after
+      setTimeout(() => onVisualEvent?.(null), 1500);
+    } catch (e) {
+      // ignore
+    }
   };
 
   const saveKeyToVault = () => {
