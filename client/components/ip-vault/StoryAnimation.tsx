@@ -428,19 +428,6 @@ export default function StoryAnimation({
         <div className="absolute left-2 top-2 text-[10px] text-white/70">
           scene mounted
         </div>
-        {/* IPFS node */}
-        <div
-          className="absolute transform-gpu"
-          style={{
-            left: positions.ipfs,
-            top: "22%",
-            transform: "translateX(-50%)",
-          }}
-        >
-          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
-            <Database className="size-3" /> <span className="ipfs-text">IPFS Storage</span>
-          </div>
-        </div>
 
         {/* Vault */}
         <div
