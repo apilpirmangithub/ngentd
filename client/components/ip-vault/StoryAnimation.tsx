@@ -1,0 +1,137 @@
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { Cpu, Lock, ShieldCheck, User2, FileText } from "lucide-react";
+
+export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
+  const sceneRef = useRef<HTMLDivElement | null>(null);
+  const ownerRef = useRef<HTMLDivElement | null>(null);
+  const buyerRef = useRef<HTMLDivElement | null>(null);
+  const docRef = useRef<HTMLDivElement | null>(null);
+  const vaultRef = useRef<HTMLDivElement | null>(null);
+  const doorRef = useRef<HTMLDivElement | null>(null);
+  const lockRef = useRef<HTMLDivElement | null>(null);
+  const teeRef = useRef<HTMLDivElement | null>(null);
+  const licBadgeRef = useRef<HTMLDivElement | null>(null);
+  const attBadgeRef = useRef<HTMLDivElement | null>(null);
+
+  const positions = {
+    owner: "10%",
+    vault: "50%",
+    tee: "68%",
+    buyer: "86%",
+  } as const;
+
+  const reset = () => {
+    gsap.set(ownerRef.current, { left: positions.owner, top: "56%", xPercent: -50, yPercent: -50, opacity: 1 });
+    gsap.set(docRef.current, { left: positions.owner, top: "42%", xPercent: -50, yPercent: -50, opacity: 1, scale: 1 });
+    gsap.set(buyerRef.current, { left: positions.buyer, top: "56%", xPercent: -50, yPercent: -50, opacity: 1 });
+    gsap.set(licBadgeRef.current, { opacity: 0, y: 10 });
+    gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
+    gsap.set(doorRef.current, { width: "100%" }); // door closed
+    gsap.set(lockRef.current, { scale: 1, opacity: 1, color: "#0f172a" });
+  };
+
+  const play = () => {
+    reset();
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+    // Owner walks to Vault carrying doc
+    tl.to(ownerRef.current, { left: "45%", duration: 1.2 })
+      .to(docRef.current, { left: "47%", duration: 1.2 }, "<")
+      // Document goes inside vault
+      .to(docRef.current, { left: positions.vault, top: "50%", scale: 0.6, duration: 0.6 })
+      .to(doorRef.current, { width: "0%", duration: 0.35 }, "openDoor")
+      .to(docRef.current, { opacity: 0, duration: 0.35 }, "openDoor+=0.05")
+      .to(doorRef.current, { width: "100%", duration: 0.35 })
+      .to(lockRef.current, { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 }, "-=0.15");
+
+    if (mode === "vault") {
+      // Buyer approaches vault, license check, door opens, doc out
+      tl.to(buyerRef.current, { left: "55%", duration: 1.1, delay: 0.2 })
+        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .to(doorRef.current, { width: "0%", duration: 0.35 })
+        .to(docRef.current, { opacity: 1, scale: 0.6, left: positions.vault, top: "50%", duration: 0 })
+        .to(docRef.current, { left: "55%", top: "56%", scale: 0.9, duration: 0.6 })
+        .to(doorRef.current, { width: "100%", duration: 0.35 });
+    } else {
+      // TEE path: buyer goes to safe room first
+      tl.to(buyerRef.current, { left: positions.tee, duration: 1.0, delay: 0.2 })
+        .to(attBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .to(buyerRef.current, { left: "55%", duration: 0.9 })
+        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
+        .to(doorRef.current, { width: "0%", duration: 0.35 })
+        .to(docRef.current, { opacity: 1, scale: 0.6, left: positions.vault, top: "50%", duration: 0 })
+        .to(docRef.current, { left: "55%", top: "56%", scale: 0.9, duration: 0.6 })
+        .to(doorRef.current, { width: "100%", duration: 0.35 });
+    }
+  };
+
+  useEffect(() => {
+    // replay when mode changes
+    play();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
+
+  return (
+    <div className="w-full max-w-5xl">
+      <div className="mb-3 flex items-center gap-3 text-sm text-muted-foreground">
+        <button onClick={play} className="rounded-md bg-white/10 px-3 py-1.5 text-white hover:bg-white/15">Play</button>
+        <span>Walkthrough: {mode === "tee" ? "TEE attestation path" : "Standard license path"}</span>
+      </div>
+      <div ref={sceneRef} className="relative h-64 w-full overflow-hidden rounded-xl border border-white/10 bg-black">
+        {/* Vault */}
+        <div ref={vaultRef} className="absolute left-1/2 top-1/2 h-28 w-40 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-yellow-400 text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)]">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Lock className="size-6" />
+          </div>
+          {/* Door overlay */}
+          <div ref={doorRef} className="absolute left-0 top-0 h-full bg-yellow-500/60" />
+          <div ref={lockRef} className="pointer-events-none absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-yellow-300/90 px-2 py-0.5 text-xs font-semibold text-black shadow">Locked</div>
+        </div>
+
+        {/* Safe room (TEE) */}
+        <div className="absolute" style={{ left: positions.tee, top: "24%", transform: "translateX(-50%)" }}>
+          <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
+            <Cpu className="size-3" /> Safe Room
+          </div>
+        </div>
+
+        {/* Owner */}
+        <div ref={ownerRef} className="absolute">
+          <div className="flex size-12 items-center justify-center rounded-full bg-blue-500">
+            <User2 className="size-6" />
+          </div>
+          <div className="mt-1 text-center text-xs opacity-80">IP Owner</div>
+        </div>
+
+        {/* Buyer */}
+        <div ref={buyerRef} className="absolute">
+          <div className="flex size-12 items-center justify-center rounded-full bg-white text-black">
+            <User2 className="size-6" />
+          </div>
+          <div className="mt-1 text-center text-xs opacity-80">Buyer</div>
+        </div>
+
+        {/* Document */}
+        <div ref={docRef} className="absolute">
+          <div className="flex items-center gap-1 rounded-md bg-white/90 px-2 py-1 text-black shadow">
+            <FileText className="size-4" />
+            <span className="text-xs font-medium">IP Doc</span>
+          </div>
+        </div>
+
+        {/* Badges */}
+        <div ref={licBadgeRef} className="absolute left-1/2 top-[78%] -translate-x-1/2">
+          <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
+            <ShieldCheck className="size-3" /> License OK
+          </div>
+        </div>
+        <div ref={attBadgeRef} className="absolute" style={{ left: positions.tee, top: "44%", transform: "translateX(-50%)" }}>
+          <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
+            <ShieldCheck className="size-3" /> Attestation OK
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
