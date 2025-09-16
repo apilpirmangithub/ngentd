@@ -207,7 +207,11 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         {/* IPFS node */}
         <div
           className="absolute transform-gpu"
-          style={{ left: positions.ipfs, top: "22%", transform: "translateX(-50%)" }}
+          style={{
+            left: positions.ipfs,
+            top: "22%",
+            transform: "translateX(-50%)",
+          }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/20 bg-sky-500/20 px-3 py-1 text-xs text-sky-200">
             <Database className="size-3" /> IPFS Storage
@@ -220,7 +224,11 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
           className="absolute left-1/2 top-1/2 h-40 w-56 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-yellow-400 text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)]"
         >
           <div className="absolute inset-0 flex items-center justify-center">
-            <img src="https://cdn.builder.io/api/v1/image/assets%2F45b51cbd16f1407caa5463a5ffd74106%2F1fb9fcb5c7b44919b4aa9abd73481a1f?format=webp&width=800" alt="Vault" className="h-8 w-8 object-contain" />
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2F45b51cbd16f1407caa5463a5ffd74106%2F1fb9fcb5c7b44919b4aa9abd73481a1f?format=webp&width=800"
+              alt="Vault"
+              className="h-8 w-8 object-contain"
+            />
           </div>
           {/* Door overlay */}
           <div
@@ -298,7 +306,11 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         <div
           ref={ipfsBadgeRef}
           className="absolute transform-gpu"
-          style={{ left: positions.ipfs, top: "42%", transform: "translateX(-50%)" }}
+          style={{
+            left: positions.ipfs,
+            top: "42%",
+            transform: "translateX(-50%)",
+          }}
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-sky-500/20 px-2 py-1 text-sky-200 text-xs">
             <ShieldCheck className="size-3" /> Stored on IPFS
