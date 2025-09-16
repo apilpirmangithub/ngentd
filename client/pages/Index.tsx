@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { FlowStepCard } from "@/components/ip-vault/FlowStepCard";
 import { FlowControls } from "@/components/ip-vault/FlowControls";
+import { DiagramHero } from "@/components/ip-vault/DiagramHero";
 import { UploadCloud, Lock, Database, KeySquare, BadgeCheck, Shuffle, FileCheck } from "lucide-react";
 
 interface Step {
@@ -84,7 +85,9 @@ export default function Index() {
             <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">IP Vault — Cara Kerja (Visual & Animasi)</h1>
             <p className="text-base md:text-lg text-muted-foreground">Animasi sederhana untuk memahami alur: dari upload → enkripsi → kunci disimpan → akses terkontrol.</p>
 
-            <div className="mx-auto max-w-2xl">
+            <DiagramHero active={active} />
+
+            <div className="mx-auto mt-6 max-w-2xl">
               <ProgressBar progress={progress} />
             </div>
 
