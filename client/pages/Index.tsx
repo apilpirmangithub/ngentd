@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { FlowStepCard } from "@/components/ip-vault/FlowStepCard";
-import { FlowControls } from "@/components/ip-vault/FlowControls";
-import { AnimatedDiagram } from "@/components/ip-vault/AnimatedDiagram";
-import { UploadCloud, Lock, Database, KeySquare, BadgeCheck, Shuffle, FileCheck } from "lucide-react";
+import TabbedFlow from "@/components/ip-vault/TabbedFlow";
 
 interface Step {
   title: string;
