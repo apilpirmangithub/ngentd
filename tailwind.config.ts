@@ -65,25 +65,27 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        glow: {
+          from: { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.0)" },
+          to: { boxShadow: "0 10px 30px 0 hsl(var(--primary) / 0.25)" },
+        },
+        "bg-pan": {
+          from: { backgroundPosition: "0% center" },
+          to: { backgroundPosition: "-200% center" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        glow: "glow 0.8s ease-out both",
+        "bg-pan": "bg-pan 8s linear infinite",
       },
     },
   },
