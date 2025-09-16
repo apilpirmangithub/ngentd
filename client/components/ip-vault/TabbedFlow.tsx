@@ -12,7 +12,7 @@ export default function TabbedFlow() {
   }, [type]);
 
   return (
-    <section className="bg-black text-white flex flex-col items-center justify-center min-h-[60vh] p-6 space-y-8 rounded-2xl border border-white/10">
+    <section className="bg-black text-white flex flex-col items-center justify-center min-h-[70vh] p-8 space-y-8 rounded-2xl border border-white/10">
       <h1 className="text-3xl font-bold text-center">IP Vault Flow</h1>
 
       <div className="flex space-x-4">
