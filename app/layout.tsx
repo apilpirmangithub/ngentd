@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Lock, PlayCircle } from "lucide-react";
 import Providers from "./providers";
+import ExtensionErrorGuard from "./extension-error-guard";
 import "../client/global.css";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="dark">
       <body className="bg-background text-foreground min-h-dvh flex flex-col">
         <Header />
+        <ExtensionErrorGuard />
         <main className="flex-1">
           <Providers>{children}</Providers>
         </main>
