@@ -264,6 +264,12 @@ export default function StoryAnimation({
     const ipfsEl = ipfsBadgeRef.current;
     const buyerEl = buyerRef.current;
     if (scene && ipfsEl && buyerEl) {
+      // Ensure IPFS badge is visible and layout is settled
+      gsap.set(ipfsEl, { opacity: 1, y: 0 });
+      // force reflow so measurements are accurate
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      ipfsEl.offsetWidth;
+
       const sceneRect = scene.getBoundingClientRect();
       const ipfsRect = ipfsEl.getBoundingClientRect();
       const buyerRect = buyerEl.getBoundingClientRect();
@@ -272,9 +278,10 @@ export default function StoryAnimation({
       docEl.className =
         "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
       docEl.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"inline-block align-middle mr-1\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg><span class=\"text-xs font-medium\">IP Doc</span>`;
-      Object.assign(docEl.style, { position: "absolute", zIndex: "9999" });
+      Object.assign(docEl.style, { position: "absolute", zIndex: "9999", opacity: "1" });
       scene.appendChild(docEl);
 
+      // Calculate exact centers (accounting for transforms)
       const startX = ipfsRect.left - sceneRect.left + ipfsRect.width / 2;
       const startY = ipfsRect.top - sceneRect.top + ipfsRect.height / 2;
       const endX = buyerRect.left - sceneRect.left + buyerRect.width / 2;
