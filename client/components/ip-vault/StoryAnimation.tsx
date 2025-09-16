@@ -390,8 +390,10 @@ export default function StoryAnimation({
           <div
             ref={lockRef}
             aria-hidden="true"
-            className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow"
-          />
+            className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow inline-flex items-center justify-center"
+          >
+            <Lock className="size-4" />
+          </div>
         </div>
 
         {/* Safe room (TEE) */}
