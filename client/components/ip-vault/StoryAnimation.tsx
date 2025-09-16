@@ -418,7 +418,7 @@ export default function StoryAnimation({
         {/* Badges */}
         <div
           ref={licBadgeRef}
-          className="absolute left-1/2 top-[82%] -translate-x-1/2 transform-gpu"
+          className="absolute left-1/2 top-[76%] -translate-x-1/2 transform-gpu"
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
             <ShieldCheck className="size-3" /> License OK
