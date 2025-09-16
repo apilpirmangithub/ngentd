@@ -391,13 +391,15 @@ export default function StoryAnimation({
             className="absolute left-0 top-0 h-full bg-black/20"
             style={{ width: "100%" }}
           />
-          <div
-            ref={lockRef}
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow inline-flex items-center justify-center"
-          >
-            <Lock className="size-4" />
-          </div>
+        </div>
+
+        {/* Lock (above vault) */}
+        <div
+          ref={lockRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-black shadow z-50 inline-flex items-center justify-center"
+        >
+          <Lock className="size-5" />
         </div>
 
         {/* Safe room (TEE) */}
