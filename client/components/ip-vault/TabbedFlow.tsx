@@ -46,6 +46,7 @@ export default function TabbedFlow() {
   const [type, setType] = useState<"vault" | "tee">("vault");
   const containerRef = useRef<HTMLDivElement | null>(null);
   const introTweenRef = useRef<gsap.core.Tween | null>(null);
+  const [visualEvent, setVisualEvent] = useState<string | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
