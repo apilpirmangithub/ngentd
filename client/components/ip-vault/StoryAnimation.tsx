@@ -241,9 +241,9 @@ export default function StoryAnimation({
               duration: 1.0,
               ease: "power2.out",
               onComplete: () => {
-            // Morph the floating file into the Stored on IPFS badge
+            // Morph the floating file into the IPFS Storage badge
             try {
-              // keep floating file appearance (do not change to 'Stored on IPFS')
+              // keep floating file appearance (do not change to 'IPFS Storage')
               fileEl.className = "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
 
               // small pulse to emphasize morph
@@ -253,11 +253,11 @@ export default function StoryAnimation({
                 { scale: 1, duration: 0.18, ease: 'power1.out' }
               );
 
-              // update the top IPFS Storage badge to show 'Stored on IPFS' and reveal it
+              // update the top IPFS Storage badge to show 'IPFS Storage' and reveal it
               try {
                 const topBadge = scene.querySelector('.ipfs-text')?.parentElement as HTMLElement | null;
                 if (topBadge) {
-                  topBadge.innerHTML = `\n                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><path d=\"M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7\"></path><path d=\"M7 17a4 4 0 0 0 8 0\"></path></svg>\n                    <span class=\"text-xs font-medium\">Stored on IPFS</span>\n                  `;
+                  topBadge.innerHTML = `\n                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><path d=\"M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7\"></path><path d=\"M7 17a4 4 0 0 0 8 0\"></path></svg>\n                    <span class=\"text-xs font-medium\">IPFS Storage</span>\n                  `;
                   gsap.set(topBadge, { opacity: 0, y: 8 });
                   gsap.to(topBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
                 } else {
@@ -633,7 +633,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-sky-500/20 px-2 py-1 text-sky-200 text-xs">
-            <ShieldCheck className="size-3" /> Stored on IPFS
+            <ShieldCheck className="size-3" /> IPFS Storage
           </div>
         </div>
       </div>
