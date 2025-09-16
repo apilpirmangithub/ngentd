@@ -142,7 +142,6 @@ export default function StoryAnimation({
   const play = () => {
     reset();
     const master = gsap.timeline();
-    const master = gsap.timeline();
     master.add(playMain());
     return master;
   };
