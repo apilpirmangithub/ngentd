@@ -98,6 +98,8 @@ export default function StoryAnimation({
           opacity: 1,
           left: positions.ipfs,
           top: "52%",
+          xPercent: -50,
+          yPercent: -50,
           duration: 0,
         })
         .to(docRef.current, {
@@ -122,6 +124,8 @@ export default function StoryAnimation({
           opacity: 1,
           left: positions.ipfs,
           top: "52%",
+          xPercent: -50,
+          yPercent: -50,
           duration: 0,
         })
         .to(docRef.current, {
@@ -440,6 +444,8 @@ export default function StoryAnimation({
             gsap.to(docRef.current, {
               left: positions.ipfs,
               top: "52%",
+              xPercent: -50,
+              yPercent: -50,
               duration: 0.6,
             });
             gsap.to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 });
