@@ -615,12 +615,12 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "42%",
+            top: "22%",
             transform: "translateX(-50%)",
           }}
         >
-          <div className="inline-flex items-center gap-1 rounded-md bg-sky-500/20 px-2 py-1 text-sky-200 text-xs">
-            <ShieldCheck className="size-3" /> IPFS Storage
+          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
+            <Database className="size-3" /> <span className="ipfs-text">IPFS Storage</span>
           </div>
         </div>
       </div>
