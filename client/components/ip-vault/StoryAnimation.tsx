@@ -61,7 +61,7 @@ export default function StoryAnimation({
       xPercent: -50,
       yPercent: -50,
       opacity: 0,
-      pointerEvents: 'none',
+      pointerEvents: "none",
       scale: 1,
     });
     gsap.set(buyerRef.current, {
@@ -77,7 +77,8 @@ export default function StoryAnimation({
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
     try {
       const scene = sceneRef.current;
-      const topBadge = scene?.querySelector('.ipfs-text')?.parentElement as HTMLElement | null;
+      const topBadge = scene?.querySelector(".ipfs-text")
+        ?.parentElement as HTMLElement | null;
       if (topBadge) {
         gsap.set(topBadge, { opacity: 1, y: 0 });
       }
@@ -92,10 +93,14 @@ export default function StoryAnimation({
       backgroundColor: "rgba(255,255,255,0.9)",
     });
     if (lockRef.current) {
-      const unlockEl = lockRef.current.querySelector('.unlock-icon') as HTMLElement | null;
-      const lockElInner = lockRef.current.querySelector('.lock-icon') as HTMLElement | null;
-      unlockEl?.classList.remove('opacity-0');
-      lockElInner?.classList.add('opacity-0');
+      const unlockEl = lockRef.current.querySelector(
+        ".unlock-icon",
+      ) as HTMLElement | null;
+      const lockElInner = lockRef.current.querySelector(
+        ".lock-icon",
+      ) as HTMLElement | null;
+      unlockEl?.classList.remove("opacity-0");
+      lockElInner?.classList.add("opacity-0");
     }
     if (condRef.current) gsap.set(condRef.current, { opacity: 0, y: 10 });
   };
@@ -140,7 +145,7 @@ export default function StoryAnimation({
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
-.call(performDeliver)
+        .call(performDeliver)
         .to(doorRef.current, { width: "100%", duration: 0.35 });
     } else {
       // TEE path: buyer goes to safe room first, then license, then fetch through vault
@@ -194,7 +199,7 @@ export default function StoryAnimation({
     if (scene && ownerRef.current && doc) {
       // hide the owner's static IP File during animated upload
       try {
-        gsap.set(doc, { opacity: 0, pointerEvents: 'none' });
+        gsap.set(doc, { opacity: 0, pointerEvents: "none" });
       } catch (e) {
         /* ignore */
       }
@@ -203,9 +208,10 @@ export default function StoryAnimation({
       const ipfsRect = ipfsBadge?.getBoundingClientRect();
       const vaultRect = vault?.getBoundingClientRect();
       // Prefer the top IPFS text element if present
-      const ipfsTextEl = scene.querySelector('.ipfs-text') as HTMLElement | null;
+      const ipfsTextEl = scene.querySelector(
+        ".ipfs-text",
+      ) as HTMLElement | null;
       const ipfsTextRect = ipfsTextEl?.getBoundingClientRect();
-
 
       const fileEl = document.createElement("div");
       fileEl.className =
@@ -213,7 +219,6 @@ export default function StoryAnimation({
       fileEl.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"inline-block align-middle mr-1\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg><span class=\"text-xs font-medium\">IP File</span>`;
       Object.assign(fileEl.style, { position: "absolute", zIndex: "9999" });
       scene.appendChild(fileEl);
-
 
       const startX = ownerRect.left - sceneRect.left + ownerRect.width / 2;
       const startY = ownerRect.top - sceneRect.top + ownerRect.height / 2;
@@ -232,41 +237,59 @@ export default function StoryAnimation({
           ? ipfsTextRect.top - sceneRect.top + ipfsTextRect.height / 2
           : ipfsRect.top - sceneRect.top + ipfsRect.height / 2;
         gsap.to(fileEl, {
-              left: `${endX}px`,
-              top: `${endY}px`,
-              scale: 0.75,
-              duration: 1.0,
-              ease: "power2.out",
-              onComplete: () => {
+          left: `${endX}px`,
+          top: `${endY}px`,
+          scale: 0.75,
+          duration: 1.0,
+          ease: "power2.out",
+          onComplete: () => {
             // Morph the floating file into the IPFS badge
             try {
               // keep floating file appearance (do not change to 'IPFS')
-              fileEl.className = "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
+              fileEl.className =
+                "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
 
               // small pulse to emphasize morph
               gsap.fromTo(
                 fileEl,
                 { scale: 0.9, opacity: 1 },
-                { scale: 1, duration: 0.18, ease: 'power1.out' }
+                { scale: 1, duration: 0.18, ease: "power1.out" },
               );
 
               // update the top IPFS badge to show 'IPFS' and reveal it
               try {
-                const topBadge = scene.querySelector('.ipfs-text')?.parentElement as HTMLElement | null;
+                const topBadge = scene.querySelector(".ipfs-text")
+                  ?.parentElement as HTMLElement | null;
                 if (topBadge) {
                   topBadge.innerHTML = `\n                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><path d=\"M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7\"></path><path d=\"M7 17a4 4 0 0 0 8 0\"></path></svg>\n                    <span class=\"text-xs font-medium\">IPFS</span>\n                  `;
                   gsap.set(topBadge, { opacity: 0, y: 8 });
-                  gsap.to(topBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
+                  gsap.to(topBadge, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.25,
+                    delay: 0.18,
+                  });
                 } else {
-                  gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
+                  gsap.to(ipfsBadge, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.25,
+                    delay: 0.18,
+                  });
                 }
               } catch (e) {
-                gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
+                gsap.to(ipfsBadge, {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.25,
+                  delay: 0.18,
+                });
               }
 
               // ensure top badge DOM uses the same innerHTML as the ipfsBadgeRef (preserve Database icon)
               try {
-                const top = scene.querySelector('.ipfs-text')?.parentElement as HTMLElement | null;
+                const top = scene.querySelector(".ipfs-text")
+                  ?.parentElement as HTMLElement | null;
                 if (top && ipfsBadgeRef.current) {
                   top.innerHTML = ipfsBadgeRef.current.innerHTML;
                 }
@@ -277,10 +300,14 @@ export default function StoryAnimation({
               // run lock animation as before
               const lockEl = lockRef.current;
               if (lockEl) {
-                const unlockIcon = lockEl.querySelector('.unlock-icon') as HTMLElement | null;
-                const lockIcon = lockEl.querySelector('.lock-icon') as HTMLElement | null;
-                unlockIcon?.classList.remove('opacity-0');
-                lockIcon?.classList.add('opacity-0');
+                const unlockIcon = lockEl.querySelector(
+                  ".unlock-icon",
+                ) as HTMLElement | null;
+                const lockIcon = lockEl.querySelector(
+                  ".lock-icon",
+                ) as HTMLElement | null;
+                unlockIcon?.classList.remove("opacity-0");
+                lockIcon?.classList.add("opacity-0");
 
                 gsap.set(lockEl, {
                   left: `${endX}px`,
@@ -327,11 +354,11 @@ export default function StoryAnimation({
                     if (docRef.current) {
                       gsap.set(docRef.current, {
                         left: positions.owner,
-                        top: '44%',
+                        top: "44%",
                         xPercent: -50,
                         yPercent: -50,
                         opacity: 0,
-                        pointerEvents: 'none',
+                        pointerEvents: "none",
                       });
                     }
                   } catch (e) {
@@ -342,7 +369,12 @@ export default function StoryAnimation({
             } catch (e) {
               // fallback: simply show ipfs badge and remove fileEl
               gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25 });
-              gsap.to(fileEl, { opacity: 0, duration: 0.25, delay: 0.1, onComplete: () => fileEl.remove() });
+              gsap.to(fileEl, {
+                opacity: 0,
+                duration: 0.25,
+                delay: 0.1,
+                onComplete: () => fileEl.remove(),
+              });
             }
           },
         });
@@ -371,10 +403,11 @@ export default function StoryAnimation({
       const temps: HTMLElement[] = [];
       targets.forEach((t) => {
         const r = t.getBoundingClientRect();
-        const temp = document.createElement('div');
-        temp.className = 'pointer-events-none rounded-full bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs inline-flex items-center justify-center shadow';
-        temp.style.position = 'absolute';
-        temp.style.zIndex = '9999';
+        const temp = document.createElement("div");
+        temp.className =
+          "pointer-events-none rounded-full bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs inline-flex items-center justify-center shadow";
+        temp.style.position = "absolute";
+        temp.style.zIndex = "9999";
         temp.innerHTML = '<span class="text-xs">✓</span>';
         scene.appendChild(temp);
         const startX = r.left - sceneRect.left + r.width / 2;
@@ -382,7 +415,7 @@ export default function StoryAnimation({
         Object.assign(temp.style, {
           left: `${startX}px`,
           top: `${startY}px`,
-          transform: 'translate(-50%,-50%)',
+          transform: "translate(-50%,-50%)",
         });
         temps.push(temp);
       });
@@ -397,7 +430,7 @@ export default function StoryAnimation({
             left: `${attRect.left - sceneRect.left + attRect.width / 2}px`,
             top: `${attRect.top - sceneRect.top + attRect.height / 2}px`,
             duration: 0.7,
-            ease: 'power2.inOut',
+            ease: "power2.inOut",
             delay: i * 0.08,
             onComplete: () => {
               gsap.to(attEl, { opacity: 1, y: 0, duration: 0.28 });
@@ -585,7 +618,11 @@ export default function StoryAnimation({
               performUploadSplit();
             } catch (e) {
               // fallback: show ipfs badge
-              gsap.to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 });
+              gsap.to(ipfsBadgeRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 0.3,
+              });
             }
           }}
           className="absolute transform-gpu cursor-pointer"
@@ -682,7 +719,8 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
-            <Database className="size-3" /> <span className="ipfs-text">IPFS</span>
+            <Database className="size-3" />{" "}
+            <span className="ipfs-text">IPFS</span>
           </div>
         </div>
       </div>
