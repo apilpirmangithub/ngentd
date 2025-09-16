@@ -31,6 +31,7 @@ export default function StoryAnimation({
   const licBadgeRef = useRef<HTMLDivElement | null>(null);
   const attBadgeRef = useRef<HTMLDivElement | null>(null);
   const ipfsBadgeRef = useRef<HTMLDivElement | null>(null);
+  const condRef = useRef<HTMLDivElement | null>(null);
   const masterRef = useRef<gsap.core.Timeline | null>(null);
 
   const positions = {
