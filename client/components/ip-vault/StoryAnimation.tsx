@@ -492,18 +492,12 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{ left: "30%", top: "80%", transform: "translateX(-50%)" }}
         >
-          <div className="inline-flex items-center gap-1 rounded-md bg-white/10 px-2 py-1 text-white/80 text-xs">
-            <ShieldCheck className="size-3" /> Write access: Ownership of IP
-          </div>
         </div>
         <div
           ref={readCondRef}
           className="absolute transform-gpu"
           style={{ left: "70%", top: "80%", transform: "translateX(-50%)" }}
         >
-          <div className="inline-flex items-center gap-1 rounded-md bg-white/10 px-2 py-1 text-white/80 text-xs">
-            <ShieldCheck className="size-3" /> Read access: Valid IP License
-          </div>
         </div>
 
         <div
