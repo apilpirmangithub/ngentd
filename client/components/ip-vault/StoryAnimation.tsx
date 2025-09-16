@@ -221,12 +221,6 @@ export default function StoryAnimation({
       Object.assign(fileEl.style, { position: "absolute", zIndex: "9999" });
       scene.appendChild(fileEl);
 
-      const keyEl = document.createElement("div");
-      keyEl.className =
-        "pointer-events-none rounded-full bg-yellow-300 px-2 py-0.5 text-xs font-semibold text-black shadow transform-gpu";
-      keyEl.textContent = "🔑";
-      Object.assign(keyEl.style, { position: "absolute", zIndex: "9999" });
-      scene.appendChild(keyEl);
 
       const startX = ownerRect.left - sceneRect.left + ownerRect.width / 2;
       const startY = ownerRect.top - sceneRect.top + ownerRect.height / 2;
@@ -314,32 +308,7 @@ export default function StoryAnimation({
         });
       }
 
-      if (vaultRect) {
-        const endX = vaultRect.left - sceneRect.left + vaultRect.width / 2;
-        const endY = vaultRect.top - sceneRect.top + vaultRect.height / 2;
-        gsap.to(keyEl, {
-          left: `${endX}px`,
-          top: `${endY}px`,
-          scale: 1.1,
-          duration: 1.2,
-          ease: "power2.out",
-          onComplete: () => {
-            gsap.fromTo(
-              lockRef.current,
-              { scale: 1 },
-              { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 },
-            );
-            // visually lock the vault when key arrives
-            gsap.to(lockRef.current, {
-              backgroundColor: "#10B981",
-              color: "#ffffff",
-              duration: 0.18,
-              delay: 0.05,
-            });
-            keyEl.remove();
-          },
-        });
-      }
+      // vault locking handled by lock animation from IPFS; no key element needed
 
       gsap.to(doc, { opacity: 0, duration: 0.2, delay: 0.15 });
     }
