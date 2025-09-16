@@ -11,6 +11,7 @@ import {
   Scissors,
   EyeOff,
   Monitor,
+  Lock,
 } from "lucide-react";
 
 export default function StoryAnimation({
