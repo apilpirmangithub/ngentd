@@ -24,6 +24,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
   const talkOwnerRef = useRef<HTMLDivElement | null>(null);
   const talkBuyerRef = useRef<HTMLDivElement | null>(null);
   const ipfsBadgeRef = useRef<HTMLDivElement | null>(null);
+  const masterRef = useRef<gsap.core.Timeline | null>(null);
 
   const positions = {
     owner: "12%",
@@ -146,10 +147,15 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
       .to(talkBuyerRef.current, { opacity: 1, y: 0, duration: 0.4 })
       .to(talkBuyerRef.current, { opacity: 0, duration: 0.3 }, "+=1.1")
       .add(playMain());
+    return master;
   };
 
   useEffect(() => {
-    play();
+    masterRef.current?.kill();
+    masterRef.current = play();
+    return () => {
+      masterRef.current?.kill();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
@@ -182,7 +188,10 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
           </div>
         </div>
         <button
-          onClick={play}
+          onClick={() => {
+            masterRef.current?.kill();
+            masterRef.current = play();
+          }}
           className="rounded-md bg-white/10 px-3 py-1.5 text-white hover:bg-white/15"
         >
           Play
