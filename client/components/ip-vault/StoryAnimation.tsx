@@ -12,6 +12,7 @@ import {
   EyeOff,
   Monitor,
   Lock,
+  Unlock,
 } from "lucide-react";
 
 export default function StoryAnimation({
