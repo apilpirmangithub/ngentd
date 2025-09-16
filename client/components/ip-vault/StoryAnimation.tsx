@@ -59,7 +59,8 @@ export default function StoryAnimation({
       top: "44%",
       xPercent: -50,
       yPercent: -50,
-      opacity: 1,
+      opacity: 0,
+      pointerEvents: 'none',
       scale: 1,
     });
     gsap.set(buyerRef.current, {
