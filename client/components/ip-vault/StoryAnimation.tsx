@@ -72,7 +72,10 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
     gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(doorRef.current, { width: "100%" });
     gsap.set(lockRef.current, { scale: 1, opacity: 1, color: "#0f172a" });
-    gsap.set([talkOwnerRef.current, talkBuyerRef.current], { opacity: 0, y: 8 });
+    gsap.set([talkOwnerRef.current, talkBuyerRef.current], {
+      opacity: 0,
+      y: 8,
+    });
     setStep(0);
   };
 
@@ -93,7 +96,11 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
       .to(doorRef.current, { width: "0%", duration: 0.3 }, "openDoor")
       .to(docRef.current, { opacity: 0, duration: 0.3 }, "openDoor+=0.05")
       .to(doorRef.current, { width: "100%", duration: 0.3 })
-      .to(lockRef.current, { scale: 1.15, duration: 0.22, yoyo: true, repeat: 1 }, "-=0.1");
+      .to(
+        lockRef.current,
+        { scale: 1.15, duration: 0.22, yoyo: true, repeat: 1 },
+        "-=0.1",
+      );
 
     if (mode === "vault") {
       // Step 3: License verified
@@ -103,13 +110,28 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         // Step 4: Door opens and doc goes to buyer
         .call(() => setStep(3))
         .to(doorRef.current, { width: "0%", duration: 0.3 })
-        .to(docRef.current, { opacity: 1, scale: 0.7, left: positions.vault, top: "52%", duration: 0 })
-        .to(docRef.current, { left: "56%", top: "62%", scale: 1, duration: 0.55 })
+        .to(docRef.current, {
+          opacity: 1,
+          scale: 0.7,
+          left: positions.vault,
+          top: "52%",
+          duration: 0,
+        })
+        .to(docRef.current, {
+          left: "56%",
+          top: "62%",
+          scale: 1,
+          duration: 0.55,
+        })
         .to(doorRef.current, { width: "100%", duration: 0.3 });
     } else {
       // Step 2 (TEE path): Attestation
       tl.call(() => setStep(1))
-        .to(buyerRef.current, { left: positions.tee, duration: 0.95, delay: 0.15 })
+        .to(buyerRef.current, {
+          left: positions.tee,
+          duration: 0.95,
+          delay: 0.15,
+        })
         .to(attBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 })
         // Step 3: License verified
         .call(() => setStep(2))
@@ -118,8 +140,19 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         // Step 4: Access granted in secure env
         .call(() => setStep(3))
         .to(doorRef.current, { width: "0%", duration: 0.3 })
-        .to(docRef.current, { opacity: 1, scale: 0.7, left: positions.vault, top: "52%", duration: 0 })
-        .to(docRef.current, { left: "56%", top: "62%", scale: 1, duration: 0.55 })
+        .to(docRef.current, {
+          opacity: 1,
+          scale: 0.7,
+          left: positions.vault,
+          top: "52%",
+          duration: 0,
+        })
+        .to(docRef.current, {
+          left: "56%",
+          top: "62%",
+          scale: 1,
+          duration: 0.55,
+        })
         .to(doorRef.current, { width: "100%", duration: 0.3 });
     }
     return tl;
@@ -153,7 +186,9 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
               <span
                 className={
                   "flex h-5 w-5 items-center justify-center rounded-full border text-[10px] " +
-                  (i === step ? "bg-white text-black border-white" : "border-white/40 text-white/80")
+                  (i === step
+                    ? "bg-white text-black border-white"
+                    : "border-white/40 text-white/80")
                 }
               >
                 {i + 1}
@@ -175,7 +210,9 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
             <div className="mb-1 flex items-center gap-1 text-xs opacity-70">
               <MessageSquare className="size-3" /> IP Owner
             </div>
-            <p className="text-sm">Aku ingin mengunggah dan mengunci dokumen IP-ku dengan aman.</p>
+            <p className="text-sm">
+              Aku ingin mengunggah dan mengunci dokumen IP-ku dengan aman.
+            </p>
           </div>
           <div
             ref={talkBuyerRef}
@@ -184,14 +221,23 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
             <div className="mb-1 flex items-center gap-1 text-xs opacity-70">
               <MessageSquare className="size-3" /> IP Buyer
             </div>
-            <p className="text-sm">Saya ingin melisensi dan mengaksesnya hanya jika syaratnya terpenuhi.</p>
+            <p className="text-sm">
+              Saya ingin melisensi dan mengaksesnya hanya jika syaratnya
+              terpenuhi.
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={play} className="rounded-md bg-white/10 px-3 py-1.5 text-white hover:bg-white/15">
+          <button
+            onClick={play}
+            className="rounded-md bg-white/10 px-3 py-1.5 text-white hover:bg-white/15"
+          >
             Play
           </button>
-          <span className="text-xs opacity-80">Walkthrough: {mode === "tee" ? "TEE attestation path" : "Standard license path"}</span>
+          <span className="text-xs opacity-80">
+            Walkthrough:{" "}
+            {mode === "tee" ? "TEE attestation path" : "Standard license path"}
+          </span>
         </div>
       </div>
 
@@ -208,7 +254,10 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
             <Lock className="size-7" />
           </div>
           {/* Door overlay */}
-          <div ref={doorRef} className="absolute left-0 top-0 h-full bg-yellow-500/60" />
+          <div
+            ref={doorRef}
+            className="absolute left-0 top-0 h-full bg-yellow-500/60"
+          />
           <div
             ref={lockRef}
             className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-yellow-300/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow"
@@ -223,7 +272,11 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         {/* Safe room (TEE) */}
         <div
           className="absolute"
-          style={{ left: positions.tee, top: "22%", transform: "translateX(-50%)" }}
+          style={{
+            left: positions.tee,
+            top: "22%",
+            transform: "translateX(-50%)",
+          }}
         >
           <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
             <Cpu className="size-3" /> Safe Room
@@ -255,7 +308,10 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         </div>
 
         {/* Badges */}
-        <div ref={licBadgeRef} className="absolute left-1/2 top-[82%] -translate-x-1/2">
+        <div
+          ref={licBadgeRef}
+          className="absolute left-1/2 top-[82%] -translate-x-1/2"
+        >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
             <ShieldCheck className="size-3" /> License OK
           </div>
@@ -263,7 +319,11 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         <div
           ref={attBadgeRef}
           className="absolute"
-          style={{ left: positions.tee, top: "42%", transform: "translateX(-50%)" }}
+          style={{
+            left: positions.tee,
+            top: "42%",
+            transform: "translateX(-50%)",
+          }}
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
             <ShieldCheck className="size-3" /> Attestation OK
