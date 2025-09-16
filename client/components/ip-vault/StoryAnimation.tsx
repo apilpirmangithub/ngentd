@@ -192,7 +192,8 @@ export default function StoryAnimation({
       const ownerRect = ownerRef.current.getBoundingClientRect();
       const ipfsRect = ipfsBadge?.getBoundingClientRect();
       const vaultRect = vault?.getBoundingClientRect();
-      const ipfsTextEl = ipfsBadge?.querySelector('.ipfs-text') as HTMLElement | null;
+      // Prefer the top IPFS Storage text element if present
+      const ipfsTextEl = scene.querySelector('.ipfs-text') as HTMLElement | null;
       const ipfsTextRect = ipfsTextEl?.getBoundingClientRect();
 
 
