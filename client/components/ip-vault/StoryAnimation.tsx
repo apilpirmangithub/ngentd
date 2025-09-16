@@ -158,6 +158,11 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  // Visual events from parent (e.g. upload -> animate file to IPFS and key to vault)
+  useEffect(() => {
+    // event prop handled in parent via re-render
+  }, []);
+
   return (
     <div className="w-full max-w-[80rem]">
       <div className="mb-4 flex flex-col items-center gap-3 text-sm text-muted-foreground">
