@@ -91,7 +91,7 @@ export default function TabbedFlow() {
   );
 }
 
-function DemoPanel({ mode }: { mode: "vault" | "tee" }) {
+function DemoPanel({ mode, onVisualEvent }: { mode: "vault" | "tee"; onVisualEvent: (e: string | null) => void }) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [cid, setCid] = useState<string | null>(null);
