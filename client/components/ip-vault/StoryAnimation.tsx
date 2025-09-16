@@ -9,7 +9,13 @@ import {
   Database,
 } from "lucide-react";
 
-export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee"; event?: string | null }) {
+export default function StoryAnimation({
+  mode,
+  event,
+}: {
+  mode: "vault" | "tee";
+  event?: string | null;
+}) {
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const ownerRef = useRef<HTMLDivElement | null>(null);
   const buyerRef = useRef<HTMLDivElement | null>(null);
@@ -181,13 +187,15 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
       });
 
       const fileEl = document.createElement("div");
-      fileEl.className = "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
+      fileEl.className =
+        "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
       fileEl.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"inline-block align-middle mr-1\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg><span class=\"text-xs font-medium\">IP Doc</span>`;
       Object.assign(fileEl.style, { position: "absolute", zIndex: "9999" });
       scene.appendChild(fileEl);
 
       const keyEl = document.createElement("div");
-      keyEl.className = "pointer-events-none rounded-full bg-yellow-300 px-2 py-0.5 text-xs font-semibold text-black shadow transform-gpu";
+      keyEl.className =
+        "pointer-events-none rounded-full bg-yellow-300 px-2 py-0.5 text-xs font-semibold text-black shadow transform-gpu";
       keyEl.textContent = "🔑";
       Object.assign(keyEl.style, { position: "absolute", zIndex: "9999" });
       scene.appendChild(keyEl);
@@ -195,8 +203,16 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
       const startX = ownerRect.left - sceneRect.left + ownerRect.width / 2;
       const startY = ownerRect.top - sceneRect.top + ownerRect.height / 2;
 
-      Object.assign(fileEl.style, { left: `${startX}px`, top: `${startY}px`, transform: "translate(-50%,-50%)" });
-      Object.assign(keyEl.style, { left: `${startX}px`, top: `${startY}px`, transform: "translate(-50%,-50%)" });
+      Object.assign(fileEl.style, {
+        left: `${startX}px`,
+        top: `${startY}px`,
+        transform: "translate(-50%,-50%)",
+      });
+      Object.assign(keyEl.style, {
+        left: `${startX}px`,
+        top: `${startY}px`,
+        transform: "translate(-50%,-50%)",
+      });
 
       if (ipfsRect) {
         const endX = ipfsRect.left - sceneRect.left + ipfsRect.width / 2;
@@ -209,7 +225,12 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
           ease: "power2.out",
           onComplete: () => {
             gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25 });
-            gsap.to(fileEl, { opacity: 0, duration: 0.25, delay: 0.1, onComplete: () => fileEl.remove() });
+            gsap.to(fileEl, {
+              opacity: 0,
+              duration: 0.25,
+              delay: 0.1,
+              onComplete: () => fileEl.remove(),
+            });
           },
         });
       }
@@ -224,7 +245,11 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
           duration: 1.2,
           ease: "power2.out",
           onComplete: () => {
-            gsap.fromTo(lockRef.current, { scale: 1 }, { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 });
+            gsap.fromTo(
+              lockRef.current,
+              { scale: 1 },
+              { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 },
+            );
             keyEl.remove();
           },
         });
@@ -244,7 +269,8 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
       const buyerRect = buyerEl.getBoundingClientRect();
 
       const docEl = document.createElement("div");
-      docEl.className = "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
+      docEl.className =
+        "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
       docEl.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"inline-block align-middle mr-1\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg><span class=\"text-xs font-medium\">IP Doc</span>`;
       Object.assign(docEl.style, { position: "absolute", zIndex: "9999" });
       scene.appendChild(docEl);
@@ -254,7 +280,11 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
       const endX = buyerRect.left - sceneRect.left + buyerRect.width / 2;
       const endY = buyerRect.top - sceneRect.top + buyerRect.height / 2;
 
-      Object.assign(docEl.style, { left: `${startX}px`, top: `${startY}px`, transform: "translate(-50%,-50%)" });
+      Object.assign(docEl.style, {
+        left: `${startX}px`,
+        top: `${startY}px`,
+        transform: "translate(-50%,-50%)",
+      });
 
       gsap.to(docEl, {
         left: `${endX}px`,
@@ -263,7 +293,11 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
         duration: 1.0,
         ease: "power2.inOut",
         onComplete: () => {
-          gsap.fromTo(buyerEl, { scale: 1 }, { scale: 1.08, yoyo: true, repeat: 1, duration: 0.2 });
+          gsap.fromTo(
+            buyerEl,
+            { scale: 1 },
+            { scale: 1.08, yoyo: true, repeat: 1, duration: 0.2 },
+          );
           setTimeout(() => docEl.remove(), 300);
         },
       });
@@ -312,7 +346,11 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
               performUploadSplit();
               // after upload completes, trigger keySaved pulse a bit later
               setTimeout(() => {
-                gsap.fromTo(lockRef.current, { scale: 1 }, { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 });
+                gsap.fromTo(
+                  lockRef.current,
+                  { scale: 1 },
+                  { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 },
+                );
               }, 900);
               // deliver doc from IPFS to buyer after a short delay
               setTimeout(() => performDeliver(), 1300);
