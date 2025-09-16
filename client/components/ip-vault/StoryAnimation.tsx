@@ -214,8 +214,12 @@ export default function StoryAnimation({
       });
 
       if (ipfsRect) {
-        const endX = ipfsRect.left - sceneRect.left + ipfsRect.width / 2;
-        const endY = ipfsRect.top - sceneRect.top + ipfsRect.height / 2;
+        const endX = ipfsTextRect
+          ? ipfsTextRect.left - sceneRect.left + ipfsTextRect.width / 2
+          : ipfsRect.left - sceneRect.left + ipfsRect.width / 2;
+        const endY = ipfsTextRect
+          ? ipfsTextRect.top - sceneRect.top + ipfsTextRect.height / 2
+          : ipfsRect.top - sceneRect.top + ipfsRect.height / 2;
         gsap.to(fileEl, {
               left: `${endX}px`,
               top: `${endY}px`,
