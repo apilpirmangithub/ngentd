@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { User2, ShieldCheck, Lock, Check, Cpu } from "lucide-react";
+import { User2, ShieldCheck, Check, Cpu } from "lucide-react";
 
 export function AnimatedDiagram({ active }: { active: number }) {
   const width = 1200;
@@ -83,7 +83,7 @@ export function AnimatedDiagram({ active }: { active: number }) {
                 fill="#0F172A"
                 opacity="0.8"
               />
-              <Lock x={-16} y={-16} width={32} height={32} color="#FDE047" />
+              <image x={-16} y={-16} width={32} height={32} href="https://cdn.builder.io/api/v1/image/assets%2F45b51cbd16f1407caa5463a5ffd74106%2F1fb9fcb5c7b44919b4aa9abd73481a1f?format=webp&width=800" preserveAspectRatio="xMidYMid meet" />
             </g>
             <text
               x={0}
