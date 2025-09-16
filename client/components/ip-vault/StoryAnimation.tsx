@@ -213,14 +213,6 @@ export default function StoryAnimation({
       const ipfsRect = ipfsBadge?.getBoundingClientRect();
       const vaultRect = vault?.getBoundingClientRect();
 
-      gsap.set(doc, {
-        left: `calc(${positions.owner})`,
-        top: "44%",
-        xPercent: -50,
-        yPercent: -50,
-        opacity: 1,
-        scale: 1,
-      });
 
       const fileEl = document.createElement("div");
       fileEl.className =
