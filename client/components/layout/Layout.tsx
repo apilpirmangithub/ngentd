@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { Lock, PlayCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
