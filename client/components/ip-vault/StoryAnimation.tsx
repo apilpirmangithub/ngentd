@@ -90,7 +90,8 @@ export default function StoryAnimation({
         lockRef.current,
         { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 },
         "+=0.1",
-      );
+      )
+      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.3 }, ">-");
 
     if (mode === "vault") {
       // Buyer approaches vault, license check, door opens, doc fetched from IPFS and delivered
