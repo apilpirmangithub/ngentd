@@ -352,7 +352,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/20 bg-sky-500/20 px-3 py-1 text-xs text-sky-200">
-            <Database className="size-3" /> IPFS Storage
+            <Database className="size-3" /> Decentralized Storage (IPFS/Shelby)
           </div>
         </div>
 
@@ -391,6 +391,9 @@ export default function StoryAnimation({
           >
             <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
               <Cpu className="size-3" /> TEE
+            </div>
+            <div className="mt-1 rounded-xl border border-white/10 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] text-emerald-200 inline-flex items-center gap-1">
+              <ShieldCheck className="size-3" /> MPC
             </div>
           </div>
         )}
@@ -491,7 +494,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-sky-500/20 px-2 py-1 text-sky-200 text-xs">
-            <ShieldCheck className="size-3" /> Stored on IPFS
+            <ShieldCheck className="size-3" /> Encrypted on IPFS
           </div>
         </div>
       </div>
