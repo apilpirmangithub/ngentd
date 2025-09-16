@@ -6,6 +6,7 @@ export default function TabbedFlow() {
   const [type, setType] = useState<"vault" | "tee">("vault");
   const containerRef = useRef<HTMLDivElement | null>(null);
   const introTweenRef = useRef<gsap.core.Tween | null>(null);
+  const [playSignal, setPlaySignal] = useState<string>("");
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -47,10 +48,16 @@ export default function TabbedFlow() {
         >
           IP Vault + TEE
         </button>
+        <button
+          onClick={() => setPlaySignal(String(Date.now()))}
+          className="px-4 py-2 rounded-lg transition focus:outline-none focus:ring-2 bg-violet-500 hover:bg-violet-600 focus:ring-violet-300"
+        >
+          Play
+        </button>
       </div>
 
       <div ref={containerRef} className="w-full space-y-8">
-        <StoryAnimation mode={type} />
+        <StoryAnimation mode={type} event={playSignal} />
       </div>
     </section>
   );
