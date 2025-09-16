@@ -276,7 +276,24 @@ export default function StoryAnimation({
               opacity: 0,
               duration: 0.25,
               delay: 0.1,
-              onComplete: () => fileEl.remove(),
+              onComplete: () => {
+                fileEl.remove();
+                try {
+                  // ensure the owner's static IP File doesn't reappear
+                  if (docRef.current) {
+                    gsap.set(docRef.current, {
+                      left: positions.owner,
+                      top: '44%',
+                      xPercent: -50,
+                      yPercent: -50,
+                      opacity: 0,
+                      pointerEvents: 'none',
+                    });
+                  }
+                } catch (e) {
+                  // ignore
+                }
+              },
             });
           },
         });
