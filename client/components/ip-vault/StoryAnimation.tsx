@@ -7,6 +7,10 @@ import {
   FileText,
   MessageSquare,
   Database,
+  Clock,
+  Scissors,
+  EyeOff,
+  Monitor,
 } from "lucide-react";
 
 export default function StoryAnimation({
