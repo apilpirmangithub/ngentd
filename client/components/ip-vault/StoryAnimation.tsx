@@ -442,7 +442,20 @@ export default function StoryAnimation({
         </div>
 
         {/* Document */}
-        <div ref={docRef} className="absolute transform-gpu">
+        <div
+          ref={docRef}
+          role="button"
+          onClick={() => {
+            gsap.to(docRef.current, {
+              left: positions.ipfs,
+              top: "52%",
+              scale: 0.85,
+              duration: 0.6,
+            });
+            gsap.to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 });
+          }}
+          className="absolute transform-gpu cursor-pointer"
+        >
           <div className="flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow">
             <FileText className="size-4" />
             <span className="text-xs font-medium">IP Doc</span>
