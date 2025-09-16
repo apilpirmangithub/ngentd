@@ -19,12 +19,12 @@ const STEPS: Step[] = [
   {
     title: "Encrypt File",
     description: "File dienkripsi (mis. AES-256-GCM) → kunci dibuat secara aman.",
-    icon: <ShieldLock />,
+    icon: <Lock />,
   },
   {
     title: "Upload ke Storage",
     description: "File terenkripsi diunggah ke IPFS / Shelby / Arweave untuk availability.",
-    icon: <HardDriveDownload />,
+    icon: <Database />,
   },
   {
     title: "Simpan Kunci di Vault",
