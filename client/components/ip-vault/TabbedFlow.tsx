@@ -23,7 +23,10 @@ function base64ToBytes(b64: string) {
 }
 
 async function generateAesKey() {
-  return crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]);
+  return crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, [
+    "encrypt",
+    "decrypt",
+  ]);
 }
 
 async function exportKey(key: CryptoKey) {
@@ -33,7 +36,10 @@ async function exportKey(key: CryptoKey) {
 
 async function importKey(b64: string) {
   const raw = base64ToBytes(b64);
-  return crypto.subtle.importKey("raw", raw, { name: "AES-GCM" }, true, ["encrypt", "decrypt"]);
+  return crypto.subtle.importKey("raw", raw, { name: "AES-GCM" }, true, [
+    "encrypt",
+    "decrypt",
+  ]);
 }
 
 export default function TabbedFlow() {
@@ -116,7 +122,9 @@ function DemoPanel({ mode }: { mode: "vault" | "tee" }) {
 
   const onEncryptAndUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    const input = (e.target as HTMLFormElement).elements.namedItem("file") as HTMLInputElement;
+    const input = (e.target as HTMLFormElement).elements.namedItem(
+      "file",
+    ) as HTMLInputElement;
     const file = input?.files?.[0];
     if (!file) {
       setStatus("Pilih file dulu.");
@@ -139,7 +147,9 @@ function DemoPanel({ mode }: { mode: "vault" | "tee" }) {
     setStatus("Mengunggah ke IPFS (mock)...");
     const newCid = await mockUploadToIpfs(payloadB64);
     setCid(newCid);
-    setStatus("Selesai: file terenkripsi dan diunggah (mock). Simpan kunci ke Vault untuk akses pembeli.");
+    setStatus(
+      "Selesai: file terenkripsi dan diunggah (mock). Simpan kunci ke Vault untuk akses pembeli.",
+    );
   };
 
   const saveKeyToVault = () => {
@@ -148,7 +158,13 @@ function DemoPanel({ mode }: { mode: "vault" | "tee" }) {
       return;
     }
     const vault = JSON.parse(localStorage.getItem("ip_vault_keys") || "[]");
-    vault.push({ cid, key: keyB64, fileName, mode, savedAt: new Date().toISOString() });
+    vault.push({
+      cid,
+      key: keyB64,
+      fileName,
+      mode,
+      savedAt: new Date().toISOString(),
+    });
     localStorage.setItem("ip_vault_keys", JSON.stringify(vault));
     setStatus("Kunci disimpan di Vault (localStorage) dengan stub TEE/MPC.");
   };
@@ -180,7 +196,11 @@ function DemoPanel({ mode }: { mode: "vault" | "tee" }) {
     const ct = base64ToBytes(payloadJson.ct);
     setStatus("Mendekripsi file...");
     try {
-      const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: new Uint8Array(iv) }, imported, ct);
+      const plain = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: new Uint8Array(iv) },
+        imported,
+        ct,
+      );
       const blob = new Blob([plain]);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -192,7 +212,9 @@ function DemoPanel({ mode }: { mode: "vault" | "tee" }) {
       URL.revokeObjectURL(url);
       setStatus("Berhasil didekripsi dan siap diunduh.");
     } catch (err) {
-      setStatus("Gagal mendekripsi: kunci salah atau kondisi akses tidak terpenuhi.");
+      setStatus(
+        "Gagal mendekripsi: kunci salah atau kondisi akses tidak terpenuhi.",
+      );
     }
   };
 
@@ -200,30 +222,57 @@ function DemoPanel({ mode }: { mode: "vault" | "tee" }) {
     <div className="w-full max-w-4xl mx-auto rounded-lg bg-white/5 p-6 border border-white/10">
       <h2 className="text-lg font-semibold">Demo Upload & Vault (Sederhana)</h2>
       <p className="text-sm text-muted-foreground mt-1">
-        Demo ringan: enkripsi AES‑GCM di klien, mock upload ke IPFS, simpan kunci di Vault (localStorage). Tombol "Beli" akan mencoba mendekripsi jika kunci ada.
+        Demo ringan: enkripsi AES‑GCM di klien, mock upload ke IPFS, simpan
+        kunci di Vault (localStorage). Tombol "Beli" akan mencoba mendekripsi
+        jika kunci ada.
       </p>
 
       <form onSubmit={onEncryptAndUpload} className="mt-4 flex flex-col gap-3">
-        <input name="file" type="file" onChange={(e) => handleFile(e.target.files?.[0] || null)} />
+        <input
+          name="file"
+          type="file"
+          onChange={(e) => handleFile(e.target.files?.[0] || null)}
+        />
         <div className="flex items-center gap-2">
-          <button className="rounded bg-blue-600 px-3 py-1 text-white" type="submit">
+          <button
+            className="rounded bg-blue-600 px-3 py-1 text-white"
+            type="submit"
+          >
             Encrypt & Upload (mock)
           </button>
-          <button type="button" className="rounded bg-emerald-600 px-3 py-1 text-white" onClick={saveKeyToVault}>
+          <button
+            type="button"
+            className="rounded bg-emerald-600 px-3 py-1 text-white"
+            onClick={saveKeyToVault}
+          >
             Save key to Vault
           </button>
-          <button type="button" className="rounded bg-yellow-600 px-3 py-1 text-black" onClick={buyLicenseAndDownload}>
+          <button
+            type="button"
+            className="rounded bg-yellow-600 px-3 py-1 text-black"
+            onClick={buyLicenseAndDownload}
+          >
             Buy License & Download
           </button>
         </div>
       </form>
 
       <div className="mt-4 text-sm">
-        <div>Mode: <strong>{mode}</strong></div>
-        <div>File: <strong>{fileName || "–"}</strong></div>
-        <div>CID (mock): <strong>{cid || "–"}</strong></div>
-        <div>Kunci (base64): <small className="break-all">{keyB64 || "–"}</small></div>
-        <div className="mt-2 text-muted-foreground">Status: {status || "Idle"}</div>
+        <div>
+          Mode: <strong>{mode}</strong>
+        </div>
+        <div>
+          File: <strong>{fileName || "–"}</strong>
+        </div>
+        <div>
+          CID (mock): <strong>{cid || "–"}</strong>
+        </div>
+        <div>
+          Kunci (base64): <small className="break-all">{keyB64 || "–"}</small>
+        </div>
+        <div className="mt-2 text-muted-foreground">
+          Status: {status || "Idle"}
+        </div>
       </div>
     </div>
   );
