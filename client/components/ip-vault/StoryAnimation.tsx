@@ -214,25 +214,39 @@ export default function StoryAnimation({
         const endX = ipfsRect.left - sceneRect.left + ipfsRect.width / 2;
         const endY = ipfsRect.top - sceneRect.top + ipfsRect.height / 2;
         gsap.to(fileEl, {
-          left: `${endX}px`,
-          top: `${endY}px`,
-          scale: 0.75,
-          duration: 1.0,
-          ease: "power2.out",
-          onComplete: () => {
-            gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25 });
-
-            // Show lock at IPFS location (start unlocked), then slide to vault and lock
+              left: `${endX}px`,
+              top: `${endY}px`,
+              scale: 0.75,
+              duration: 1.0,
+              ease: "power2.out",
+              onComplete: () => {
+            // Morph the floating file into the Stored on IPFS badge
             try {
+              // prepare fileEl to look like a badge
+              fileEl.className = "pointer-events-none inline-flex items-center gap-1 rounded-md bg-sky-500/20 px-2 py-1 text-sky-200 text-xs shadow transform-gpu";
+              fileEl.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><path d="M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7"></path><path d="M7 17a4 4 0 0 0 8 0"></path></svg>
+                <span class=\"text-xs font-medium\">Stored on IPFS</span>
+              `;
+
+              // small pulse to emphasize morph
+              gsap.fromTo(
+                fileEl,
+                { scale: 0.9, opacity: 1 },
+                { scale: 1, duration: 0.18, ease: 'power1.out' }
+              );
+
+              // show the underlying ipfsBadge after morph completes
+              gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
+
+              // run lock animation as before
               const lockEl = lockRef.current;
               if (lockEl) {
-                // ensure unlock icon visible
                 const unlockIcon = lockEl.querySelector('.unlock-icon') as HTMLElement | null;
                 const lockIcon = lockEl.querySelector('.lock-icon') as HTMLElement | null;
                 unlockIcon?.classList.remove('opacity-0');
                 lockIcon?.classList.add('opacity-0');
 
-                // position lock at IPFS badge center
                 gsap.set(lockEl, {
                   left: `${endX}px`,
                   top: `${endY}px`,
@@ -248,14 +262,12 @@ export default function StoryAnimation({
                   const vaultCenterY =
                     vaultRect.top - sceneRect.top + vaultRect.height / 2;
 
-                  // animate lock sliding to vault
                   gsap.to(lockEl, {
                     left: `${vaultCenterX}px`,
                     top: `${vaultCenterY}px`,
                     duration: 1.0,
                     ease: "power2.out",
                     onComplete: () => {
-                      // swap icons to locked
                       if (unlockIcon) unlockIcon.classList.add("opacity-0");
                       if (lockIcon) lockIcon.classList.remove("opacity-0");
                       gsap.to(lockEl, {
@@ -268,33 +280,35 @@ export default function StoryAnimation({
                   });
                 }
               }
-            } catch (e) {
-              // ignore DOM failures
-            }
 
-            gsap.to(fileEl, {
-              opacity: 0,
-              duration: 0.25,
-              delay: 0.1,
-              onComplete: () => {
-                fileEl.remove();
-                try {
-                  // ensure the owner's static IP File doesn't reappear
-                  if (docRef.current) {
-                    gsap.set(docRef.current, {
-                      left: positions.owner,
-                      top: '44%',
-                      xPercent: -50,
-                      yPercent: -50,
-                      opacity: 0,
-                      pointerEvents: 'none',
-                    });
+              // cleanup: remove the floating element after badge visible
+              gsap.to(fileEl, {
+                opacity: 0,
+                duration: 0.25,
+                delay: 0.5,
+                onComplete: () => {
+                  fileEl.remove();
+                  try {
+                    if (docRef.current) {
+                      gsap.set(docRef.current, {
+                        left: positions.owner,
+                        top: '44%',
+                        xPercent: -50,
+                        yPercent: -50,
+                        opacity: 0,
+                        pointerEvents: 'none',
+                      });
+                    }
+                  } catch (e) {
+                    // ignore
                   }
-                } catch (e) {
-                  // ignore
-                }
-              },
-            });
+                },
+              });
+            } catch (e) {
+              // fallback: simply show ipfs badge and remove fileEl
+              gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25 });
+              gsap.to(fileEl, { opacity: 0, duration: 0.25, delay: 0.1, onComplete: () => fileEl.remove() });
+            }
           },
         });
       }
