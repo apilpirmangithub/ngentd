@@ -30,6 +30,7 @@ export default function StoryAnimation({
   const doorRef = useRef<HTMLDivElement | null>(null);
   const lockRef = useRef<HTMLDivElement | null>(null);
   const teeRef = useRef<HTMLDivElement | null>(null);
+  const mpcRef = useRef<HTMLDivElement | null>(null);
   const licBadgeRef = useRef<HTMLDivElement | null>(null);
   const attBadgeRef = useRef<HTMLDivElement | null>(null);
   const ipfsBadgeRef = useRef<HTMLDivElement | null>(null);
