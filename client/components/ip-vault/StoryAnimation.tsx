@@ -210,6 +210,44 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
     if (event === "keySaved") {
       gsap.fromTo(lockRef.current, { scale: 1 }, { scale: 1.25, yoyo: true, repeat: 1, duration: 0.35 });
     }
+
+    if (event === "deliver") {
+      // animate a document traveling from IPFS badge to Buyer
+      const scene = sceneRef.current;
+      const ipfsEl = ipfsBadgeRef.current;
+      const buyerEl = buyerRef.current;
+      if (scene && ipfsEl && buyerEl) {
+        const sceneRect = scene.getBoundingClientRect();
+        const ipfsRect = ipfsEl.getBoundingClientRect();
+        const buyerRect = buyerEl.getBoundingClientRect();
+
+        const docEl = document.createElement("div");
+        docEl.className = "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
+        docEl.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"inline-block align-middle mr-1\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg><span class=\"text-xs font-medium\">IP Doc</span>`;
+        Object.assign(docEl.style, { position: "absolute", zIndex: "9999" });
+        scene.appendChild(docEl);
+
+        const startX = ipfsRect.left - sceneRect.left + ipfsRect.width / 2;
+        const startY = ipfsRect.top - sceneRect.top + ipfsRect.height / 2;
+        const endX = buyerRect.left - sceneRect.left + buyerRect.width / 2;
+        const endY = buyerRect.top - sceneRect.top + buyerRect.height / 2;
+
+        Object.assign(docEl.style, { left: `${startX}px`, top: `${startY}px`, transform: "translate(-50%,-50%)" });
+
+        gsap.to(docEl, {
+          left: `${endX}px`,
+          top: `${endY}px`,
+          scale: 1,
+          duration: 1.0,
+          ease: "power2.inOut",
+          onComplete: () => {
+            // buyer receives pulse
+            gsap.fromTo(buyerEl, { scale: 1 }, { scale: 1.08, yoyo: true, repeat: 1, duration: 0.2 });
+            setTimeout(() => docEl.remove(), 300);
+          },
+        });
+      }
+    }
   }, [event]);
 
   return (
