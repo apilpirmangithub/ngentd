@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import {
   Cpu,
@@ -170,7 +170,7 @@ export default function StoryAnimation({
     return master;
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     masterRef.current?.kill();
     masterRef.current = build();
     return () => {
@@ -345,8 +345,16 @@ export default function StoryAnimation({
       </div>
       <div
         ref={sceneRef}
-        className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/10 bg-black transform-gpu"
+        className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/30 bg-black transform-gpu"
       >
+        {/* Debug grid overlay */}
+        <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-30" />
+        {/* Debug center dot */}
+        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-2 rounded-full bg-red-500" />
+        {/* Debug label */}
+        <div className="absolute left-2 top-2 text-[10px] text-white/70">
+          scene mounted
+        </div>
         {/* IPFS node */}
         <div
           className="absolute transform-gpu"
@@ -356,7 +364,7 @@ export default function StoryAnimation({
             transform: "translateX(-50%)",
           }}
         >
-          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/20 bg-sky-500/20 px-3 py-1 text-xs text-sky-200">
+          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
             <Database className="size-3" /> Decentralized Storage (IPFS/Shelby)
           </div>
         </div>
@@ -376,6 +384,7 @@ export default function StoryAnimation({
           <div
             ref={doorRef}
             className="absolute left-0 top-0 h-full bg-black/20"
+            style={{ width: "100%" }}
           />
           <div
             ref={lockRef}
@@ -404,7 +413,15 @@ export default function StoryAnimation({
         )}
 
         {/* Owner */}
-        <div ref={ownerRef} className="absolute transform-gpu">
+        <div
+          ref={ownerRef}
+          className="absolute transform-gpu"
+          style={{
+            left: positions.owner,
+            top: "62%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
           <div className="flex size-14 items-center justify-center rounded-full bg-blue-500">
             <User2 className="size-7" />
           </div>
@@ -412,7 +429,15 @@ export default function StoryAnimation({
         </div>
 
         {/* Buyer */}
-        <div ref={buyerRef} className="absolute transform-gpu">
+        <div
+          ref={buyerRef}
+          className="absolute transform-gpu"
+          style={{
+            left: positions.buyer,
+            top: "62%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
           <div className="flex size-14 items-center justify-center rounded-full bg-white text-black">
             <User2 className="size-7" />
           </div>
@@ -423,6 +448,11 @@ export default function StoryAnimation({
         <div
           ref={docRef}
           role="button"
+          style={{
+            left: positions.owner,
+            top: "44%",
+            transform: "translate(-50%,-50%)",
+          }}
           onClick={() => {
             gsap.to(docRef.current, {
               left: positions.ipfs,
