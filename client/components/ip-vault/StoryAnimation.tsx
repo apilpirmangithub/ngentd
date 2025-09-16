@@ -388,7 +388,7 @@ export default function StoryAnimation({
         >
           <div className="absolute inset-0 flex items-center justify-center">
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F45b51cbd16f1407caa5463a5ffd74106%2F1fb9fcb5c7b44919b4aa9abd73481a1f?format=webp&width=800"
+              src="https://cdn.builder.io/api/v1/image/assets%2F75857544e65a4f6982333406121c72a7%2Fa9f23897196141cda50bf40c9cf505c4?format=webp&width=800"
               alt="Vault"
               className="h-8 w-8 object-contain"
             />
