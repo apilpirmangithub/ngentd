@@ -5,16 +5,21 @@ import StoryAnimation from "@/components/ip-vault/StoryAnimation";
 export default function TabbedFlow() {
   const [type, setType] = useState<"vault" | "tee">("vault");
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const introTweenRef = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
-    gsap.from(containerRef.current.children, {
+    introTweenRef.current?.kill();
+    introTweenRef.current = gsap.from(containerRef.current.children, {
       opacity: 0,
       y: 10,
       duration: 0.4,
       stagger: 0.05,
       ease: "power2.out",
     });
+    return () => {
+      introTweenRef.current?.kill();
+    };
   }, [type]);
 
   return (
