@@ -78,14 +78,8 @@ export default function StoryAnimation({
     // Owner walks to IPFS carrying doc
     tl.to(ownerRef.current, { left: "30%", duration: 1.0 })
       .to(docRef.current, { left: "32%", duration: 1.0 }, "<")
-      // Document stored on IPFS (disappear into storage)
-      .to(docRef.current, {
-        left: positions.ipfs,
-        top: "52%",
-        scale: 0.85,
-        duration: 0.5,
-      })
-      .to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 }, "-=0.1")
+      // Document stored on IPFS (fade into storage)
+      .to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 })
       .to(docRef.current, { opacity: 0, duration: 0.25 })
       // Key saved in Vault (lock pulse)
       .to(
@@ -102,7 +96,6 @@ export default function StoryAnimation({
         // doc appears from IPFS side and moves to buyer via vault gate
         .to(docRef.current, {
           opacity: 1,
-          scale: 0.85,
           left: positions.ipfs,
           top: "52%",
           duration: 0,
@@ -127,7 +120,6 @@ export default function StoryAnimation({
         .to(doorRef.current, { width: "0%", duration: 0.35 })
         .to(docRef.current, {
           opacity: 1,
-          scale: 0.85,
           left: positions.ipfs,
           top: "52%",
           duration: 0,
@@ -448,7 +440,6 @@ export default function StoryAnimation({
             gsap.to(docRef.current, {
               left: positions.ipfs,
               top: "52%",
-              scale: 0.85,
               duration: 0.6,
             });
             gsap.to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 });
