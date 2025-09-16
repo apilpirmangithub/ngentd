@@ -74,10 +74,17 @@ export default function StoryAnimation({
       gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(doorRef.current, { width: "100%" }); // door closed
-    gsap.set(lockRef.current, { scale: 1, opacity: 0, color: "#0f172a", backgroundColor: "rgba(255,255,255,0.9)" });
+    gsap.set(lockRef.current, {
+      scale: 1,
+      opacity: 0,
+      color: "#0f172a",
+      backgroundColor: "rgba(255,255,255,0.9)",
+    });
     if (lockRef.current) {
-      lockRef.current.querySelector?.('.unlock-icon')?.classList.remove('opacity-0');
-      lockRef.current.querySelector?.('.lock-icon')?.classList.add('opacity-0');
+      lockRef.current
+        .querySelector?.(".unlock-icon")
+        ?.classList.remove("opacity-0");
+      lockRef.current.querySelector?.(".lock-icon")?.classList.add("opacity-0");
     }
     if (condRef.current) gsap.set(condRef.current, { opacity: 0, y: 10 });
   };
@@ -96,14 +103,18 @@ export default function StoryAnimation({
       .to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 })
       .to(docRef.current, { opacity: 0, duration: 0.25 })
       // Key saved in Vault (lock pulse)
-    .to(
-      lockRef.current,
-      { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 },
-      "+=0.1",
-    )
-    // Set lock to locked visual state (green background, white icon)
-    .to(lockRef.current, { backgroundColor: "#10B981", color: "#ffffff", duration: 0.18 }, ">")
-    .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.3 }, ">-");
+      .to(
+        lockRef.current,
+        { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 },
+        "+=0.1",
+      )
+      // Set lock to locked visual state (green background, white icon)
+      .to(
+        lockRef.current,
+        { backgroundColor: "#10B981", color: "#ffffff", duration: 0.18 },
+        ">",
+      )
+      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.3 }, ">-");
 
     if (mode === "vault") {
       // Buyer approaches vault, license check, door opens, doc fetched from IPFS and delivered
@@ -254,10 +265,10 @@ export default function StoryAnimation({
               const lockEl = lockRef.current;
               if (lockEl) {
                 // ensure unlock icon visible
-                const unlockIcon = lockEl.querySelector?.('.unlock-icon');
-                const lockIcon = lockEl.querySelector?.('.lock-icon');
-                if (unlockIcon) unlockIcon.classList.remove('opacity-0');
-                if (lockIcon) lockIcon.classList.add('opacity-0');
+                const unlockIcon = lockEl.querySelector?.(".unlock-icon");
+                const lockIcon = lockEl.querySelector?.(".lock-icon");
+                if (unlockIcon) unlockIcon.classList.remove("opacity-0");
+                if (lockIcon) lockIcon.classList.add("opacity-0");
 
                 // position lock at IPFS badge center
                 gsap.set(lockEl, {
@@ -270,20 +281,27 @@ export default function StoryAnimation({
                 });
 
                 if (vaultRect) {
-                  const vaultCenterX = vaultRect.left - sceneRect.left + vaultRect.width / 2;
-                  const vaultCenterY = vaultRect.top - sceneRect.top + vaultRect.height / 2;
+                  const vaultCenterX =
+                    vaultRect.left - sceneRect.left + vaultRect.width / 2;
+                  const vaultCenterY =
+                    vaultRect.top - sceneRect.top + vaultRect.height / 2;
 
                   // animate lock sliding to vault
                   gsap.to(lockEl, {
                     left: `${vaultCenterX}px`,
                     top: `${vaultCenterY}px`,
                     duration: 1.0,
-                    ease: 'power2.out',
+                    ease: "power2.out",
                     onComplete: () => {
                       // swap icons to locked
-                      if (unlockIcon) unlockIcon.classList.add('opacity-0');
-                      if (lockIcon) lockIcon.classList.remove('opacity-0');
-                      gsap.to(lockEl, { backgroundColor: '#10B981', color: '#ffffff', scale: 1.05, duration: 0.12 });
+                      if (unlockIcon) unlockIcon.classList.add("opacity-0");
+                      if (lockIcon) lockIcon.classList.remove("opacity-0");
+                      gsap.to(lockEl, {
+                        backgroundColor: "#10B981",
+                        color: "#ffffff",
+                        scale: 1.05,
+                        duration: 0.12,
+                      });
                     },
                   });
                 }
@@ -318,7 +336,12 @@ export default function StoryAnimation({
               { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 },
             );
             // visually lock the vault when key arrives
-            gsap.to(lockRef.current, { backgroundColor: "#10B981", color: "#ffffff", duration: 0.18, delay: 0.05 });
+            gsap.to(lockRef.current, {
+              backgroundColor: "#10B981",
+              color: "#ffffff",
+              duration: 0.18,
+              delay: 0.05,
+            });
             keyEl.remove();
           },
         });
