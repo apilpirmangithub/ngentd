@@ -9,7 +9,7 @@ import {
   Database,
 } from "lucide-react";
 
-export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
+export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee"; event?: string | null }) {
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const ownerRef = useRef<HTMLDivElement | null>(null);
   const buyerRef = useRef<HTMLDivElement | null>(null);
