@@ -1,6 +1,13 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { Cpu, Lock, ShieldCheck, User2, FileText, MessageSquare } from "lucide-react";
+import {
+  Cpu,
+  Lock,
+  ShieldCheck,
+  User2,
+  FileText,
+  MessageSquare,
+} from "lucide-react";
 
 export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
   const sceneRef = useRef<HTMLDivElement | null>(null);
@@ -24,14 +31,36 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
   } as const;
 
   const reset = () => {
-    gsap.set(ownerRef.current, { left: positions.owner, top: "62%", xPercent: -50, yPercent: -50, opacity: 1 });
-    gsap.set(docRef.current, { left: positions.owner, top: "44%", xPercent: -50, yPercent: -50, opacity: 1, scale: 1 });
-    gsap.set(buyerRef.current, { left: positions.buyer, top: "62%", xPercent: -50, yPercent: -50, opacity: 1 });
+    gsap.set(ownerRef.current, {
+      left: positions.owner,
+      top: "62%",
+      xPercent: -50,
+      yPercent: -50,
+      opacity: 1,
+    });
+    gsap.set(docRef.current, {
+      left: positions.owner,
+      top: "44%",
+      xPercent: -50,
+      yPercent: -50,
+      opacity: 1,
+      scale: 1,
+    });
+    gsap.set(buyerRef.current, {
+      left: positions.buyer,
+      top: "62%",
+      xPercent: -50,
+      yPercent: -50,
+      opacity: 1,
+    });
     gsap.set(licBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(doorRef.current, { width: "100%" }); // door closed
     gsap.set(lockRef.current, { scale: 1, opacity: 1, color: "#0f172a" });
-    gsap.set([talkOwnerRef.current, talkBuyerRef.current], { opacity: 0, y: 8 });
+    gsap.set([talkOwnerRef.current, talkBuyerRef.current], {
+      opacity: 0,
+      y: 8,
+    });
   };
 
   const playMain = () => {
@@ -40,29 +69,64 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
     tl.to(ownerRef.current, { left: "45%", duration: 1.2 })
       .to(docRef.current, { left: "47%", duration: 1.2 }, "<")
       // Document goes inside vault
-      .to(docRef.current, { left: positions.vault, top: "52%", scale: 0.7, duration: 0.6 })
+      .to(docRef.current, {
+        left: positions.vault,
+        top: "52%",
+        scale: 0.7,
+        duration: 0.6,
+      })
       .to(doorRef.current, { width: "0%", duration: 0.35 }, "openDoor")
       .to(docRef.current, { opacity: 0, duration: 0.35 }, "openDoor+=0.05")
       .to(doorRef.current, { width: "100%", duration: 0.35 })
-      .to(lockRef.current, { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 }, "-=0.15");
+      .to(
+        lockRef.current,
+        { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 },
+        "-=0.15",
+      );
 
     if (mode === "vault") {
       // Buyer approaches vault, license check, door opens, doc out
       tl.to(buyerRef.current, { left: "56%", duration: 1.1, delay: 0.2 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
-        .to(docRef.current, { opacity: 1, scale: 0.7, left: positions.vault, top: "52%", duration: 0 })
-        .to(docRef.current, { left: "56%", top: "62%", scale: 1, duration: 0.6 })
+        .to(docRef.current, {
+          opacity: 1,
+          scale: 0.7,
+          left: positions.vault,
+          top: "52%",
+          duration: 0,
+        })
+        .to(docRef.current, {
+          left: "56%",
+          top: "62%",
+          scale: 1,
+          duration: 0.6,
+        })
         .to(doorRef.current, { width: "100%", duration: 0.35 });
     } else {
       // TEE path: buyer goes to safe room first
-      tl.to(buyerRef.current, { left: positions.tee, duration: 1.0, delay: 0.2 })
+      tl.to(buyerRef.current, {
+        left: positions.tee,
+        duration: 1.0,
+        delay: 0.2,
+      })
         .to(attBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .to(buyerRef.current, { left: "56%", duration: 0.9 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
         .to(doorRef.current, { width: "0%", duration: 0.35 })
-        .to(docRef.current, { opacity: 1, scale: 0.7, left: positions.vault, top: "52%", duration: 0 })
-        .to(docRef.current, { left: "56%", top: "62%", scale: 1, duration: 0.6 })
+        .to(docRef.current, {
+          opacity: 1,
+          scale: 0.7,
+          left: positions.vault,
+          top: "52%",
+          duration: 0,
+        })
+        .to(docRef.current, {
+          left: "56%",
+          top: "62%",
+          scale: 1,
+          duration: 0.6,
+        })
         .to(doorRef.current, { width: "100%", duration: 0.35 });
     }
     return tl;
@@ -88,31 +152,75 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
     <div className="w-full max-w-[80rem]">
       <div className="mb-4 flex flex-col items-center gap-3 text-sm text-muted-foreground">
         <div className="grid w-full max-w-4xl grid-cols-2 gap-3">
-          <div ref={talkOwnerRef} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90">
-            <div className="mb-1 flex items-center gap-1 text-xs opacity-70"><MessageSquare className="size-3" /> IP Owner</div>
-            <p className="text-sm">Aku ingin mengunggah dan mengunci dokumen IP-ku dengan aman.</p>
+          <div
+            ref={talkOwnerRef}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90"
+          >
+            <div className="mb-1 flex items-center gap-1 text-xs opacity-70">
+              <MessageSquare className="size-3" /> IP Owner
+            </div>
+            <p className="text-sm">
+              Aku ingin mengunggah dan mengunci dokumen IP-ku dengan aman.
+            </p>
           </div>
-          <div ref={talkBuyerRef} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90">
-            <div className="mb-1 flex items-center gap-1 text-xs opacity-70"><MessageSquare className="size-3" /> IP Buyer</div>
-            <p className="text-sm">Saya ingin melisensi dan mengaksesnya hanya jika syaratnya terpenuhi.</p>
+          <div
+            ref={talkBuyerRef}
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90"
+          >
+            <div className="mb-1 flex items-center gap-1 text-xs opacity-70">
+              <MessageSquare className="size-3" /> IP Buyer
+            </div>
+            <p className="text-sm">
+              Saya ingin melisensi dan mengaksesnya hanya jika syaratnya
+              terpenuhi.
+            </p>
           </div>
         </div>
-        <button onClick={play} className="rounded-md bg-white/10 px-3 py-1.5 text-white hover:bg-white/15">Play</button>
-        <span>Walkthrough: {mode === "tee" ? "TEE attestation path" : "Standard license path"}</span>
+        <button
+          onClick={play}
+          className="rounded-md bg-white/10 px-3 py-1.5 text-white hover:bg-white/15"
+        >
+          Play
+        </button>
+        <span>
+          Walkthrough:{" "}
+          {mode === "tee" ? "TEE attestation path" : "Standard license path"}
+        </span>
       </div>
-      <div ref={sceneRef} className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/10 bg-black">
+      <div
+        ref={sceneRef}
+        className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/10 bg-black"
+      >
         {/* Vault */}
-        <div ref={vaultRef} className="absolute left-1/2 top-1/2 h-40 w-56 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-yellow-400 text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)]">
+        <div
+          ref={vaultRef}
+          className="absolute left-1/2 top-1/2 h-40 w-56 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-yellow-400 text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)]"
+        >
           <div className="absolute inset-0 flex items-center justify-center">
             <Lock className="size-7" />
           </div>
           {/* Door overlay */}
-          <div ref={doorRef} className="absolute left-0 top-0 h-full bg-yellow-500/60" />
-          <div ref={lockRef} className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-yellow-300/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow">Locked</div>
+          <div
+            ref={doorRef}
+            className="absolute left-0 top-0 h-full bg-yellow-500/60"
+          />
+          <div
+            ref={lockRef}
+            className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-yellow-300/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow"
+          >
+            Locked
+          </div>
         </div>
 
         {/* Safe room (TEE) */}
-        <div className="absolute" style={{ left: positions.tee, top: "22%", transform: "translateX(-50%)" }}>
+        <div
+          className="absolute"
+          style={{
+            left: positions.tee,
+            top: "22%",
+            transform: "translateX(-50%)",
+          }}
+        >
           <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
             <Cpu className="size-3" /> Safe Room
           </div>
@@ -143,12 +251,23 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         </div>
 
         {/* Badges */}
-        <div ref={licBadgeRef} className="absolute left-1/2 top-[82%] -translate-x-1/2">
+        <div
+          ref={licBadgeRef}
+          className="absolute left-1/2 top-[82%] -translate-x-1/2"
+        >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
             <ShieldCheck className="size-3" /> License OK
           </div>
         </div>
-        <div ref={attBadgeRef} className="absolute" style={{ left: positions.tee, top: "42%", transform: "translateX(-50%)" }}>
+        <div
+          ref={attBadgeRef}
+          className="absolute"
+          style={{
+            left: positions.tee,
+            top: "42%",
+            transform: "translateX(-50%)",
+          }}
+        >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
             <ShieldCheck className="size-3" /> Attestation OK
           </div>

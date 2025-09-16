@@ -17,7 +17,10 @@ export function DiagramHero({ active }: { active: number }) {
 
   return (
     <div className="relative mx-auto mt-2 w-full max-w-5xl">
-      <div className="absolute -inset-6 rounded-2xl bg-[radial-gradient(1200px_300px_at_50%_0%,hsl(75_95%_65%_/_0.25),transparent_60%)]" aria-hidden />
+      <div
+        className="absolute -inset-6 rounded-2xl bg-[radial-gradient(1200px_300px_at_50%_0%,hsl(75_95%_65%_/_0.25),transparent_60%)]"
+        aria-hidden
+      />
       <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-black/60 shadow-[0_0_0_1px_hsl(var(--border)/0.3),0_10px_40px_hsl(75_95%_65%_/_0.15)]">
         <div className="aspect-[16/9] w-full">
           <AnimatePresence mode="wait" initial={false}>

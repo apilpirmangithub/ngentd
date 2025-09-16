@@ -8,7 +8,13 @@ export default function TabbedFlow() {
 
   useEffect(() => {
     if (!containerRef.current) return;
-    gsap.from(containerRef.current.children, { opacity: 0, y: 10, duration: 0.4, stagger: 0.05, ease: "power2.out" });
+    gsap.from(containerRef.current.children, {
+      opacity: 0,
+      y: 10,
+      duration: 0.4,
+      stagger: 0.05,
+      ease: "power2.out",
+    });
   }, [type]);
 
   return (
@@ -16,8 +22,18 @@ export default function TabbedFlow() {
       <h1 className="text-3xl font-bold text-center">IP Vault Flow</h1>
 
       <div className="flex space-x-4">
-        <button onClick={() => setType("vault")} className={`px-4 py-2 rounded-lg transition focus:outline-none focus:ring-2 ${type==='vault' ? 'bg-blue-500 hover:bg-blue-600 focus:ring-blue-400' : 'bg-blue-600/40 hover:bg-blue-600 focus:ring-blue-300'}`}>IP Vault</button>
-        <button onClick={() => setType("tee")} className={`px-4 py-2 rounded-lg transition focus:outline-none focus:ring-2 ${type==='tee' ? 'bg-green-500 hover:bg-green-600 focus:ring-green-400' : 'bg-green-600/40 hover:bg-green-600 focus:ring-green-300'}`}>IP Vault + TEE</button>
+        <button
+          onClick={() => setType("vault")}
+          className={`px-4 py-2 rounded-lg transition focus:outline-none focus:ring-2 ${type === "vault" ? "bg-blue-500 hover:bg-blue-600 focus:ring-blue-400" : "bg-blue-600/40 hover:bg-blue-600 focus:ring-blue-300"}`}
+        >
+          IP Vault
+        </button>
+        <button
+          onClick={() => setType("tee")}
+          className={`px-4 py-2 rounded-lg transition focus:outline-none focus:ring-2 ${type === "tee" ? "bg-green-500 hover:bg-green-600 focus:ring-green-400" : "bg-green-600/40 hover:bg-green-600 focus:ring-green-300"}`}
+        >
+          IP Vault + TEE
+        </button>
       </div>
 
       <div ref={containerRef} className="w-full">

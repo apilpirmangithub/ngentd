@@ -13,7 +13,10 @@ export function AnimatedDiagram({ active }: { active: number }) {
 
   return (
     <div className="relative mx-auto mt-4 w-full max-w-5xl">
-      <div className="absolute -inset-6 rounded-2xl bg-[radial-gradient(1200px_300px_at_50%_0%,hsl(75_95%_65%_/_0.25),transparent_60%)]" aria-hidden />
+      <div
+        className="absolute -inset-6 rounded-2xl bg-[radial-gradient(1200px_300px_at_50%_0%,hsl(75_95%_65%_/_0.25),transparent_60%)]"
+        aria-hidden
+      />
       <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-black/60 shadow-[0_0_0_1px_hsl(var(--border)/0.3),0_10px_40px_hsl(75_95%_65%_/_0.15)]">
         <motion.svg
           viewBox={`0 0 ${width} ${height}`}
@@ -33,8 +36,25 @@ export function AnimatedDiagram({ active }: { active: number }) {
           <g transform={`translate(140,180)`}>
             <circle r="46" fill="#1F2937" stroke="#334155" />
             <User2 x={-18} y={-18} width={36} height={36} color="#CBD5E1" />
-            <rect x={-70} y={58} rx={18} ry={18} width={140} height={36} fill="#99B8FF" />
-            <text x={0} y={82} textAnchor="middle" fontWeight="600" fill="#0F172A" fontSize="16">IP OWNER</text>
+            <rect
+              x={-70}
+              y={58}
+              rx={18}
+              ry={18}
+              width={140}
+              height={36}
+              fill="#99B8FF"
+            />
+            <text
+              x={0}
+              y={82}
+              textAnchor="middle"
+              fontWeight="600"
+              fill="#0F172A"
+              fontSize="16"
+            >
+              IP OWNER
+            </text>
           </g>
 
           {/* Vault */}
@@ -47,13 +67,34 @@ export function AnimatedDiagram({ active }: { active: number }) {
               height={180}
               fill="url(#vaultGrad)"
               initial={false}
-              animate={{ filter: (isEncrypt ? "drop-shadow(0 0 24px rgba(215,255,87,0.45))" : "drop-shadow(0 0 0 rgba(0,0,0,0))") as any }}
+              animate={{
+                filter: (isEncrypt
+                  ? "drop-shadow(0 0 24px rgba(215,255,87,0.45))"
+                  : "drop-shadow(0 0 0 rgba(0,0,0,0))") as any,
+              }}
             />
             <g>
-              <rect x={-26} y={-26} width={52} height={52} rx={10} fill="#0F172A" opacity="0.8" />
+              <rect
+                x={-26}
+                y={-26}
+                width={52}
+                height={52}
+                rx={10}
+                fill="#0F172A"
+                opacity="0.8"
+              />
               <Lock x={-16} y={-16} width={32} height={32} color="#FDE047" />
             </g>
-            <text x={0} y={80} textAnchor="middle" fontWeight="600" fill="#0F172A" fontSize="20">Vault</text>
+            <text
+              x={0}
+              y={80}
+              textAnchor="middle"
+              fontWeight="600"
+              fill="#0F172A"
+              fontSize="20"
+            >
+              Vault
+            </text>
           </g>
 
           {/* TEE */}
@@ -70,15 +111,42 @@ export function AnimatedDiagram({ active }: { active: number }) {
               transition={{ type: "spring", stiffness: 70, damping: 12 }}
             />
             <Cpu x={-16} y={-16} width={32} height={32} color="#FDE047" />
-            <text x={0} y={80} textAnchor="middle" fontWeight="600" fill="#E2E8F0" fontSize="14">TEE</text>
+            <text
+              x={0}
+              y={80}
+              textAnchor="middle"
+              fontWeight="600"
+              fill="#E2E8F0"
+              fontSize="14"
+            >
+              TEE
+            </text>
           </g>
 
           {/* Buyer */}
           <g transform={`translate(1060,180)`}>
             <circle r="46" fill="#1F2937" stroke="#334155" />
             <User2 x={-18} y={-18} width={36} height={36} color="#CBD5E1" />
-            <rect x={-62} y={58} rx={18} ry={18} width={124} height={36} fill="#FFFFFF" opacity="0.92" />
-            <text x={0} y={82} textAnchor="middle" fontWeight="600" fill="#0F172A" fontSize="16">IP BUYER</text>
+            <rect
+              x={-62}
+              y={58}
+              rx={18}
+              ry={18}
+              width={124}
+              height={36}
+              fill="#FFFFFF"
+              opacity="0.92"
+            />
+            <text
+              x={0}
+              y={82}
+              textAnchor="middle"
+              fontWeight="600"
+              fill="#0F172A"
+              fontSize="16"
+            >
+              IP BUYER
+            </text>
           </g>
 
           {/* Lines */}
@@ -117,39 +185,71 @@ export function AnimatedDiagram({ active }: { active: number }) {
           {/* Condition badges */}
           {/* Write condition near owner */}
           <g transform="translate(260,240)">
-            <rect width="220" height="48" rx="12" fill="#0B1220" opacity="0.8" stroke="#334155" />
-            <text x="16" y="20" fill="#94A3B8" fontSize="12">Write access condition:</text>
+            <rect
+              width="220"
+              height="48"
+              rx="12"
+              fill="#0B1220"
+              opacity="0.8"
+              stroke="#334155"
+            />
+            <text x="16" y="20" fill="#94A3B8" fontSize="12">
+              Write access condition:
+            </text>
             <g transform="translate(16,28)">
               <Check width={16} height={16} color="#86EFAC" />
-              <text x="22" y="14" fill="#E2E8F0" fontSize="13">Ownership of IP</text>
+              <text x="22" y="14" fill="#E2E8F0" fontSize="13">
+                Ownership of IP
+              </text>
             </g>
           </g>
 
           {/* Read conditions near buyer */}
           <g transform="translate(900,240)">
-            <rect width="260" height="72" rx="12" fill="#0B1220" opacity="0.8" stroke="#334155" />
-            <text x="16" y="20" fill="#94A3B8" fontSize="12">Read access condition:</text>
+            <rect
+              width="260"
+              height="72"
+              rx="12"
+              fill="#0B1220"
+              opacity="0.8"
+              stroke="#334155"
+            />
+            <text x="16" y="20" fill="#94A3B8" fontSize="12">
+              Read access condition:
+            </text>
             <g transform="translate(16,28)">
               <Check width={16} height={16} color="#86EFAC" />
-              <text x="22" y="14" fill="#E2E8F0" fontSize="13">Valid IP License</text>
+              <text x="22" y="14" fill="#E2E8F0" fontSize="13">
+                Valid IP License
+              </text>
             </g>
             {isTEE && (
               <g transform="translate(16,46)">
                 <Check width={16} height={16} color="#86EFAC" />
-                <text x="22" y="14" fill="#E2E8F0" fontSize="13">Valid Remote Attestation</text>
+                <text x="22" y="14" fill="#E2E8F0" fontSize="13">
+                  Valid Remote Attestation
+                </text>
               </g>
             )}
           </g>
 
           {/* Secure labels */}
           <g fill="#94A3B8" fontSize="12" textAnchor="middle">
-            <text x={308} y={170}>SECURE UPLOAD OF DATA</text>
-            <text x={980} y={170}>SECURE DOWNLOAD OF DATA</text>
+            <text x={308} y={170}>
+              SECURE UPLOAD OF DATA
+            </text>
+            <text x={980} y={170}>
+              SECURE DOWNLOAD OF DATA
+            </text>
           </g>
 
           {/* Shield pulsing when license step */}
           {isLicense && (
-            <motion.g transform="translate(1045,110)" initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
+            <motion.g
+              transform="translate(1045,110)"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+            >
               <ShieldCheck width={28} height={28} color="#86EFAC" />
             </motion.g>
           )}

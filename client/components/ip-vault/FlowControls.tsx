@@ -10,16 +10,37 @@ interface FlowControlsProps {
   disableNext: boolean;
 }
 
-export function FlowControls({ onPrev, onNext, onTogglePlay, isPlaying, disablePrev, disableNext }: FlowControlsProps) {
+export function FlowControls({
+  onPrev,
+  onNext,
+  onTogglePlay,
+  isPlaying,
+  disablePrev,
+  disableNext,
+}: FlowControlsProps) {
   return (
     <div id="walkthrough" className="flex items-center justify-center gap-3">
-      <Button variant="secondary" onClick={onPrev} disabled={disablePrev} aria-label="Prev">
+      <Button
+        variant="secondary"
+        onClick={onPrev}
+        disabled={disablePrev}
+        aria-label="Prev"
+      >
         <ChevronLeft className="mr-1" /> Prev
       </Button>
-      <Button onClick={onTogglePlay} aria-label={isPlaying ? "Pause Walkthrough" : "Play Walkthrough"}>
-        {isPlaying ? <Pause className="mr-2" /> : <Play className="mr-2" />} {isPlaying ? "Pause" : "Play Walkthrough"}
+      <Button
+        onClick={onTogglePlay}
+        aria-label={isPlaying ? "Pause Walkthrough" : "Play Walkthrough"}
+      >
+        {isPlaying ? <Pause className="mr-2" /> : <Play className="mr-2" />}{" "}
+        {isPlaying ? "Pause" : "Play Walkthrough"}
       </Button>
-      <Button variant="secondary" onClick={onNext} disabled={disableNext} aria-label="Next">
+      <Button
+        variant="secondary"
+        onClick={onNext}
+        disabled={disableNext}
+        aria-label="Next"
+      >
         Next <ChevronRight className="ml-1" />
       </Button>
     </div>
