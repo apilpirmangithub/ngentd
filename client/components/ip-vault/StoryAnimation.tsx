@@ -129,21 +129,7 @@ export default function StoryAnimation({
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
-        // doc appears from IPFS side and moves to buyer via vault gate
-        .to(docRef.current, {
-          opacity: 1,
-          left: positions.ipfs,
-          top: "52%",
-          xPercent: -50,
-          yPercent: -50,
-          duration: 0,
-        })
-        .to(docRef.current, {
-          left: targetLeft,
-          top: "62%",
-          scale: 1,
-          duration: 0.7,
-        })
+.call(performDeliver)
         .to(doorRef.current, { width: "100%", duration: 0.35 });
     } else {
       // TEE path: buyer goes to safe room first, then license, then fetch through vault
@@ -165,20 +151,7 @@ export default function StoryAnimation({
         )
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
-        .to(docRef.current, {
-          opacity: 1,
-          left: positions.ipfs,
-          top: "52%",
-          xPercent: -50,
-          yPercent: -50,
-          duration: 0,
-        })
-        .to(docRef.current, {
-          left: targetLeft,
-          top: "62%",
-          scale: 1,
-          duration: 0.7,
-        })
+        .call(performDeliver)
         .to(doorRef.current, { width: "100%", duration: 0.35 });
     }
     return tl;
