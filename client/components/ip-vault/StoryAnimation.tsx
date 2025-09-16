@@ -116,7 +116,8 @@ export default function StoryAnimation({
         delay: 0.2,
       })
         .to(attBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
-        .to(buyerRef.current, { left: "56%", duration: 0.9 })
+        .to({}, { duration: 0.6 })
+        .to(buyerRef.current, { left: "56%", duration: 1.4 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
