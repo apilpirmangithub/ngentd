@@ -127,6 +127,7 @@ export default function StoryAnimation({
         .to({}, { duration: 0.6 })
         .to(buyerRef.current, { left: "56%", duration: 1.4 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
+        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to(condRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .from(
           condRef.current?.querySelectorAll('[data-rule]'),
