@@ -268,6 +268,8 @@ export default function StoryAnimation({
               { scale: 1 },
               { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 },
             );
+            // visually lock the vault when key arrives
+            gsap.to(lockRef.current, { backgroundColor: "#10B981", color: "#ffffff", duration: 0.18, delay: 0.05 });
             keyEl.remove();
           },
         });
