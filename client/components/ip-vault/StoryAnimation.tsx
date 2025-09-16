@@ -264,6 +264,16 @@ export default function StoryAnimation({
                 gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
               }
 
+              // ensure top badge DOM uses the same innerHTML as the ipfsBadgeRef (preserve Database icon)
+              try {
+                const top = scene.querySelector('.ipfs-text')?.parentElement as HTMLElement | null;
+                if (top && ipfsBadgeRef.current) {
+                  top.innerHTML = ipfsBadgeRef.current.innerHTML;
+                }
+              } catch (e) {
+                /* ignore */
+              }
+
               // run lock animation as before
               const lockEl = lockRef.current;
               if (lockEl) {
