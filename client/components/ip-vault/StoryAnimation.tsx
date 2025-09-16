@@ -168,17 +168,29 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
       const ipfsBadge = ipfsBadgeRef.current;
       const vault = vaultRef.current;
 
-      // animate document flying to IPFS
-      const tl = gsap.timeline();
-      tl.to(doc, { left: positions.ipfs, top: "52%", scale: 0.75, duration: 0.9 })
-        .to(ipfsBadge, { opacity: 1, y: 0, duration: 0.3 }, "-=0.5")
-        .to(doc, { opacity: 0, duration: 0.25 }, "+=0.1");
-
-      // animate a temporary key flying from owner to vault
-      if (scene && ownerRef.current && vault) {
+      // If possible, start split animation from owner's carried doc
+      if (scene && ownerRef.current && doc) {
         const sceneRect = scene.getBoundingClientRect();
         const ownerRect = ownerRef.current.getBoundingClientRect();
-        const vaultRect = vault.getBoundingClientRect();
+        const ipfsRect = ipfsBadge?.getBoundingClientRect();
+        const vaultRect = vault?.getBoundingClientRect();
+
+        // position original doc at owner (visual)
+        gsap.set(doc, {
+          left: `calc(${positions.owner})`,
+          top: "44%",
+          xPercent: -50,
+          yPercent: -50,
+          opacity: 1,
+          scale: 1,
+        });
+
+        // create file element (raw file) and key element
+        const fileEl = document.createElement("div");
+        fileEl.className = "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
+        fileEl.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"inline-block align-middle mr-1\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg><span class=\"text-xs font-medium\">IP Doc</span>`;
+        Object.assign(fileEl.style, { position: "absolute", zIndex: "9999" });
+        scene.appendChild(fileEl);
 
         const keyEl = document.createElement("div");
         keyEl.className = "pointer-events-none rounded-full bg-yellow-300 px-2 py-0.5 text-xs font-semibold text-black shadow transform-gpu";
@@ -188,22 +200,46 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
 
         const startX = ownerRect.left - sceneRect.left + ownerRect.width / 2;
         const startY = ownerRect.top - sceneRect.top + ownerRect.height / 2;
-        const endX = vaultRect.left - sceneRect.left + vaultRect.width / 2;
-        const endY = vaultRect.top - sceneRect.top + vaultRect.height / 2;
 
+        Object.assign(fileEl.style, { left: `${startX}px`, top: `${startY}px`, transform: "translate(-50%,-50%)" });
         Object.assign(keyEl.style, { left: `${startX}px`, top: `${startY}px`, transform: "translate(-50%,-50%)" });
 
-        gsap.to(keyEl, {
-          left: `${endX}px`,
-          top: `${endY}px`,
-          scale: 1.1,
-          duration: 1.2,
-          ease: "power2.out",
-          onComplete: () => {
-            gsap.fromTo(lockRef.current, { scale: 1 }, { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 });
-            keyEl.remove();
-          },
-        });
+        // animate file to IPFS
+        if (ipfsRect) {
+          const endX = ipfsRect.left - sceneRect.left + ipfsRect.width / 2;
+          const endY = ipfsRect.top - sceneRect.top + ipfsRect.height / 2;
+          gsap.to(fileEl, {
+            left: `${endX}px`,
+            top: `${endY}px`,
+            scale: 0.75,
+            duration: 1.0,
+            ease: "power2.out",
+            onComplete: () => {
+              gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25 });
+              gsap.to(fileEl, { opacity: 0, duration: 0.25, delay: 0.1, onComplete: () => fileEl.remove() });
+            },
+          });
+        }
+
+        // animate key to Vault
+        if (vaultRect) {
+          const endX = vaultRect.left - sceneRect.left + vaultRect.width / 2;
+          const endY = vaultRect.top - sceneRect.top + vaultRect.height / 2;
+          gsap.to(keyEl, {
+            left: `${endX}px`,
+            top: `${endY}px`,
+            scale: 1.1,
+            duration: 1.2,
+            ease: "power2.out",
+            onComplete: () => {
+              gsap.fromTo(lockRef.current, { scale: 1 }, { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 });
+              keyEl.remove();
+            },
+          });
+        }
+
+        // fade original doc carried by owner (split effect)
+        gsap.to(doc, { opacity: 0, duration: 0.2, delay: 0.15 });
       }
     }
 
