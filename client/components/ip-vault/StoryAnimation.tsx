@@ -7,6 +7,10 @@ import {
   FileText,
   MessageSquare,
   Database,
+  Clock,
+  Scissors,
+  EyeOff,
+  Monitor,
 } from "lucide-react";
 
 export default function StoryAnimation({
@@ -27,6 +31,9 @@ export default function StoryAnimation({
   const licBadgeRef = useRef<HTMLDivElement | null>(null);
   const attBadgeRef = useRef<HTMLDivElement | null>(null);
   const ipfsBadgeRef = useRef<HTMLDivElement | null>(null);
+  const condRef = useRef<HTMLDivElement | null>(null);
+  const writeCondRef = useRef<HTMLDivElement | null>(null);
+  const readCondRef = useRef<HTMLDivElement | null>(null);
   const masterRef = useRef<gsap.core.Timeline | null>(null);
 
   const positions = {
@@ -61,14 +68,16 @@ export default function StoryAnimation({
       opacity: 1,
     });
     gsap.set(licBadgeRef.current, { opacity: 0, y: 10 });
-    gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
+    if (attBadgeRef.current) gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(doorRef.current, { width: "100%" }); // door closed
     gsap.set(lockRef.current, { scale: 1, opacity: 1, color: "#0f172a" });
+    if (condRef.current) gsap.set(condRef.current, { opacity: 0, y: 10 });
   };
 
   const playMain = () => {
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+    const targetLeft = positions.tee;
     // Owner walks to IPFS carrying doc
     tl.to(ownerRef.current, { left: "30%", duration: 1.0 })
       .to(
@@ -84,12 +93,14 @@ export default function StoryAnimation({
         lockRef.current,
         { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 },
         "+=0.1",
-      );
+      )
+      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.3 }, ">-");
 
     if (mode === "vault") {
       // Buyer approaches vault, license check, door opens, doc fetched from IPFS and delivered
-      tl.to(buyerRef.current, { left: "56%", duration: 1.1, delay: 0.2 })
+      tl.to(buyerRef.current, { left: positions.tee, duration: 1.1, delay: 0.2 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
         // doc appears from IPFS side and moves to buyer via vault gate
@@ -102,7 +113,7 @@ export default function StoryAnimation({
           duration: 0,
         })
         .to(docRef.current, {
-          left: "56%",
+          left: targetLeft,
           top: "62%",
           scale: 1,
           duration: 0.7,
@@ -116,8 +127,16 @@ export default function StoryAnimation({
         delay: 0.2,
       })
         .to(attBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
-        .to(buyerRef.current, { left: "56%", duration: 0.9 })
+        .to({}, { duration: 0.6 })
+        .to(buyerRef.current, { left: positions.tee, duration: 0.2 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
+        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
+        .to(condRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .from(
+          condRef.current?.querySelectorAll('[data-rule]'),
+          { opacity: 0, y: 6, stagger: 0.08, duration: 0.25 },
+          "<"
+        )
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
         .to(docRef.current, {
@@ -129,7 +148,7 @@ export default function StoryAnimation({
           duration: 0,
         })
         .to(docRef.current, {
-          left: "56%",
+          left: targetLeft,
           top: "62%",
           scale: 1,
           duration: 0.7,
@@ -139,17 +158,16 @@ export default function StoryAnimation({
     return tl;
   };
 
-  const play = () => {
+  const build = () => {
     reset();
-    const master = gsap.timeline();
-    const master = gsap.timeline();
+    const master = gsap.timeline({ paused: true });
     master.add(playMain());
     return master;
   };
 
   useEffect(() => {
     masterRef.current?.kill();
-    masterRef.current = play();
+    masterRef.current = build();
     return () => {
       masterRef.current?.kill();
     };
@@ -307,10 +325,13 @@ export default function StoryAnimation({
     }
   };
 
-  // Play button already triggers play(); also run demo sequence
+  // External play trigger via `event` prop
   useEffect(() => {
-    // no-op
-  }, []);
+    if (event) {
+      // restart from beginning on each event change
+      masterRef.current?.restart();
+    }
+  }, [event]);
 
   return (
     <div className="w-full max-w-[80rem]">
@@ -331,7 +352,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/20 bg-sky-500/20 px-3 py-1 text-xs text-sky-200">
-            <Database className="size-3" /> IPFS Storage
+            <Database className="size-3" /> Decentralized Storage (IPFS/Shelby)
           </div>
         </div>
 
@@ -359,18 +380,23 @@ export default function StoryAnimation({
         </div>
 
         {/* Safe room (TEE) */}
-        <div
-          className="absolute transform-gpu"
-          style={{
-            left: positions.tee,
-            top: "22%",
-            transform: "translateX(-50%)",
-          }}
-        >
-          <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
-            <Cpu className="size-3" /> Safe Room
+        {mode === "tee" && (
+          <div
+            className="absolute transform-gpu"
+            style={{
+              left: positions.tee,
+              top: "22%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
+              <Cpu className="size-3" /> TEE
+            </div>
+            <div className="mt-1 rounded-xl border border-white/10 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] text-emerald-200 inline-flex items-center gap-1">
+              <ShieldCheck className="size-3" /> MPC
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Owner */}
         <div ref={ownerRef} className="absolute transform-gpu">
@@ -413,25 +439,73 @@ export default function StoryAnimation({
         {/* Badges */}
         <div
           ref={licBadgeRef}
-          className="absolute left-1/2 top-[82%] -translate-x-1/2 transform-gpu"
+          className="absolute left-1/2 top-[76%] -translate-x-1/2 transform-gpu"
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
             <ShieldCheck className="size-3" /> License OK
           </div>
         </div>
+        {mode === "tee" && (
+          <div
+            ref={attBadgeRef}
+            className="absolute transform-gpu"
+            style={{
+              left: positions.tee,
+              top: "42%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
+              <ShieldCheck className="size-3" /> Attestation OK
+            </div>
+          </div>
+        )}
+        {/* Conditional Decryption (TEE only) */}
+        {mode === "tee" && (
+          <div
+            ref={condRef}
+            className="absolute left-1/2 top-[70%] -translate-x-1/2 transform-gpu"
+          >
+            <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/90 shadow-sm">
+              <div className="mb-1 font-semibold text-white/90">Conditional Decryption</div>
+              <div className="flex flex-wrap gap-1.5">
+                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                  <EyeOff className="size-3" /> Output-only
+                </span>
+                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                  <Scissors className="size-3" /> Partial access
+                </span>
+                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                  <Clock className="size-3" /> Time/usage
+                </span>
+                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                  <Monitor className="size-3" /> App-restricted
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Access condition badges */}
         <div
-          ref={attBadgeRef}
+          ref={writeCondRef}
           className="absolute transform-gpu"
-          style={{
-            left: positions.tee,
-            top: "42%",
-            transform: "translateX(-50%)",
-          }}
+          style={{ left: "30%", top: "80%", transform: "translateX(-50%)" }}
         >
-          <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-            <ShieldCheck className="size-3" /> Attestation OK
+          <div className="inline-flex items-center gap-1 rounded-md bg-white/10 px-2 py-1 text-white/80 text-xs">
+            <ShieldCheck className="size-3" /> Write access: Ownership of IP
           </div>
         </div>
+        <div
+          ref={readCondRef}
+          className="absolute transform-gpu"
+          style={{ left: "70%", top: "80%", transform: "translateX(-50%)" }}
+        >
+          <div className="inline-flex items-center gap-1 rounded-md bg-white/10 px-2 py-1 text-white/80 text-xs">
+            <ShieldCheck className="size-3" /> Read access: Valid IP License
+          </div>
+        </div>
+
         <div
           ref={ipfsBadgeRef}
           className="absolute transform-gpu"
@@ -442,7 +516,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-sky-500/20 px-2 py-1 text-sky-200 text-xs">
-            <ShieldCheck className="size-3" /> Stored on IPFS
+            <ShieldCheck className="size-3" /> Encrypted on IPFS
           </div>
         </div>
       </div>
