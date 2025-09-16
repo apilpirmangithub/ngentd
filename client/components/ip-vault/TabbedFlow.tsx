@@ -210,6 +210,15 @@ function DemoPanel({ mode, onVisualEvent }: { mode: "vault" | "tee"; onVisualEve
     const iv = base64ToBytes(payloadJson.iv);
     const ct = base64ToBytes(payloadJson.ct);
     setStatus("Mendekripsi file...");
+
+    // trigger visual: deliver doc from IPFS to buyer
+    try {
+      onVisualEvent?.("deliver");
+      setTimeout(() => onVisualEvent?.(null), 1200);
+    } catch (e) {
+      // ignore
+    }
+
     try {
       const plain = await crypto.subtle.decrypt(
         { name: "AES-GCM", iv: new Uint8Array(iv) },
