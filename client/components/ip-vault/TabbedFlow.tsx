@@ -273,6 +273,16 @@ function DemoPanel({ mode, onVisualEvent }: { mode: "vault" | "tee"; onVisualEve
           </button>
           <button
             type="button"
+            className="rounded bg-stone-500 px-3 py-1 text-white"
+            onClick={() => {
+              onVisualEvent?.("upload");
+              setTimeout(() => onVisualEvent?.(null), 1500);
+            }}
+          >
+            Test animation
+          </button>
+          <button
+            type="button"
             className="rounded bg-yellow-600 px-3 py-1 text-black"
             onClick={buyLicenseAndDownload}
           >
