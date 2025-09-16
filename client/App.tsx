@@ -13,7 +13,14 @@ const queryClient = new QueryClient();
 
 import Layout from "@/components/layout/Layout";
 
-const isInIframe = typeof window !== "undefined" && window.self !== window.top;
+const isInIframe = (() => {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
+  }
+})();
 const Router = isInIframe ? HashRouter : BrowserRouter;
 
 const App = () => (
