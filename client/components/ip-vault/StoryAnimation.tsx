@@ -244,8 +244,19 @@ export default function StoryAnimation({
                 { scale: 1, duration: 0.18, ease: 'power1.out' }
               );
 
-              // show the underlying ipfsBadge after morph completes
-              gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
+              // update the top IPFS Storage badge to show 'Stored on IPFS' and reveal it
+              try {
+                const topBadge = scene.querySelector('.ipfs-text')?.parentElement as HTMLElement | null;
+                if (topBadge) {
+                  topBadge.innerHTML = `\n                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><path d=\"M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7\"></path><path d=\"M7 17a4 4 0 0 0 8 0\"></path></svg>\n                    <span class=\"text-xs font-medium\">Stored on IPFS</span>\n                  `;
+                  gsap.set(topBadge, { opacity: 0, y: 8 });
+                  gsap.to(topBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
+                } else {
+                  gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
+                }
+              } catch (e) {
+                gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
+              }
 
               // run lock animation as before
               const lockEl = lockRef.current;
