@@ -81,10 +81,10 @@ export default function StoryAnimation({
       backgroundColor: "rgba(255,255,255,0.9)",
     });
     if (lockRef.current) {
-      lockRef.current
-        .querySelector?.(".unlock-icon")
-        ?.classList.remove("opacity-0");
-      lockRef.current.querySelector?.(".lock-icon")?.classList.add("opacity-0");
+      const unlockEl = lockRef.current.querySelector('.unlock-icon') as HTMLElement | null;
+      const lockElInner = lockRef.current.querySelector('.lock-icon') as HTMLElement | null;
+      unlockEl?.classList.remove('opacity-0');
+      lockElInner?.classList.add('opacity-0');
     }
     if (condRef.current) gsap.set(condRef.current, { opacity: 0, y: 10 });
   };
@@ -265,10 +265,10 @@ export default function StoryAnimation({
               const lockEl = lockRef.current;
               if (lockEl) {
                 // ensure unlock icon visible
-                const unlockIcon = lockEl.querySelector?.(".unlock-icon");
-                const lockIcon = lockEl.querySelector?.(".lock-icon");
-                if (unlockIcon) unlockIcon.classList.remove("opacity-0");
-                if (lockIcon) lockIcon.classList.add("opacity-0");
+                const unlockIcon = lockEl.querySelector('.unlock-icon') as HTMLElement | null;
+                const lockIcon = lockEl.querySelector('.lock-icon') as HTMLElement | null;
+                unlockIcon?.classList.remove('opacity-0');
+                lockIcon?.classList.add('opacity-0');
 
                 // position lock at IPFS badge center
                 gsap.set(lockEl, {
