@@ -3,45 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import StoryAnimation from "@/components/ip-vault/StoryAnimation";
 
-function bytesToBase64(buf: ArrayBuffer) {
-  let binary = "";
-  const bytes = new Uint8Array(buf);
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
-}
-
-function base64ToBytes(b64: string) {
-  const binary = atob(b64);
-  const len = binary.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes.buffer;
-}
-
-async function generateAesKey() {
-  return crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, [
-    "encrypt",
-    "decrypt",
-  ]);
-}
-
-async function exportKey(key: CryptoKey) {
-  const raw = await crypto.subtle.exportKey("raw", key);
-  return bytesToBase64(raw);
-}
-
-async function importKey(b64: string) {
-  const raw = base64ToBytes(b64);
-  return crypto.subtle.importKey("raw", raw, { name: "AES-GCM" }, true, [
-    "encrypt",
-    "decrypt",
-  ]);
-}
 
 export default function TabbedFlow() {
   const [type, setType] = useState<"vault" | "tee">("vault");
