@@ -243,12 +243,8 @@ export default function StoryAnimation({
               onComplete: () => {
             // Morph the floating file into the Stored on IPFS badge
             try {
-              // prepare fileEl to look like a badge
-              fileEl.className = "pointer-events-none inline-flex items-center gap-1 rounded-md bg-sky-500/20 px-2 py-1 text-sky-200 text-xs shadow transform-gpu";
-              fileEl.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><path d="M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7"></path><path d="M7 17a4 4 0 0 0 8 0"></path></svg>
-                <span class=\"text-xs font-medium\">Stored on IPFS</span>
-              `;
+              // keep floating file appearance (do not change to 'Stored on IPFS')
+              fileEl.className = "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
 
               // small pulse to emphasize morph
               gsap.fromTo(
