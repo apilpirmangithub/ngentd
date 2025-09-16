@@ -151,8 +151,6 @@ export default function StoryAnimation({
     master
       .to(talkOwnerRef.current, { opacity: 1, y: 0, duration: 0.4 })
       .to(talkOwnerRef.current, { opacity: 0, duration: 0.3 }, "+=1.1")
-      .to(talkBuyerRef.current, { opacity: 1, y: 0, duration: 0.4 })
-      .to(talkBuyerRef.current, { opacity: 0, duration: 0.3 }, "+=1.1")
       .add(playMain());
     return master;
   };
@@ -333,48 +331,7 @@ export default function StoryAnimation({
               Aku ingin mengunggah dan mengunci dokumen IP-ku dengan aman.
             </p>
           </div>
-          <div
-            ref={talkBuyerRef}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90 transform-gpu"
-          >
-            <div className="mb-1 flex items-center gap-1 text-xs opacity-70">
-              <MessageSquare className="size-3" /> IP Buyer
-            </div>
-            <p className="text-sm">
-              Saya ingin melisensi dan mengaksesnya hanya jika syaratnya
-              terpenuhi.
-            </p>
-          </div>
         </div>
-        <button
-          onClick={() => {
-            masterRef.current?.kill();
-            masterRef.current = play();
-            // trigger demo visual sequence: upload split then deliver
-            try {
-              performUploadSplit();
-              // after upload completes, trigger keySaved pulse a bit later
-              setTimeout(() => {
-                gsap.fromTo(
-                  lockRef.current,
-                  { scale: 1 },
-                  { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 },
-                );
-              }, 900);
-              // deliver doc from IPFS to buyer after a short delay
-              setTimeout(() => performDeliver(), 2400);
-            } catch (e) {
-              // ignore
-            }
-          }}
-          className="rounded-md bg-white/10 px-3 py-1.5 text-white hover:bg-white/15"
-        >
-          Play
-        </button>
-        <span>
-          Walkthrough:{" "}
-          {mode === "tee" ? "TEE attestation path" : "Standard license path"}
-        </span>
       </div>
       <div
         ref={sceneRef}
