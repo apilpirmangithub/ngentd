@@ -83,9 +83,9 @@ export default function TabbedFlow() {
       </div>
 
       <div ref={containerRef} className="w-full space-y-8">
-        <StoryAnimation mode={type} />
+        <StoryAnimation mode={type} event={visualEvent} />
 
-        <DemoPanel mode={type} />
+        <DemoPanel mode={type} onVisualEvent={setVisualEvent} />
       </div>
     </section>
   );
