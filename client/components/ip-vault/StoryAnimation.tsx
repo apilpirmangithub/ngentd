@@ -345,8 +345,14 @@ export default function StoryAnimation({
       </div>
       <div
         ref={sceneRef}
-        className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/10 bg-black transform-gpu"
+        className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/30 bg-black transform-gpu"
       >
+        {/* Debug grid overlay */}
+        <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-30" />
+        {/* Debug center dot */}
+        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-2 rounded-full bg-red-500" />
+        {/* Debug label */}
+        <div className="absolute left-2 top-2 text-[10px] text-white/70">scene mounted</div>
         {/* IPFS node */}
         <div
           className="absolute transform-gpu"
@@ -356,7 +362,7 @@ export default function StoryAnimation({
             transform: "translateX(-50%)",
           }}
         >
-          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/20 bg-sky-500/20 px-3 py-1 text-xs text-sky-200">
+          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
             <Database className="size-3" /> Decentralized Storage (IPFS/Shelby)
           </div>
         </div>
