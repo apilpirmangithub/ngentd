@@ -33,7 +33,13 @@ function expressPlugin(): Plugin {
       const app = createServer();
 
       // Add Express app as middleware to Vite dev server
-      server.middlewares.use(app);
+      // Mount Express only for /api requests to avoid intercepting Vite assets and SPA routes
+      server.middlewares.use((req, res, next) => {
+        if (req.url && req.url.startsWith("/api")) {
+          return app(req, res, next);
+        }
+        next();
+      });
     },
   };
 }
