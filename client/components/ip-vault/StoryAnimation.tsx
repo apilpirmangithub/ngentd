@@ -160,8 +160,57 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
 
   // Visual events from parent (e.g. upload -> animate file to IPFS and key to vault)
   useEffect(() => {
-    // event prop handled in parent via re-render
-  }, []);
+    if (!event) return;
+
+    if (event === "upload") {
+      const scene = sceneRef.current;
+      const doc = docRef.current;
+      const ipfsBadge = ipfsBadgeRef.current;
+      const vault = vaultRef.current;
+
+      // animate document flying to IPFS
+      const tl = gsap.timeline();
+      tl.to(doc, { left: positions.ipfs, top: "52%", scale: 0.75, duration: 0.9 })
+        .to(ipfsBadge, { opacity: 1, y: 0, duration: 0.3 }, "-=0.5")
+        .to(doc, { opacity: 0, duration: 0.25 }, "+=0.1");
+
+      // animate a temporary key flying from owner to vault
+      if (scene && ownerRef.current && vault) {
+        const sceneRect = scene.getBoundingClientRect();
+        const ownerRect = ownerRef.current.getBoundingClientRect();
+        const vaultRect = vault.getBoundingClientRect();
+
+        const keyEl = document.createElement("div");
+        keyEl.className = "pointer-events-none rounded-full bg-yellow-300 px-2 py-0.5 text-xs font-semibold text-black shadow transform-gpu";
+        keyEl.textContent = "🔑";
+        Object.assign(keyEl.style, { position: "absolute", zIndex: "9999" });
+        scene.appendChild(keyEl);
+
+        const startX = ownerRect.left - sceneRect.left + ownerRect.width / 2;
+        const startY = ownerRect.top - sceneRect.top + ownerRect.height / 2;
+        const endX = vaultRect.left - sceneRect.left + vaultRect.width / 2;
+        const endY = vaultRect.top - sceneRect.top + vaultRect.height / 2;
+
+        Object.assign(keyEl.style, { left: `${startX}px`, top: `${startY}px`, transform: "translate(-50%,-50%)" });
+
+        gsap.to(keyEl, {
+          left: `${endX}px`,
+          top: `${endY}px`,
+          scale: 1.1,
+          duration: 1.2,
+          ease: "power2.out",
+          onComplete: () => {
+            gsap.fromTo(lockRef.current, { scale: 1 }, { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 });
+            keyEl.remove();
+          },
+        });
+      }
+    }
+
+    if (event === "keySaved") {
+      gsap.fromTo(lockRef.current, { scale: 1 }, { scale: 1.25, yoyo: true, repeat: 1, duration: 0.35 });
+    }
+  }, [event]);
 
   return (
     <div className="w-full max-w-[80rem]">
