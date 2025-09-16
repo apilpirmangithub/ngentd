@@ -61,7 +61,7 @@ export default function StoryAnimation({
       opacity: 1,
     });
     gsap.set(licBadgeRef.current, { opacity: 0, y: 10 });
-    gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
+    if (attBadgeRef.current) gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(doorRef.current, { width: "100%" }); // door closed
     gsap.set(lockRef.current, { scale: 1, opacity: 1, color: "#0f172a" });
@@ -358,18 +358,20 @@ export default function StoryAnimation({
         </div>
 
         {/* Safe room (TEE) */}
-        <div
-          className="absolute transform-gpu"
-          style={{
-            left: positions.tee,
-            top: "22%",
-            transform: "translateX(-50%)",
-          }}
-        >
-          <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
-            <Cpu className="size-3" /> Safe Room
+        {mode === "tee" && (
+          <div
+            className="absolute transform-gpu"
+            style={{
+              left: positions.tee,
+              top: "22%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
+              <Cpu className="size-3" /> Safe Room
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Owner */}
         <div ref={ownerRef} className="absolute transform-gpu">
@@ -418,19 +420,21 @@ export default function StoryAnimation({
             <ShieldCheck className="size-3" /> License OK
           </div>
         </div>
-        <div
-          ref={attBadgeRef}
-          className="absolute transform-gpu"
-          style={{
-            left: positions.tee,
-            top: "42%",
-            transform: "translateX(-50%)",
-          }}
-        >
-          <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-            <ShieldCheck className="size-3" /> Attestation OK
+        {mode === "tee" && (
+          <div
+            ref={attBadgeRef}
+            className="absolute transform-gpu"
+            style={{
+              left: positions.tee,
+              top: "42%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
+              <ShieldCheck className="size-3" /> Attestation OK
+            </div>
           </div>
-        </div>
+        )}
         <div
           ref={ipfsBadgeRef}
           className="absolute transform-gpu"
