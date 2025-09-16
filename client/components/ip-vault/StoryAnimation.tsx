@@ -307,6 +307,18 @@ export default function StoryAnimation({ mode, event }: { mode: "vault" | "tee";
           onClick={() => {
             masterRef.current?.kill();
             masterRef.current = play();
+            // trigger demo visual sequence: upload split then deliver
+            try {
+              performUploadSplit();
+              // after upload completes, trigger keySaved pulse a bit later
+              setTimeout(() => {
+                gsap.fromTo(lockRef.current, { scale: 1 }, { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 });
+              }, 900);
+              // deliver doc from IPFS to buyer after a short delay
+              setTimeout(() => performDeliver(), 1300);
+            } catch (e) {
+              // ignore
+            }
           }}
           className="rounded-md bg-white/10 px-3 py-1.5 text-white hover:bg-white/15"
         >
