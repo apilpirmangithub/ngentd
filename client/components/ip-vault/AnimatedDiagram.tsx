@@ -89,6 +89,7 @@ export function AnimatedDiagram({ active }: { active: number }) {
                 width={32}
                 height={32}
                 href="https://cdn.builder.io/api/v1/image/assets%2F45b51cbd16f1407caa5463a5ffd74106%2F1fb9fcb5c7b44919b4aa9abd73481a1f?format=webp&width=800"
+                xlinkHref="https://cdn.builder.io/api/v1/image/assets%2F45b51cbd16f1407caa5463a5ffd74106%2F1fb9fcb5c7b44919b4aa9abd73481a1f?format=webp&width=800"
                 preserveAspectRatio="xMidYMid meet"
               />
             </g>
