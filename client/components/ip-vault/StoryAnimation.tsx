@@ -348,6 +348,59 @@ export default function StoryAnimation({
     }
   };
 
+  const performAttestationReveal = () => {
+    const scene = sceneRef.current;
+    const teeEl = teeRef.current;
+    const mpcEl = mpcRef.current;
+    const attEl = attBadgeRef.current;
+    if (!scene || !attEl) return;
+
+    try {
+      const sceneRect = scene.getBoundingClientRect();
+      const attRect = attEl.getBoundingClientRect();
+      const targets: HTMLElement[] = [];
+      if (teeEl) targets.push(teeEl);
+      if (mpcEl) targets.push(mpcEl);
+
+      const temps: HTMLElement[] = [];
+      targets.forEach((t) => {
+        const r = t.getBoundingClientRect();
+        const temp = document.createElement('div');
+        temp.className = 'pointer-events-none rounded-full bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs inline-flex items-center justify-center shadow';
+        temp.style.position = 'absolute';
+        temp.style.zIndex = '9999';
+        temp.innerHTML = '<span class="text-xs">✓</span>';
+        scene.appendChild(temp);
+        const startX = r.left - sceneRect.left + r.width / 2;
+        const startY = r.top - sceneRect.top + r.height / 2;
+        Object.assign(temp.style, {
+          left: `${startX}px`,
+          top: `${startY}px`,
+          transform: 'translate(-50%,-50%)',
+        });
+        temps.push(temp);
+      });
+
+      // animate temps to att badge center
+      temps.forEach((temp, i) => {
+        gsap.to(temp, {
+          left: `${attRect.left - sceneRect.left + attRect.width / 2}px`,
+          top: `${attRect.top - sceneRect.top + attRect.height / 2}px`,
+          duration: 0.7,
+          ease: 'power2.inOut',
+          delay: i * 0.08,
+          onComplete: () => {
+            gsap.to(attEl, { opacity: 1, y: 0, duration: 0.28 });
+            temp.remove();
+          },
+        });
+      });
+    } catch (e) {
+      // fallback: just reveal
+      gsap.to(attEl, { opacity: 1, y: 0, duration: 0.35 });
+    }
+  };
+
   const performDeliver = () => {
     const scene = sceneRef.current;
     const ipfsEl = ipfsBadgeRef.current;
