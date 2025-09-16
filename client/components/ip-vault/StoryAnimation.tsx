@@ -365,7 +365,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
-            <Database className="size-3" /> Decentralized Storage (IPFS/Shelby)
+            <Database className="size-3" /> IPFS Storage
           </div>
         </div>
 
