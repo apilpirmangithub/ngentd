@@ -165,7 +165,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         <div className="grid w-full max-w-4xl grid-cols-2 gap-3">
           <div
             ref={talkOwnerRef}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90"
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90 transform-gpu"
           >
             <div className="mb-1 flex items-center gap-1 text-xs opacity-70">
               <MessageSquare className="size-3" /> IP Owner
@@ -176,7 +176,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
           </div>
           <div
             ref={talkBuyerRef}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90"
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90 transform-gpu"
           >
             <div className="mb-1 flex items-center gap-1 text-xs opacity-70">
               <MessageSquare className="size-3" /> IP Buyer
@@ -203,11 +203,11 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
       </div>
       <div
         ref={sceneRef}
-        className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/10 bg-black"
+        className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/10 bg-black transform-gpu"
       >
         {/* IPFS node */}
         <div
-          className="absolute"
+          className="absolute transform-gpu"
           style={{ left: positions.ipfs, top: "22%", transform: "translateX(-50%)" }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/20 bg-sky-500/20 px-3 py-1 text-xs text-sky-200">
@@ -238,7 +238,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
 
         {/* Safe room (TEE) */}
         <div
-          className="absolute"
+          className="absolute transform-gpu"
           style={{
             left: positions.tee,
             top: "22%",
@@ -251,7 +251,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         </div>
 
         {/* Owner */}
-        <div ref={ownerRef} className="absolute">
+        <div ref={ownerRef} className="absolute transform-gpu">
           <div className="flex size-14 items-center justify-center rounded-full bg-blue-500">
             <User2 className="size-7" />
           </div>
@@ -259,7 +259,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         </div>
 
         {/* Buyer */}
-        <div ref={buyerRef} className="absolute">
+        <div ref={buyerRef} className="absolute transform-gpu">
           <div className="flex size-14 items-center justify-center rounded-full bg-white text-black">
             <User2 className="size-7" />
           </div>
@@ -267,7 +267,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         </div>
 
         {/* Document */}
-        <div ref={docRef} className="absolute">
+        <div ref={docRef} className="absolute transform-gpu">
           <div className="flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow">
             <FileText className="size-4" />
             <span className="text-xs font-medium">IP Doc</span>
@@ -277,7 +277,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         {/* Badges */}
         <div
           ref={licBadgeRef}
-          className="absolute left-1/2 top-[82%] -translate-x-1/2"
+          className="absolute left-1/2 top-[82%] -translate-x-1/2 transform-gpu"
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
             <ShieldCheck className="size-3" /> License OK
@@ -285,7 +285,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         </div>
         <div
           ref={attBadgeRef}
-          className="absolute"
+          className="absolute transform-gpu"
           style={{
             left: positions.tee,
             top: "42%",
@@ -298,7 +298,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         </div>
         <div
           ref={ipfsBadgeRef}
-          className="absolute"
+          className="absolute transform-gpu"
           style={{ left: positions.ipfs, top: "42%", transform: "translateX(-50%)" }}
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-sky-500/20 px-2 py-1 text-sky-200 text-xs">
