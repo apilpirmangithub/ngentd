@@ -382,19 +382,24 @@ export default function StoryAnimation({
       });
 
       // animate temps to att badge center
-      temps.forEach((temp, i) => {
-        gsap.to(temp, {
-          left: `${attRect.left - sceneRect.left + attRect.width / 2}px`,
-          top: `${attRect.top - sceneRect.top + attRect.height / 2}px`,
-          duration: 0.7,
-          ease: 'power2.inOut',
-          delay: i * 0.08,
-          onComplete: () => {
-            gsap.to(attEl, { opacity: 1, y: 0, duration: 0.28 });
-            temp.remove();
-          },
+      if (temps.length === 0) {
+        // no source elements (TEE/MPC) to animate from — reveal attestation directly
+        gsap.to(attEl, { opacity: 1, y: 0, duration: 0.28 });
+      } else {
+        temps.forEach((temp, i) => {
+          gsap.to(temp, {
+            left: `${attRect.left - sceneRect.left + attRect.width / 2}px`,
+            top: `${attRect.top - sceneRect.top + attRect.height / 2}px`,
+            duration: 0.7,
+            ease: 'power2.inOut',
+            delay: i * 0.08,
+            onComplete: () => {
+              gsap.to(attEl, { opacity: 1, y: 0, duration: 0.28 });
+              temp.remove();
+            },
+          });
         });
-      });
+      }
     } catch (e) {
       // fallback: just reveal
       gsap.to(attEl, { opacity: 1, y: 0, duration: 0.35 });
