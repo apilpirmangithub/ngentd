@@ -230,11 +230,6 @@ export default function StoryAnimation({
         top: `${startY}px`,
         transform: "translate(-50%,-50%)",
       });
-      Object.assign(keyEl.style, {
-        left: `${startX}px`,
-        top: `${startY}px`,
-        transform: "translate(-50%,-50%)",
-      });
 
       if (ipfsRect) {
         const endX = ipfsRect.left - sceneRect.left + ipfsRect.width / 2;
