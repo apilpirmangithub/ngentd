@@ -406,7 +406,7 @@ export default function StoryAnimation({
             <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
               <Cpu className="size-3" /> TEE
             </div>
-            <div className="mt-1 rounded-xl border border-white/10 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] text-emerald-200 inline-flex items-center gap-1">
+            <div className="mt-1 rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
               <ShieldCheck className="size-3" /> MPC
             </div>
           </div>
