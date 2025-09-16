@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Lock, PlayCircle } from "lucide-react";
 import Providers from "./providers";
 import ExtensionErrorGuard from "./extension-error-guard";
+import Script from "next/script";
 import "../client/global.css";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +15,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark">
       <body className="bg-background text-foreground min-h-dvh flex flex-col">
+        <Script id="ext-guard" strategy="beforeInteractive">
+          {`
+            (function(){
+              function isExtErr(e){
+                try{var m=(e&&e.message)||e||'';var s=(e&&e.stack)||'';return m.includes('Talisman extension')||m.includes('chrome-extension://')||s.includes('chrome-extension://');}catch{return false}}
+              function onErr(ev){var f=ev && ev.filename || ''; if((f && f.indexOf('chrome-extension://')===0) || isExtErr(ev.error)){ev.preventDefault&&ev.preventDefault(); ev.stopImmediatePropagation&&ev.stopImmediatePropagation();}}
+              function onRej(ev){ if(isExtErr(ev && ev.reason)){ev.preventDefault&&ev.preventDefault(); ev.stopImmediatePropagation&&ev.stopImmediatePropagation();}}
+              window.addEventListener('error', onErr, true);
+              window.addEventListener('unhandledrejection', onRej, true);
+            })();
+          `}
+        </Script>
         <Header />
         <ExtensionErrorGuard />
         <main className="flex-1">
