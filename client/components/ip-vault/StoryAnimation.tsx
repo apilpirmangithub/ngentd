@@ -27,7 +27,7 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
 
   const positions = {
     owner: "12%",
-    ipfs: "35%",
+    ipfs: "30%",
     vault: "50%",
     tee: "70%",
     buyer: "88%",
