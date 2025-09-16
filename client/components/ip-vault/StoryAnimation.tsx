@@ -77,6 +77,7 @@ export default function StoryAnimation({
 
   const playMain = () => {
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+    const targetLeft = mode === "tee" ? positions.tee : "56%";
     // Owner walks to IPFS carrying doc
     tl.to(ownerRef.current, { left: "30%", duration: 1.0 })
       .to(
@@ -112,7 +113,7 @@ export default function StoryAnimation({
           duration: 0,
         })
         .to(docRef.current, {
-          left: "56%",
+          left: targetLeft,
           top: "62%",
           scale: 1,
           duration: 0.7,
@@ -127,7 +128,7 @@ export default function StoryAnimation({
       })
         .to(attBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .to({}, { duration: 0.6 })
-        .to(buyerRef.current, { left: "56%", duration: 1.4 })
+        .to(buyerRef.current, { left: positions.tee, duration: 0.2 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to(condRef.current, { opacity: 1, y: 0, duration: 0.35 })
@@ -147,7 +148,7 @@ export default function StoryAnimation({
           duration: 0,
         })
         .to(docRef.current, {
-          left: "56%",
+          left: targetLeft,
           top: "62%",
           scale: 1,
           duration: 0.7,
