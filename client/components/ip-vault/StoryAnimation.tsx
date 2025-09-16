@@ -68,7 +68,8 @@ export default function StoryAnimation({
       opacity: 1,
     });
     gsap.set(licBadgeRef.current, { opacity: 0, y: 10 });
-    if (attBadgeRef.current) gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
+    if (attBadgeRef.current)
+      gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(doorRef.current, { width: "100%" }); // door closed
     gsap.set(lockRef.current, { scale: 1, opacity: 1, color: "#0f172a" });
@@ -98,7 +99,11 @@ export default function StoryAnimation({
 
     if (mode === "vault") {
       // Buyer approaches vault, license check, door opens, doc fetched from IPFS and delivered
-      tl.to(buyerRef.current, { left: positions.tee, duration: 1.1, delay: 0.2 })
+      tl.to(buyerRef.current, {
+        left: positions.tee,
+        duration: 1.1,
+        delay: 0.2,
+      })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to({}, { duration: 0.6 })
@@ -133,9 +138,9 @@ export default function StoryAnimation({
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to(condRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .from(
-          condRef.current?.querySelectorAll('[data-rule]'),
+          condRef.current?.querySelectorAll("[data-rule]"),
           { opacity: 0, y: 6, stagger: 0.08, duration: 0.25 },
-          "<"
+          "<",
         )
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
@@ -467,18 +472,32 @@ export default function StoryAnimation({
             className="absolute left-1/2 top-[70%] -translate-x-1/2 transform-gpu"
           >
             <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/90 shadow-sm">
-              <div className="mb-1 font-semibold text-white/90">Conditional Decryption</div>
+              <div className="mb-1 font-semibold text-white/90">
+                Conditional Decryption
+              </div>
               <div className="flex flex-wrap gap-1.5">
-                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                <span
+                  data-rule
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                >
                   <EyeOff className="size-3" /> Output-only
                 </span>
-                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                <span
+                  data-rule
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                >
                   <Scissors className="size-3" /> Partial access
                 </span>
-                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                <span
+                  data-rule
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                >
                   <Clock className="size-3" /> Time/usage
                 </span>
-                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                <span
+                  data-rule
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                >
                   <Monitor className="size-3" /> App-restricted
                 </span>
               </div>
@@ -491,14 +510,12 @@ export default function StoryAnimation({
           ref={writeCondRef}
           className="absolute transform-gpu"
           style={{ left: "30%", top: "80%", transform: "translateX(-50%)" }}
-        >
-        </div>
+        ></div>
         <div
           ref={readCondRef}
           className="absolute transform-gpu"
           style={{ left: "70%", top: "80%", transform: "translateX(-50%)" }}
-        >
-        </div>
+        ></div>
 
         <div
           ref={ipfsBadgeRef}
