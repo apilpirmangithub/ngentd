@@ -459,27 +459,49 @@ export default function StoryAnimation({
             </div>
           </div>
         )}
-        {/* Conditional Decryption */}
-        <div
-          ref={condRef}
-          className="absolute left-1/2 top-[70%] -translate-x-1/2 transform-gpu"
-        >
-          <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/90 shadow-sm">
-            <div className="mb-1 font-semibold text-white/90">Conditional Decryption</div>
-            <div className="flex flex-wrap gap-1.5">
-              <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
-                <EyeOff className="size-3" /> Output-only
-              </span>
-              <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
-                <Scissors className="size-3" /> Partial access
-              </span>
-              <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
-                <Clock className="size-3" /> Time/usage
-              </span>
-              <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
-                <Monitor className="size-3" /> App-restricted
-              </span>
+        {/* Conditional Decryption (TEE only) */}
+        {mode === "tee" && (
+          <div
+            ref={condRef}
+            className="absolute left-1/2 top-[70%] -translate-x-1/2 transform-gpu"
+          >
+            <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/90 shadow-sm">
+              <div className="mb-1 font-semibold text-white/90">Conditional Decryption</div>
+              <div className="flex flex-wrap gap-1.5">
+                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                  <EyeOff className="size-3" /> Output-only
+                </span>
+                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                  <Scissors className="size-3" /> Partial access
+                </span>
+                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                  <Clock className="size-3" /> Time/usage
+                </span>
+                <span data-rule className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5">
+                  <Monitor className="size-3" /> App-restricted
+                </span>
+              </div>
             </div>
+          </div>
+        )}
+
+        {/* Access condition badges */}
+        <div
+          ref={writeCondRef}
+          className="absolute transform-gpu"
+          style={{ left: "30%", top: "80%", transform: "translateX(-50%)" }}
+        >
+          <div className="inline-flex items-center gap-1 rounded-md bg-white/10 px-2 py-1 text-white/80 text-xs">
+            <ShieldCheck className="size-3" /> Write access: Ownership of IP
+          </div>
+        </div>
+        <div
+          ref={readCondRef}
+          className="absolute transform-gpu"
+          style={{ left: "70%", top: "80%", transform: "translateX(-50%)" }}
+        >
+          <div className="inline-flex items-center gap-1 rounded-md bg-white/10 px-2 py-1 text-white/80 text-xs">
+            <ShieldCheck className="size-3" /> Read access: Valid IP License
           </div>
         </div>
 
