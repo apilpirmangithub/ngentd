@@ -388,23 +388,22 @@ export default function StoryAnimation({
         {/* Vault */}
         <div
           ref={vaultRef}
-          className="absolute left-1/2 top-1/2 h-40 w-56 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-yellow-400 text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)]"
+          className="absolute left-1/2 top-1/2 h-40 w-56 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)] overflow-hidden"
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F75857544e65a4f6982333406121c72a7%2Fa9f23897196141cda50bf40c9cf505c4?format=webp&width=800"
-              alt="Vault"
-              className="h-8 w-8 object-contain"
-            />
-          </div>
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F75857544e65a4f6982333406121c72a7%2Fa9f23897196141cda50bf40c9cf505c4?format=webp&width=800"
+            alt="Vault"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+
           {/* Door overlay */}
           <div
             ref={doorRef}
-            className="absolute left-0 top-0 h-full bg-yellow-500/60"
+            className="absolute left-0 top-0 h-full bg-black/20"
           />
           <div
             ref={lockRef}
-            className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-yellow-300/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow"
+            className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow"
           >
             Key in Vault
           </div>
