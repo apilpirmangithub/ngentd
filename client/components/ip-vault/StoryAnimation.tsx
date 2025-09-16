@@ -81,7 +81,7 @@ export default function StoryAnimation({
       if (topBadge) {
         topBadge.innerHTML = `
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><path d="M12 2v6"></path></svg>
-          <span class="text-xs font-medium">IPFS Storage</span>
+          <span class="text-xs font-medium">IPFS</span>
         `;
         gsap.set(topBadge, { opacity: 1, y: 0 });
       }
@@ -206,7 +206,7 @@ export default function StoryAnimation({
       const ownerRect = ownerRef.current.getBoundingClientRect();
       const ipfsRect = ipfsBadge?.getBoundingClientRect();
       const vaultRect = vault?.getBoundingClientRect();
-      // Prefer the top IPFS Storage text element if present
+      // Prefer the top IPFS text element if present
       const ipfsTextEl = scene.querySelector('.ipfs-text') as HTMLElement | null;
       const ipfsTextRect = ipfsTextEl?.getBoundingClientRect();
 
@@ -242,9 +242,9 @@ export default function StoryAnimation({
               duration: 1.0,
               ease: "power2.out",
               onComplete: () => {
-            // Morph the floating file into the IPFS Storage badge
+            // Morph the floating file into the IPFS badge
             try {
-              // keep floating file appearance (do not change to 'IPFS Storage')
+              // keep floating file appearance (do not change to 'IPFS')
               fileEl.className = "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
 
               // small pulse to emphasize morph
@@ -254,11 +254,11 @@ export default function StoryAnimation({
                 { scale: 1, duration: 0.18, ease: 'power1.out' }
               );
 
-              // update the top IPFS Storage badge to show 'IPFS Storage' and reveal it
+              // update the top IPFS badge to show 'IPFS' and reveal it
               try {
                 const topBadge = scene.querySelector('.ipfs-text')?.parentElement as HTMLElement | null;
                 if (topBadge) {
-                  topBadge.innerHTML = `\n                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><path d=\"M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7\"></path><path d=\"M7 17a4 4 0 0 0 8 0\"></path></svg>\n                    <span class=\"text-xs font-medium\">IPFS Storage</span>\n                  `;
+                  topBadge.innerHTML = `\n                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><path d=\"M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7\"></path><path d=\"M7 17a4 4 0 0 0 8 0\"></path></svg>\n                    <span class=\"text-xs font-medium\">IPFS</span>\n                  `;
                   gsap.set(topBadge, { opacity: 0, y: 8 });
                   gsap.to(topBadge, { opacity: 1, y: 0, duration: 0.25, delay: 0.18 });
                 } else {
