@@ -176,6 +176,12 @@ function DemoPanel({ mode, onVisualEvent }: { mode: "vault" | "tee"; onVisualEve
     });
     localStorage.setItem("ip_vault_keys", JSON.stringify(vault));
     setStatus("Kunci disimpan di Vault (localStorage) dengan stub TEE/MPC.");
+    try {
+      onVisualEvent?.("keySaved");
+      setTimeout(() => onVisualEvent?.(null), 800);
+    } catch (e) {
+      // ignore
+    }
   };
 
   const buyLicenseAndDownload = async () => {
