@@ -499,7 +499,7 @@ export default function StoryAnimation({
         {mode === "tee" && (
           <div
             ref={condRef}
-            className="absolute left-1/2 top-[70%] -translate-x-1/2 transform-gpu"
+            className="absolute left-1/2 top-[82%] -translate-x-1/2 transform-gpu"
           >
             <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/90 shadow-sm">
               <div className="mb-1 font-semibold text-white/90">
