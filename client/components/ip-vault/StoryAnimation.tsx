@@ -248,6 +248,50 @@ export default function StoryAnimation({
           ease: "power2.out",
           onComplete: () => {
             gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25 });
+
+            // Show lock at IPFS location (start unlocked), then slide to vault and lock
+            try {
+              const lockEl = lockRef.current;
+              if (lockEl) {
+                // ensure unlock icon visible
+                const unlockIcon = lockEl.querySelector?.('.unlock-icon');
+                const lockIcon = lockEl.querySelector?.('.lock-icon');
+                if (unlockIcon) unlockIcon.classList.remove('opacity-0');
+                if (lockIcon) lockIcon.classList.add('opacity-0');
+
+                // position lock at IPFS badge center
+                gsap.set(lockEl, {
+                  left: `${endX}px`,
+                  top: `${endY}px`,
+                  xPercent: -50,
+                  yPercent: -50,
+                  opacity: 1,
+                  scale: 0.9,
+                });
+
+                if (vaultRect) {
+                  const vaultCenterX = vaultRect.left - sceneRect.left + vaultRect.width / 2;
+                  const vaultCenterY = vaultRect.top - sceneRect.top + vaultRect.height / 2;
+
+                  // animate lock sliding to vault
+                  gsap.to(lockEl, {
+                    left: `${vaultCenterX}px`,
+                    top: `${vaultCenterY}px`,
+                    duration: 1.0,
+                    ease: 'power2.out',
+                    onComplete: () => {
+                      // swap icons to locked
+                      if (unlockIcon) unlockIcon.classList.add('opacity-0');
+                      if (lockIcon) lockIcon.classList.remove('opacity-0');
+                      gsap.to(lockEl, { backgroundColor: '#10B981', color: '#ffffff', scale: 1.05, duration: 0.12 });
+                    },
+                  });
+                }
+              }
+            } catch (e) {
+              // ignore DOM failures
+            }
+
             gsap.to(fileEl, {
               opacity: 0,
               duration: 0.25,
