@@ -181,6 +181,12 @@ export default function StoryAnimation({
     const vault = vaultRef.current;
 
     if (scene && ownerRef.current && doc) {
+      // hide the owner's static IP File during animated upload
+      try {
+        gsap.set(doc, { opacity: 0, pointerEvents: 'none' });
+      } catch (e) {
+        /* ignore */
+      }
       const sceneRect = scene.getBoundingClientRect();
       const ownerRect = ownerRef.current.getBoundingClientRect();
       const ipfsRect = ipfsBadge?.getBoundingClientRect();
