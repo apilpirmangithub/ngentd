@@ -79,10 +79,6 @@ export default function StoryAnimation({
       const scene = sceneRef.current;
       const topBadge = scene?.querySelector('.ipfs-text')?.parentElement as HTMLElement | null;
       if (topBadge) {
-        topBadge.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><path d="M12 2v6"></path></svg>
-          <span class="text-xs font-medium">IPFS</span>
-        `;
         gsap.set(topBadge, { opacity: 1, y: 0 });
       }
     } catch (e) {
