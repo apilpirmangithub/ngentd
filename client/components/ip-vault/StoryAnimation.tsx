@@ -140,16 +140,16 @@ export default function StoryAnimation({
     return tl;
   };
 
-  const play = () => {
+  const build = () => {
     reset();
-    const master = gsap.timeline();
+    const master = gsap.timeline({ paused: true });
     master.add(playMain());
     return master;
   };
 
   useEffect(() => {
     masterRef.current?.kill();
-    masterRef.current = play();
+    masterRef.current = build();
     return () => {
       masterRef.current?.kill();
     };
@@ -307,10 +307,13 @@ export default function StoryAnimation({
     }
   };
 
-  // Play button already triggers play(); also run demo sequence
+  // External play trigger via `event` prop
   useEffect(() => {
-    // no-op
-  }, []);
+    if (event) {
+      // restart from beginning on each event change
+      masterRef.current?.restart();
+    }
+  }, [event]);
 
   return (
     <div className="w-full max-w-[80rem]">
