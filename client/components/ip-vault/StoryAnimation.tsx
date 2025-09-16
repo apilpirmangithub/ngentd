@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import {
   Cpu,
@@ -9,7 +9,13 @@ import {
   Database,
 } from "lucide-react";
 
-export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
+export default function StoryAnimation({
+  mode,
+  event,
+}: {
+  mode: "vault" | "tee";
+  event?: string | null;
+}) {
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const ownerRef = useRef<HTMLDivElement | null>(null);
   const buyerRef = useRef<HTMLDivElement | null>(null);
@@ -20,14 +26,12 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
   const teeRef = useRef<HTMLDivElement | null>(null);
   const licBadgeRef = useRef<HTMLDivElement | null>(null);
   const attBadgeRef = useRef<HTMLDivElement | null>(null);
-  const talkOwnerRef = useRef<HTMLDivElement | null>(null);
-  const talkBuyerRef = useRef<HTMLDivElement | null>(null);
   const ipfsBadgeRef = useRef<HTMLDivElement | null>(null);
   const masterRef = useRef<gsap.core.Timeline | null>(null);
 
   const positions = {
     owner: "12%",
-    ipfs: "35%",
+    ipfs: "30%",
     vault: "50%",
     tee: "70%",
     buyer: "88%",
@@ -61,25 +65,19 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(doorRef.current, { width: "100%" }); // door closed
     gsap.set(lockRef.current, { scale: 1, opacity: 1, color: "#0f172a" });
-    gsap.set([talkOwnerRef.current, talkBuyerRef.current], {
-      opacity: 0,
-      y: 8,
-    });
   };
 
   const playMain = () => {
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
     // Owner walks to IPFS carrying doc
     tl.to(ownerRef.current, { left: "30%", duration: 1.0 })
-      .to(docRef.current, { left: "32%", duration: 1.0 }, "<")
-      // Document stored on IPFS (disappear into storage)
-      .to(docRef.current, {
-        left: positions.ipfs,
-        top: "52%",
-        scale: 0.85,
-        duration: 0.5,
-      })
-      .to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 }, "-=0.1")
+      .to(
+        docRef.current,
+        { left: "30%", xPercent: -50, yPercent: -50, duration: 1.0 },
+        "<",
+      )
+      // Document stored on IPFS (fade into storage)
+      .to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 })
       .to(docRef.current, { opacity: 0, duration: 0.25 })
       // Key saved in Vault (lock pulse)
       .to(
@@ -92,13 +90,15 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
       // Buyer approaches vault, license check, door opens, doc fetched from IPFS and delivered
       tl.to(buyerRef.current, { left: "56%", duration: 1.1, delay: 0.2 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
         // doc appears from IPFS side and moves to buyer via vault gate
         .to(docRef.current, {
           opacity: 1,
-          scale: 0.85,
           left: positions.ipfs,
           top: "52%",
+          xPercent: -50,
+          yPercent: -50,
           duration: 0,
         })
         .to(docRef.current, {
@@ -118,12 +118,14 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         .to(attBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .to(buyerRef.current, { left: "56%", duration: 0.9 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
+        .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
         .to(docRef.current, {
           opacity: 1,
-          scale: 0.85,
           left: positions.ipfs,
           top: "52%",
+          xPercent: -50,
+          yPercent: -50,
           duration: 0,
         })
         .to(docRef.current, {
@@ -140,12 +142,8 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
   const play = () => {
     reset();
     const master = gsap.timeline();
-    master
-      .to(talkOwnerRef.current, { opacity: 1, y: 0, duration: 0.4 })
-      .to(talkOwnerRef.current, { opacity: 0, duration: 0.3 }, "+=1.1")
-      .to(talkBuyerRef.current, { opacity: 1, y: 0, duration: 0.4 })
-      .to(talkBuyerRef.current, { opacity: 0, duration: 0.3 }, "+=1.1")
-      .add(playMain());
+    const master = gsap.timeline();
+    master.add(playMain());
     return master;
   };
 
@@ -158,47 +156,166 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  // helper functions for demo visual sequence
+  const performUploadSplit = () => {
+    const scene = sceneRef.current;
+    const doc = docRef.current;
+    const ipfsBadge = ipfsBadgeRef.current;
+    const vault = vaultRef.current;
+
+    if (scene && ownerRef.current && doc) {
+      const sceneRect = scene.getBoundingClientRect();
+      const ownerRect = ownerRef.current.getBoundingClientRect();
+      const ipfsRect = ipfsBadge?.getBoundingClientRect();
+      const vaultRect = vault?.getBoundingClientRect();
+
+      gsap.set(doc, {
+        left: `calc(${positions.owner})`,
+        top: "44%",
+        xPercent: -50,
+        yPercent: -50,
+        opacity: 1,
+        scale: 1,
+      });
+
+      const fileEl = document.createElement("div");
+      fileEl.className =
+        "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
+      fileEl.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"inline-block align-middle mr-1\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg><span class=\"text-xs font-medium\">IP Doc</span>`;
+      Object.assign(fileEl.style, { position: "absolute", zIndex: "9999" });
+      scene.appendChild(fileEl);
+
+      const keyEl = document.createElement("div");
+      keyEl.className =
+        "pointer-events-none rounded-full bg-yellow-300 px-2 py-0.5 text-xs font-semibold text-black shadow transform-gpu";
+      keyEl.textContent = "🔑";
+      Object.assign(keyEl.style, { position: "absolute", zIndex: "9999" });
+      scene.appendChild(keyEl);
+
+      const startX = ownerRect.left - sceneRect.left + ownerRect.width / 2;
+      const startY = ownerRect.top - sceneRect.top + ownerRect.height / 2;
+
+      Object.assign(fileEl.style, {
+        left: `${startX}px`,
+        top: `${startY}px`,
+        transform: "translate(-50%,-50%)",
+      });
+      Object.assign(keyEl.style, {
+        left: `${startX}px`,
+        top: `${startY}px`,
+        transform: "translate(-50%,-50%)",
+      });
+
+      if (ipfsRect) {
+        const endX = ipfsRect.left - sceneRect.left + ipfsRect.width / 2;
+        const endY = ipfsRect.top - sceneRect.top + ipfsRect.height / 2;
+        gsap.to(fileEl, {
+          left: `${endX}px`,
+          top: `${endY}px`,
+          scale: 0.75,
+          duration: 1.0,
+          ease: "power2.out",
+          onComplete: () => {
+            gsap.to(ipfsBadge, { opacity: 1, y: 0, duration: 0.25 });
+            gsap.to(fileEl, {
+              opacity: 0,
+              duration: 0.25,
+              delay: 0.1,
+              onComplete: () => fileEl.remove(),
+            });
+          },
+        });
+      }
+
+      if (vaultRect) {
+        const endX = vaultRect.left - sceneRect.left + vaultRect.width / 2;
+        const endY = vaultRect.top - sceneRect.top + vaultRect.height / 2;
+        gsap.to(keyEl, {
+          left: `${endX}px`,
+          top: `${endY}px`,
+          scale: 1.1,
+          duration: 1.2,
+          ease: "power2.out",
+          onComplete: () => {
+            gsap.fromTo(
+              lockRef.current,
+              { scale: 1 },
+              { scale: 1.25, yoyo: true, repeat: 1, duration: 0.25 },
+            );
+            keyEl.remove();
+          },
+        });
+      }
+
+      gsap.to(doc, { opacity: 0, duration: 0.2, delay: 0.15 });
+    }
+  };
+
+  const performDeliver = () => {
+    const scene = sceneRef.current;
+    const ipfsEl = ipfsBadgeRef.current;
+    const buyerEl = buyerRef.current;
+    if (scene && ipfsEl && buyerEl) {
+      // Ensure IPFS badge is visible and layout is settled
+      gsap.set(ipfsEl, { opacity: 1, y: 0 });
+      // force reflow so measurements are accurate
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      ipfsEl.offsetWidth;
+
+      const sceneRect = scene.getBoundingClientRect();
+      const ipfsRect = ipfsEl.getBoundingClientRect();
+      const buyerRect = buyerEl.getBoundingClientRect();
+
+      const docEl = document.createElement("div");
+      docEl.className =
+        "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
+      docEl.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"inline-block align-middle mr-1\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg><span class=\"text-xs font-medium\">IP Doc</span>`;
+      Object.assign(docEl.style, {
+        position: "absolute",
+        zIndex: "9999",
+        opacity: "1",
+      });
+      scene.appendChild(docEl);
+
+      // Calculate exact centers (accounting for transforms)
+      const startX = ipfsRect.left - sceneRect.left + ipfsRect.width / 2;
+      const startY = ipfsRect.top - sceneRect.top + ipfsRect.height / 2;
+      const endX = buyerRect.left - sceneRect.left + buyerRect.width / 2;
+      const endY = buyerRect.top - sceneRect.top + buyerRect.height / 2;
+
+      Object.assign(docEl.style, {
+        left: `${startX}px`,
+        top: `${startY}px`,
+        transform: "translate(-50%,-50%)",
+      });
+
+      gsap.to(docEl, {
+        left: `${endX}px`,
+        top: `${endY}px`,
+        scale: 1,
+        duration: 1.0,
+        ease: "power2.inOut",
+        onComplete: () => {
+          gsap.fromTo(
+            buyerEl,
+            { scale: 1 },
+            { scale: 1.08, yoyo: true, repeat: 1, duration: 0.2 },
+          );
+          setTimeout(() => docEl.remove(), 300);
+        },
+      });
+    }
+  };
+
+  // Play button already triggers play(); also run demo sequence
+  useEffect(() => {
+    // no-op
+  }, []);
+
   return (
     <div className="w-full max-w-[80rem]">
       <div className="mb-4 flex flex-col items-center gap-3 text-sm text-muted-foreground">
-        <div className="grid w-full max-w-4xl grid-cols-2 gap-3">
-          <div
-            ref={talkOwnerRef}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90 transform-gpu"
-          >
-            <div className="mb-1 flex items-center gap-1 text-xs opacity-70">
-              <MessageSquare className="size-3" /> IP Owner
-            </div>
-            <p className="text-sm">
-              Aku ingin mengunggah dan mengunci dokumen IP-ku dengan aman.
-            </p>
-          </div>
-          <div
-            ref={talkBuyerRef}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90 transform-gpu"
-          >
-            <div className="mb-1 flex items-center gap-1 text-xs opacity-70">
-              <MessageSquare className="size-3" /> IP Buyer
-            </div>
-            <p className="text-sm">
-              Saya ingin melisensi dan mengaksesnya hanya jika syaratnya
-              terpenuhi.
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={() => {
-            masterRef.current?.kill();
-            masterRef.current = play();
-          }}
-          className="rounded-md bg-white/10 px-3 py-1.5 text-white hover:bg-white/15"
-        >
-          Play
-        </button>
-        <span>
-          Walkthrough:{" "}
-          {mode === "tee" ? "TEE attestation path" : "Standard license path"}
-        </span>
+        <div className="grid w-full max-w-4xl grid-cols-2 gap-3"></div>
       </div>
       <div
         ref={sceneRef}
@@ -221,26 +338,24 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         {/* Vault */}
         <div
           ref={vaultRef}
-          className="absolute left-1/2 top-1/2 h-40 w-56 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-yellow-400 text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)]"
+          className="absolute left-1/2 top-1/2 h-40 w-56 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)] overflow-hidden"
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F45b51cbd16f1407caa5463a5ffd74106%2F1fb9fcb5c7b44919b4aa9abd73481a1f?format=webp&width=800"
-              alt="Vault"
-              className="h-8 w-8 object-contain"
-            />
-          </div>
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F75857544e65a4f6982333406121c72a7%2Fa9f23897196141cda50bf40c9cf505c4?format=webp&width=800"
+            alt="Vault"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+
           {/* Door overlay */}
           <div
             ref={doorRef}
-            className="absolute left-0 top-0 h-full bg-yellow-500/60"
+            className="absolute left-0 top-0 h-full bg-black/20"
           />
           <div
             ref={lockRef}
-            className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-yellow-300/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow"
-          >
-            Key in Vault
-          </div>
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-5 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow"
+          />
         </div>
 
         {/* Safe room (TEE) */}
@@ -274,7 +389,21 @@ export default function StoryAnimation({ mode }: { mode: "vault" | "tee" }) {
         </div>
 
         {/* Document */}
-        <div ref={docRef} className="absolute transform-gpu">
+        <div
+          ref={docRef}
+          role="button"
+          onClick={() => {
+            gsap.to(docRef.current, {
+              left: positions.ipfs,
+              top: "52%",
+              xPercent: -50,
+              yPercent: -50,
+              duration: 0.6,
+            });
+            gsap.to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 });
+          }}
+          className="absolute transform-gpu cursor-pointer"
+        >
           <div className="flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow">
             <FileText className="size-4" />
             <span className="text-xs font-medium">IP Doc</span>
