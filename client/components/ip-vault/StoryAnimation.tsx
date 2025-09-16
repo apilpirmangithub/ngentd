@@ -26,8 +26,6 @@ export default function StoryAnimation({
   const teeRef = useRef<HTMLDivElement | null>(null);
   const licBadgeRef = useRef<HTMLDivElement | null>(null);
   const attBadgeRef = useRef<HTMLDivElement | null>(null);
-  const talkOwnerRef = useRef<HTMLDivElement | null>(null);
-  const talkBuyerRef = useRef<HTMLDivElement | null>(null);
   const ipfsBadgeRef = useRef<HTMLDivElement | null>(null);
   const masterRef = useRef<gsap.core.Timeline | null>(null);
 
@@ -67,10 +65,6 @@ export default function StoryAnimation({
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(doorRef.current, { width: "100%" }); // door closed
     gsap.set(lockRef.current, { scale: 1, opacity: 1, color: "#0f172a" });
-    gsap.set([talkOwnerRef.current, talkBuyerRef.current], {
-      opacity: 0,
-      y: 8,
-    });
   };
 
   const playMain = () => {
@@ -148,10 +142,8 @@ export default function StoryAnimation({
   const play = () => {
     reset();
     const master = gsap.timeline();
-    master
-      .to(talkOwnerRef.current, { opacity: 1, y: 0, duration: 0.4 })
-      .to(talkOwnerRef.current, { opacity: 0, duration: 0.3 }, "+=1.1")
-      .add(playMain());
+    const master = gsap.timeline();
+    master.add(playMain());
     return master;
   };
 
@@ -320,17 +312,6 @@ export default function StoryAnimation({
     <div className="w-full max-w-[80rem]">
       <div className="mb-4 flex flex-col items-center gap-3 text-sm text-muted-foreground">
         <div className="grid w-full max-w-4xl grid-cols-2 gap-3">
-          <div
-            ref={talkOwnerRef}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/90 transform-gpu"
-          >
-            <div className="mb-1 flex items-center gap-1 text-xs opacity-70">
-              <MessageSquare className="size-3" /> IP Owner
-            </div>
-            <p className="text-sm">
-              Aku ingin mengunggah dan mengunci dokumen IP-ku dengan aman.
-            </p>
-          </div>
         </div>
       </div>
       <div
