@@ -153,7 +153,7 @@ export default function StoryAnimation({
         duration: 1.0,
         delay: 0.2,
       })
-        .to(attBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .call(performAttestationReveal)
         .to({}, { duration: 0.6 })
         .to(buyerRef.current, { left: positions.tee, duration: 0.2 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
