@@ -29,19 +29,27 @@ export default function TabbedFlow() {
       <div className="flex space-x-4">
         <button
           onClick={() => setType("vault")}
-          className={`px-4 py-2 rounded-lg transition focus:outline-none focus:ring-2 ${type === "vault" ? "bg-blue-500 hover:bg-blue-600 focus:ring-blue-400" : "bg-blue-600/40 hover:bg-blue-600 focus:ring-blue-300"}`}
+          className={`px-4 py-2 rounded-lg transition focus:outline-none focus:ring-2 ${
+            type === "vault"
+              ? "bg-blue-500 hover:bg-blue-600 focus:ring-blue-400"
+              : "bg-blue-600/40 hover:bg-blue-600 focus:ring-blue-300"
+          }`}
         >
           IP Vault
         </button>
         <button
           onClick={() => setType("tee")}
-          className={`px-4 py-2 rounded-lg transition focus:outline-none focus:ring-2 ${type === "tee" ? "bg-green-500 hover:bg-green-600 focus:ring-green-400" : "bg-green-600/40 hover:bg-green-600 focus:ring-green-300"}`}
+          className={`px-4 py-2 rounded-lg transition focus:outline-none focus:ring-2 ${
+            type === "tee"
+              ? "bg-green-500 hover:bg-green-600 focus:ring-green-400"
+              : "bg-green-600/40 hover:bg-green-600 focus:ring-green-300"
+          }`}
         >
           IP Vault + TEE
         </button>
       </div>
 
-      <div ref={containerRef} className="w-full">
+      <div ref={containerRef} className="w-full space-y-8">
         <StoryAnimation mode={type} />
       </div>
     </section>
