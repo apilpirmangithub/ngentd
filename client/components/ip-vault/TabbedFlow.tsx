@@ -128,6 +128,10 @@ export default function TabbedFlow() {
       <div ref={flowRef} className="w-full max-w-5xl mt-2 flex flex-col items-center">
         {Flow}
       </div>
+
+      <div className="mt-10 w-full flex justify-center">
+        <StoryAnimation mode={type} />
+      </div>
     </section>
   );
 }
