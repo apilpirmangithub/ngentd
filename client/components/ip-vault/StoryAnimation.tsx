@@ -505,14 +505,12 @@ export default function StoryAnimation({
             transform: "translate(-50%,-50%)",
           }}
           onClick={() => {
-            gsap.to(docRef.current, {
-              left: positions.ipfs,
-              top: "52%",
-              xPercent: -50,
-              yPercent: -50,
-              duration: 0.6,
-            });
-            gsap.to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 });
+            try {
+              performUploadSplit();
+            } catch (e) {
+              // fallback: show ipfs badge
+              gsap.to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.3 });
+            }
           }}
           className="absolute transform-gpu cursor-pointer"
         >
