@@ -8,11 +8,6 @@ export default function TabbedFlow() {
   const introTweenRef = useRef<gsap.core.Tween | null>(null);
   const [playSignal, setPlaySignal] = useState<string>("");
 
-  // Auto-start the animation on first mount
-  useEffect(() => {
-    setPlaySignal(String(Date.now()));
-  }, []);
-
   useEffect(() => {
     if (!containerRef.current) return;
     introTweenRef.current?.kill();
@@ -23,8 +18,6 @@ export default function TabbedFlow() {
       stagger: 0.05,
       ease: "power2.out",
     });
-    // Also replay story timeline whenever mode changes
-    setPlaySignal(String(Date.now()));
     return () => {
       introTweenRef.current?.kill();
     };
