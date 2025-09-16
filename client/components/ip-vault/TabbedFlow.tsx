@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { User2, Lock, Cpu, ShieldCheck } from "lucide-react";
+import StoryAnimation from "@/components/ip-vault/StoryAnimation";
 
 function Node({ label, color = "bg-gray-700", extra = "", icon, elRef }: { label: string; color?: string; extra?: string; icon: JSX.Element; elRef?: React.RefObject<HTMLDivElement> }) {
   return (
