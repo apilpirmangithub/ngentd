@@ -516,6 +516,15 @@ export default function StoryAnimation({
 
                       // locked state applied instantly (no pulse)
 
+                      // reveal the vault now that it's locked
+                      try {
+                        if (vaultRef.current) {
+                          gsap.to(vaultRef.current, { opacity: 1, scale: 1, y: 0, duration: 0.28 });
+                        }
+                      } catch (e) {
+                        /* ignore */
+                      }
+
                       // trigger buyer sequence now that lock is engaged
                       try {
                         startBuyerSequence();
