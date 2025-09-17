@@ -519,7 +519,12 @@ export default function StoryAnimation({
                       // reveal the vault now that it's locked
                       try {
                         if (vaultRef.current) {
-                          gsap.to(vaultRef.current, { opacity: 1, scale: 1, y: 0, duration: 0.28 });
+                          gsap.to(vaultRef.current, {
+                            opacity: 1,
+                            scale: 1,
+                            y: 0,
+                            duration: 0.28,
+                          });
                         }
                       } catch (e) {
                         /* ignore */
