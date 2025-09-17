@@ -127,11 +127,7 @@ export default function StoryAnimation({
       // trigger upload split animation (file -> ipfs -> lock slides to vault)
       .call(performUploadSplit)
       // Key saved in Vault (lock pulse)
-      .set(
-        lockRef.current,
-        { scale: 1 },
-        "+=0.1",
-      )
+      .set(lockRef.current, { scale: 1 }, "+=0.1")
       // Set lock to locked visual state (green background, white icon)
       .to(
         lockRef.current,
@@ -165,25 +161,27 @@ export default function StoryAnimation({
   const setLockToUnlock = () => {
     const lockEl = lockRef.current;
     if (!lockEl) return;
-    const unlockIcon = lockEl.querySelector('.unlock-icon') as HTMLElement | null;
-    const lockIcon = lockEl.querySelector('.lock-icon') as HTMLElement | null;
+    const unlockIcon = lockEl.querySelector(
+      ".unlock-icon",
+    ) as HTMLElement | null;
+    const lockIcon = lockEl.querySelector(".lock-icon") as HTMLElement | null;
 
     // show unlock icon, hide locked icon
-    unlockIcon?.classList.remove('opacity-0');
-    lockIcon?.classList.add('opacity-0');
+    unlockIcon?.classList.remove("opacity-0");
+    lockIcon?.classList.add("opacity-0");
 
     try {
-      lockEl.classList.remove('bg-gray-400', 'text-black');
-      lockEl.classList.add('bg-emerald-600', 'text-white');
+      lockEl.classList.remove("bg-gray-400", "text-black");
+      lockEl.classList.add("bg-emerald-600", "text-white");
     } catch (e) {
       /* ignore */
     }
 
     try {
-      lockEl.style.backgroundColor = '#10B981';
-      lockEl.style.color = '#ffffff';
+      lockEl.style.backgroundColor = "#10B981";
+      lockEl.style.color = "#ffffff";
       // ensure no transform for instant state
-      lockEl.style.transform = '';
+      lockEl.style.transform = "";
     } catch (e) {
       /* ignore */
     }
@@ -198,7 +196,8 @@ export default function StoryAnimation({
         duration: 1.1,
         delay: buyerMoveDelay,
       })
-        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }).call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
+        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
@@ -212,7 +211,8 @@ export default function StoryAnimation({
       })
         // reveal TEE badge when buyer reaches the vault (visual)
         .call(() => {
-          if (teeRef.current) gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.25 });
+          if (teeRef.current)
+            gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.25 });
         })
         .call(performAttestationReveal)
         .to({}, { duration: 0.6 })
@@ -383,7 +383,8 @@ export default function StoryAnimation({
                     vaultRect.top - sceneRect.top + vaultRect.height / 2;
 
                   // nudge the lock down slightly so it sits visually below the vault center
-                  const finalVaultY = vaultCenterY + Math.round(vaultRect.height * 0.28);
+                  const finalVaultY =
+                    vaultCenterY + Math.round(vaultRect.height * 0.28);
 
                   gsap.to(lockEl, {
                     left: `${vaultCenterX}px`,
@@ -572,8 +573,12 @@ export default function StoryAnimation({
       try {
         const lockEl = lockRef.current;
         if (lockEl) {
-          const unlockIcon = lockEl.querySelector(".unlock-icon") as HTMLElement | null;
-          const lockIcon = lockEl.querySelector(".lock-icon") as HTMLElement | null;
+          const unlockIcon = lockEl.querySelector(
+            ".unlock-icon",
+          ) as HTMLElement | null;
+          const lockIcon = lockEl.querySelector(
+            ".lock-icon",
+          ) as HTMLElement | null;
 
           // show unlock icon, hide locked icon
           unlockIcon?.classList.remove("opacity-0");
