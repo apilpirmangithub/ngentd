@@ -346,7 +346,8 @@ export default function StoryAnimation({
                         lockEl.style.backgroundColor = "#10B981";
                         lockEl.style.color = "#ffffff";
                         lockEl.style.opacity = "1";
-                        lockEl.style.transform = (lockEl.style.transform || "") + " scale(1.05)";
+                        lockEl.style.transform =
+                          (lockEl.style.transform || "") + " scale(1.05)";
                       } catch (e) {
                         /* ignore */
                       }
