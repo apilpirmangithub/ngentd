@@ -332,12 +332,27 @@ export default function StoryAnimation({
                     onComplete: () => {
                       if (unlockIcon) unlockIcon.classList.add("opacity-0");
                       if (lockIcon) lockIcon.classList.remove("opacity-0");
-                      gsap.to(lockEl, {
-                        backgroundColor: "#10B981",
-                        color: "#ffffff",
-                        scale: 1.05,
-                        duration: 0.12,
-                      });
+
+                      // Ensure any interfering Tailwind classes are removed so inline styles take effect
+                      try {
+                        lockEl.classList.remove("bg-white/90", "text-black");
+                        lockEl.classList.add("bg-emerald-600", "text-white");
+                      } catch (e) {
+                        /* ignore */
+                      }
+
+                      // Set final styles directly (more robust than animation for final state)
+                      try {
+                        lockEl.style.backgroundColor = "#10B981";
+                        lockEl.style.color = "#ffffff";
+                        lockEl.style.opacity = "1";
+                        lockEl.style.transform = (lockEl.style.transform || "") + " scale(1.05)";
+                      } catch (e) {
+                        /* ignore */
+                      }
+
+                      // Small pulse to emphasize locked state
+                      gsap.to(lockEl, { scale: 1.05, duration: 0.12 });
                     },
                   });
                 }
