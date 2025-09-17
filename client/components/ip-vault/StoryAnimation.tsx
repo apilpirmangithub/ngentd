@@ -48,7 +48,8 @@ export default function StoryAnimation({
   } as const;
 
   // configurable delays
-  const buyerMoveDelay = 0.6; // seconds delay before buyer starts moving (halved)
+  const buyerMoveDelay = 0.6; // seconds delay before buyer starts moving
+  const unlockDelay = 0.15; // seconds delay before applying unlock after License OK appears (halved)
 
   const reset = () => {
     gsap.set(ownerRef.current, {
