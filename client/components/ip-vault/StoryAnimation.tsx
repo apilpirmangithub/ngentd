@@ -529,6 +529,48 @@ export default function StoryAnimation({
             { scale: 1 },
             { scale: 1.08, yoyo: true, repeat: 1, duration: 0.2 },
           );
+
+          // When the document is delivered to the buyer, set the lock back to unlock state
+          try {
+            const lockEl = lockRef.current;
+            if (lockEl) {
+              const unlockIcon = lockEl.querySelector(
+                ".unlock-icon",
+              ) as HTMLElement | null;
+              const lockIcon = lockEl.querySelector(
+                ".lock-icon",
+              ) as HTMLElement | null;
+
+              // show unlock icon, hide locked icon
+              unlockIcon?.classList.remove("opacity-0");
+              lockIcon?.classList.add("opacity-0");
+
+              // replace classes: remove locked gray, add unlock green
+              try {
+                lockEl.classList.remove("bg-gray-400", "text-black");
+                lockEl.classList.add("bg-emerald-600", "text-white");
+              } catch (e) {
+                /* ignore */
+              }
+
+              // apply inline styles for final appearance
+              try {
+                lockEl.style.backgroundColor = "#10B981";
+                lockEl.style.color = "#ffffff";
+                // small pop to indicate unlock
+                gsap.fromTo(
+                  lockEl,
+                  { scale: 0.95 },
+                  { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1 },
+                );
+              } catch (e) {
+                /* ignore */
+              }
+            }
+          } catch (e) {
+            /* ignore */
+          }
+
           setTimeout(() => docEl.remove(), 300);
         },
       });
