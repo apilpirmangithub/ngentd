@@ -39,6 +39,10 @@ export default function StoryAnimation({
   const readCondRef = useRef<HTMLDivElement | null>(null);
   const masterRef = useRef<gsap.core.Timeline | null>(null);
 
+  // idle animation refs
+  const ownerIdle = useRef<gsap.core.Tween | null>(null);
+  const buyerIdle = useRef<gsap.core.Tween | null>(null);
+
   const positions = {
     owner: "12%",
     ipfs: "30%",
