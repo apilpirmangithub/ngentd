@@ -210,6 +210,10 @@ export default function StoryAnimation({
         duration: 1.0,
         delay: buyerMoveDelay,
       })
+        // reveal TEE badge when buyer reaches the vault (visual)
+        .call(() => {
+          if (teeRef.current) gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.25 });
+        })
         .call(performAttestationReveal)
         .to({}, { duration: 0.6 })
         .to(buyerRef.current, { left: positions.tee, duration: 0.2 })
