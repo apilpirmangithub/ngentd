@@ -158,6 +158,34 @@ export default function StoryAnimation({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  // helper to set lock element to unlocked visual state
+  const setLockToUnlock = () => {
+    const lockEl = lockRef.current;
+    if (!lockEl) return;
+    const unlockIcon = lockEl.querySelector('.unlock-icon') as HTMLElement | null;
+    const lockIcon = lockEl.querySelector('.lock-icon') as HTMLElement | null;
+
+    // show unlock icon, hide locked icon
+    unlockIcon?.classList.remove('opacity-0');
+    lockIcon?.classList.add('opacity-0');
+
+    try {
+      lockEl.classList.remove('bg-gray-400', 'text-black');
+      lockEl.classList.add('bg-emerald-600', 'text-white');
+    } catch (e) {
+      /* ignore */
+    }
+
+    try {
+      lockEl.style.backgroundColor = '#10B981';
+      lockEl.style.color = '#ffffff';
+      // ensure no transform for instant state
+      lockEl.style.transform = '';
+    } catch (e) {
+      /* ignore */
+    }
+  };
+
   // start buyer sequence after lock is engaged
   function startBuyerSequence() {
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
