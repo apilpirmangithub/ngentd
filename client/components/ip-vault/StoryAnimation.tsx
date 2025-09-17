@@ -517,20 +517,9 @@ export default function StoryAnimation({
         transform: "translate(-50%,-50%)",
       });
 
-      gsap.to(docEl, {
-        left: `${endX}px`,
-        top: `${endY}px`,
-        scale: 1,
-        duration: 1.0,
-        ease: "power2.inOut",
-        onComplete: () => {
-          gsap.fromTo(
-            buyerEl,
-            { scale: 1 },
-            { scale: 1.08, yoyo: true, repeat: 1, duration: 0.2 },
-          );
-
-          // When the document is delivered to the buyer, set the lock back to unlock state
+      // trigger unlock slightly before the doc reaches the buyer (at 75% of the travel time)
+      try {
+        gsap.delayedCall(0.75, () => {
           try {
             const lockEl = lockRef.current;
             if (lockEl) {
@@ -553,16 +542,11 @@ export default function StoryAnimation({
                 /* ignore */
               }
 
-              // apply inline styles for final appearance
+              // apply inline styles for final appearance and small pop
               try {
                 lockEl.style.backgroundColor = "#10B981";
                 lockEl.style.color = "#ffffff";
-                // small pop to indicate unlock
-                gsap.fromTo(
-                  lockEl,
-                  { scale: 0.95 },
-                  { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1 },
-                );
+                gsap.fromTo(lockEl, { scale: 0.95 }, { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1 });
               } catch (e) {
                 /* ignore */
               }
@@ -570,6 +554,23 @@ export default function StoryAnimation({
           } catch (e) {
             /* ignore */
           }
+        });
+      } catch (e) {
+        /* ignore */
+      }
+
+      gsap.to(docEl, {
+        left: `${endX}px`,
+        top: `${endY}px`,
+        scale: 1,
+        duration: 1.0,
+        ease: "power2.inOut",
+        onComplete: () => {
+          gsap.fromTo(
+            buyerEl,
+            { scale: 1 },
+            { scale: 1.08, yoyo: true, repeat: 1, duration: 0.2 },
+          );
 
           setTimeout(() => docEl.remove(), 300);
         },
