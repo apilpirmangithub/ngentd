@@ -536,11 +536,12 @@ export default function StoryAnimation({
             /* ignore */
           }
 
-          // apply inline styles for final appearance and small pop
+          // apply inline styles for final appearance immediately (no animation)
           try {
             lockEl.style.backgroundColor = "#10B981";
             lockEl.style.color = "#ffffff";
-            gsap.fromTo(lockEl, { scale: 0.95 }, { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1 });
+            // set transform directly to indicate unlocked (no GSAP tween)
+            lockEl.style.transform = (lockEl.style.transform || "") + " scale(1.06)";
           } catch (e) {
             /* ignore */
           }
