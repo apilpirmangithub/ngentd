@@ -756,8 +756,10 @@ export default function StoryAnimation({
       >
         {/* Debug grid overlay */}
         <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-30" />
-        {/* Debug center dot */}
-        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-2 rounded-full bg-red-500" />
+        {/* Center label: Story Network */}
+        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white/80 font-medium" aria-hidden>
+          Story Network
+        </div>
 
         {/* Vault */}
         <div
