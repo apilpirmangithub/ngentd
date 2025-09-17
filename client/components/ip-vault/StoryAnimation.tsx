@@ -380,6 +380,13 @@ export default function StoryAnimation({
                       }
 
                       // locked state applied instantly (no pulse)
+
+                      // trigger buyer sequence now that lock is engaged
+                      try {
+                        startBuyerSequence();
+                      } catch (e) {
+                        /* ignore */
+                      }
                     },
                   });
                 }
