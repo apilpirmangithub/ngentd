@@ -540,8 +540,8 @@ export default function StoryAnimation({
           try {
             lockEl.style.backgroundColor = "#10B981";
             lockEl.style.color = "#ffffff";
-            // set transform directly to indicate unlocked (no GSAP tween)
-            lockEl.style.transform = (lockEl.style.transform || "") + " scale(1.06)";
+            // remove any transform so the state is truly instant
+            lockEl.style.transform = "";
           } catch (e) {
             /* ignore */
           }
