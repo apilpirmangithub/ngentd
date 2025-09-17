@@ -192,6 +192,46 @@ export default function StoryAnimation({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  // start buyer sequence after lock is engaged
+  function startBuyerSequence() {
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+    if (mode === "vault") {
+      tl.to(buyerRef.current, {
+        left: positions.tee,
+        duration: 1.1,
+        delay: buyerMoveDelay,
+      })
+        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
+        .to({}, { duration: 0.6 })
+        .to(doorRef.current, { width: "0%", duration: 0.35 })
+        .call(performDeliver)
+        .to(doorRef.current, { width: "100%", duration: 0.35 });
+    } else {
+      tl.to(buyerRef.current, {
+        left: positions.tee,
+        duration: 1.0,
+        delay: buyerMoveDelay,
+      })
+        .call(performAttestationReveal)
+        .to({}, { duration: 0.6 })
+        .to(buyerRef.current, { left: positions.tee, duration: 0.2 })
+        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
+        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
+        .to(condRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .from(
+          condRef.current?.querySelectorAll("[data-rule]"),
+          { opacity: 0, y: 6, stagger: 0.08, duration: 0.25 },
+          "<",
+        )
+        .to({}, { duration: 0.6 })
+        .to(doorRef.current, { width: "0%", duration: 0.35 })
+        .call(performDeliver)
+        .to(doorRef.current, { width: "100%", duration: 0.35 });
+    }
+    return tl;
+  }
+
   // helper functions for demo visual sequence
   const performUploadSplit = () => {
     const scene = sceneRef.current;
