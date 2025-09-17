@@ -112,6 +112,14 @@ export default function StoryAnimation({
       color: "#ffffff",
       backgroundColor: "#10B981",
     });
+    // hide vault until lock reaches it
+    if (vaultRef.current) {
+      try {
+        gsap.set(vaultRef.current, { opacity: 0, scale: 0.98, y: 6 });
+      } catch (e) {
+        /* ignore */
+      }
+    }
     if (lockRef.current) {
       const unlockEl = lockRef.current.querySelector(
         ".unlock-icon",
