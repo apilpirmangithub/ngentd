@@ -364,8 +364,8 @@ export default function StoryAnimation({
                         lockEl.style.opacity = "1";
                         // ensure the final top is applied (in case GSAP inline styles overridden)
                         lockEl.style.top = `${finalVaultY}px`;
-                        lockEl.style.transform =
-                          (lockEl.style.transform || "") + " scale(1.05)";
+                        // ensure no transform so final state is applied instantly
+                        lockEl.style.transform = "";
                       } catch (e) {
                         /* ignore */
                       }
