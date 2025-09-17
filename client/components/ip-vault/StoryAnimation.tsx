@@ -306,8 +306,21 @@ export default function StoryAnimation({
                 const lockIcon = lockEl.querySelector(
                   ".lock-icon",
                 ) as HTMLElement | null;
+                // show unlock icon and ensure unlock styling (white bg)
                 unlockIcon?.classList.remove("opacity-0");
                 lockIcon?.classList.add("opacity-0");
+                try {
+                  lockEl.classList.remove("bg-gray-400", "text-black");
+                  lockEl.classList.add("bg-white/90", "text-black");
+                } catch (e) {
+                  /* ignore */
+                }
+                try {
+                  lockEl.style.backgroundColor = "rgba(255,255,255,0.9)";
+                  lockEl.style.color = "#0f172a";
+                } catch (e) {
+                  /* ignore */
+                }
 
                 gsap.set(lockEl, {
                   left: `${endX}px`,
