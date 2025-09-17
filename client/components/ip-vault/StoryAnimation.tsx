@@ -165,8 +165,47 @@ export default function StoryAnimation({
   useLayoutEffect(() => {
     masterRef.current?.kill();
     masterRef.current = build();
+
+    // start subtle idle animations for owner and buyer
+    const startIdleAnimations = () => {
+      try {
+        if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          return;
+        }
+        if (ownerRef.current) {
+          ownerIdle.current = gsap.to(ownerRef.current, {
+            y: -6,
+            duration: 1.8,
+            yoyo: true,
+            repeat: -1,
+            ease: "sine.inOut",
+          });
+        }
+        if (buyerRef.current) {
+          buyerIdle.current = gsap.to(buyerRef.current, {
+            y: -4,
+            duration: 1.6,
+            yoyo: true,
+            repeat: -1,
+            ease: "sine.inOut",
+            delay: 0.3,
+          });
+        }
+      } catch (e) {
+        /* ignore */
+      }
+    };
+
+    startIdleAnimations();
+
     return () => {
       masterRef.current?.kill();
+      try {
+        ownerIdle.current?.kill();
+        buyerIdle.current?.kill();
+      } catch (e) {
+        /* ignore */
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
