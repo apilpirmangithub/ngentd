@@ -137,42 +137,8 @@ export default function StoryAnimation({
       )
       .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.3 }, ">-");
 
-    if (mode === "vault") {
-      // Buyer approaches vault, license check, door opens, doc fetched from IPFS and delivered
-      tl.to(buyerRef.current, {
-        left: positions.tee,
-        duration: 1.1,
-        delay: buyerMoveDelay,
-      })
-        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
-        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
-        .to({}, { duration: 0.6 })
-        .to(doorRef.current, { width: "0%", duration: 0.35 })
-        .call(performDeliver)
-        .to(doorRef.current, { width: "100%", duration: 0.35 });
-    } else {
-      // TEE path: buyer goes to safe room first, then license, then fetch through vault
-      tl.to(buyerRef.current, {
-        left: positions.tee,
-        duration: 1.0,
-        delay: buyerMoveDelay,
-      })
-        .call(performAttestationReveal)
-        .to({}, { duration: 0.6 })
-        .to(buyerRef.current, { left: positions.tee, duration: 0.2 })
-        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
-        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
-        .to(condRef.current, { opacity: 1, y: 0, duration: 0.35 })
-        .from(
-          condRef.current?.querySelectorAll("[data-rule]"),
-          { opacity: 0, y: 6, stagger: 0.08, duration: 0.25 },
-          "<",
-        )
-        .to({}, { duration: 0.6 })
-        .to(doorRef.current, { width: "0%", duration: 0.35 })
-        .call(performDeliver)
-        .to(doorRef.current, { width: "100%", duration: 0.35 });
-    }
+    // buyer movement is triggered after lock is engaged via startBuyerSequence();
+    // no buyer movement added here to ensure lock completes before buyer moves.
     return tl;
   };
 
