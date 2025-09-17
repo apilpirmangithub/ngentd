@@ -47,6 +47,9 @@ export default function StoryAnimation({
     buyer: "88%",
   } as const;
 
+  // configurable delays
+  const buyerMoveDelay = 0.6; // seconds delay before buyer starts moving
+
   const reset = () => {
     gsap.set(ownerRef.current, {
       left: positions.owner,
