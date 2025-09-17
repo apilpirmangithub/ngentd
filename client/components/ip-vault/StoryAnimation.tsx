@@ -678,6 +678,7 @@ export default function StoryAnimation({
         {/* Safe room (TEE) */}
         {mode === "tee" && (
           <div
+            ref={teeRef}
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
