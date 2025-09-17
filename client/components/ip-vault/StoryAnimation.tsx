@@ -274,6 +274,20 @@ export default function StoryAnimation({
         transform: "translate(-50%,-50%)",
       });
 
+      // Pulse the owner element to indicate releasing the IP File
+      try {
+        const ownerEl = ownerRef.current;
+        if (ownerEl) {
+          gsap.fromTo(
+            ownerEl,
+            { scale: 1 },
+            { scale: 1.06, yoyo: true, repeat: 1, duration: 0.18 },
+          );
+        }
+      } catch (e) {
+        /* ignore */
+      }
+
       if (ipfsRect) {
         const endX = ipfsTextRect
           ? ipfsTextRect.left - sceneRect.left + ipfsTextRect.width / 2
