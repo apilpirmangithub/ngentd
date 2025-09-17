@@ -239,7 +239,7 @@ export default function StoryAnimation({
         gsap.to(fileEl, {
           left: `${endX}px`,
           top: `${endY}px`,
-          scale: 0.75,
+          scale: 1,
           duration: 1.0,
           ease: "power2.out",
           onComplete: () => {
