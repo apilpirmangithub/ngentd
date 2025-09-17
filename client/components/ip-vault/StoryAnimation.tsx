@@ -79,6 +79,8 @@ export default function StoryAnimation({
     if (attBadgeRef.current)
       gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
+    // hide TEE badge initially; reveal when buyer reaches vault
+    if (teeRef.current) gsap.set(teeRef.current, { opacity: 0, y: 8 });
     try {
       const scene = sceneRef.current;
       const topBadge = scene?.querySelector(".ipfs-text")
