@@ -155,7 +155,7 @@ export default function StoryAnimation({
       tl.to(buyerRef.current, {
         left: positions.tee,
         duration: 1.0,
-        delay: 0.2,
+        delay: buyerMoveDelay,
       })
         .call(performAttestationReveal)
         .to({}, { duration: 0.6 })
