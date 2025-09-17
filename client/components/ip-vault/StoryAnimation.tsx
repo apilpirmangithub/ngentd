@@ -198,10 +198,6 @@ export default function StoryAnimation({
         duration: 1.1,
         delay: buyerMoveDelay,
       })
-        // reveal TEE badge when buyer reaches the vault (visual)
-        .call(() => {
-          if (teeRef.current) gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.25 });
-        })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }).call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to({}, { duration: 0.6 })
