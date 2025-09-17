@@ -337,9 +337,12 @@ export default function StoryAnimation({
                   const vaultCenterY =
                     vaultRect.top - sceneRect.top + vaultRect.height / 2;
 
+                  // nudge the lock down slightly so it sits visually below the vault center
+                  const finalVaultY = vaultCenterY + Math.round(vaultRect.height * 0.12);
+
                   gsap.to(lockEl, {
                     left: `${vaultCenterX}px`,
-                    top: `${vaultCenterY}px`,
+                    top: `${finalVaultY}px`,
                     duration: 1.0,
                     ease: "power2.out",
                     onComplete: () => {
@@ -359,6 +362,8 @@ export default function StoryAnimation({
                         lockEl.style.backgroundColor = "#9CA3AF";
                         lockEl.style.color = "#000000";
                         lockEl.style.opacity = "1";
+                        // ensure the final top is applied (in case GSAP inline styles overridden)
+                        lockEl.style.top = `${finalVaultY}px`;
                         lockEl.style.transform =
                           (lockEl.style.transform || "") + " scale(1.05)";
                       } catch (e) {
