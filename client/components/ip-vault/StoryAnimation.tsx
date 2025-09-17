@@ -89,8 +89,8 @@ export default function StoryAnimation({
     gsap.set(lockRef.current, {
       scale: 1,
       opacity: 0,
-      color: "#0f172a",
-      backgroundColor: "rgba(255,255,255,0.9)",
+      color: "#ffffff",
+      backgroundColor: "#10B981",
     });
     if (lockRef.current) {
       const unlockEl = lockRef.current.querySelector(
