@@ -370,8 +370,7 @@ export default function StoryAnimation({
                         /* ignore */
                       }
 
-                      // Small pulse to emphasize locked state
-                      gsap.to(lockEl, { scale: 1.05, duration: 0.12 });
+                      // locked state applied instantly (no pulse)
                     },
                   });
                 }
