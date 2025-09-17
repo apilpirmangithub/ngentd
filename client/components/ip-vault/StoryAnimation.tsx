@@ -142,7 +142,7 @@ export default function StoryAnimation({
       tl.to(buyerRef.current, {
         left: positions.tee,
         duration: 1.1,
-        delay: 0.2,
+        delay: buyerMoveDelay,
       })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
