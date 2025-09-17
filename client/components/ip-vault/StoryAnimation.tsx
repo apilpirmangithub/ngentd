@@ -166,29 +166,48 @@ export default function StoryAnimation({
     masterRef.current?.kill();
     masterRef.current = build();
 
-    // start subtle idle animations for owner and buyer
+    // start smooth idle animations for owner and buyer
     const startIdleAnimations = () => {
       try {
         if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
           return;
         }
+
+        // prepare elements for GPU-accelerated transforms
+        try {
+          if (ownerRef.current) {
+            ownerRef.current.style.willChange = "transform";
+            gsap.set(ownerRef.current, { transformOrigin: "50% 50%" });
+          }
+          if (buyerRef.current) {
+            buyerRef.current.style.willChange = "transform";
+            gsap.set(buyerRef.current, { transformOrigin: "50% 50%" });
+          }
+        } catch (e) {
+          /* ignore */
+        }
+
+        // gentle bob + micro-rotation for a smooth, organic movement
         if (ownerRef.current) {
           ownerIdle.current = gsap.to(ownerRef.current, {
-            y: -6,
-            duration: 1.8,
+            y: -8,
+            rotation: 0.8,
+            duration: 3.2,
             yoyo: true,
             repeat: -1,
             ease: "sine.inOut",
           });
         }
+
         if (buyerRef.current) {
           buyerIdle.current = gsap.to(buyerRef.current, {
-            y: -4,
-            duration: 1.6,
+            y: -6,
+            rotation: -0.7,
+            duration: 2.8,
             yoyo: true,
             repeat: -1,
             ease: "sine.inOut",
-            delay: 0.3,
+            delay: 0.5,
           });
         }
       } catch (e) {
