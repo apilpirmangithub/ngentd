@@ -195,7 +195,7 @@ export default function StoryAnimation({
         duration: 1.1,
         delay: buyerMoveDelay,
       })
-        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }).call(() => setLockToUnlock())
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.35 })
