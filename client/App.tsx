@@ -41,4 +41,25 @@ const App = () => (
   </QueryClientProvider>
 );
 
+// Development-time guard: prevent browser extensions (e.g. FullStory) from causing uncaught fetch errors
+if (typeof window !== "undefined" && window.fetch && process.env.NODE_ENV === "development") {
+  try {
+    const _origFetch = window.fetch.bind(window);
+    window.fetch = (input: RequestInfo, init?: RequestInit) => {
+      try {
+        const url = typeof input === "string" ? input : (input as Request).url || "";
+        if (url && url.includes("fullstory.com")) {
+          // avoid proxying extension telemetry requests which can fail in dev
+          return Promise.resolve(new Response(null, { status: 204 }));
+        }
+      } catch (e) {
+        /* ignore */
+      }
+      return _origFetch(input as RequestInfo, init);
+    };
+  } catch (e) {
+    /* ignore */
+  }
+}
+
 createRoot(document.getElementById("root")!).render(<App />);
