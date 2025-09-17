@@ -519,7 +519,7 @@ export default function StoryAnimation({
 
       // trigger unlock slightly before the doc reaches the buyer (at 75% of the travel time)
       try {
-        gsap.delayedCall(0.75, () => {
+        gsap.delayedCall(0.35, () => {
           try {
             const lockEl = lockRef.current;
             if (lockEl) {
