@@ -306,18 +306,18 @@ export default function StoryAnimation({
                 const lockIcon = lockEl.querySelector(
                   ".lock-icon",
                 ) as HTMLElement | null;
-                // show unlock icon and ensure unlock styling (white bg)
+                // show unlock icon and ensure unlock styling (green bg)
                 unlockIcon?.classList.remove("opacity-0");
                 lockIcon?.classList.add("opacity-0");
                 try {
                   lockEl.classList.remove("bg-gray-400", "text-black");
-                  lockEl.classList.add("bg-white/90", "text-black");
+                  lockEl.classList.add("bg-emerald-600", "text-white");
                 } catch (e) {
                   /* ignore */
                 }
                 try {
-                  lockEl.style.backgroundColor = "rgba(255,255,255,0.9)";
-                  lockEl.style.color = "#0f172a";
+                  lockEl.style.backgroundColor = "#10B981";
+                  lockEl.style.color = "#ffffff";
                 } catch (e) {
                   /* ignore */
                 }
