@@ -121,9 +121,9 @@ export default function StoryAnimation({
       // trigger upload split animation (file -> ipfs -> lock slides to vault)
       .call(performUploadSplit)
       // Key saved in Vault (lock pulse)
-      .to(
+      .set(
         lockRef.current,
-        { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 },
+        { scale: 1 },
         "+=0.1",
       )
       // Set lock to locked visual state (green background, white icon)
