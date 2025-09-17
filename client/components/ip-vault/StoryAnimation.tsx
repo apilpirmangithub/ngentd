@@ -169,7 +169,11 @@ export default function StoryAnimation({
     // start smooth idle animations for owner and buyer
     const startIdleAnimations = () => {
       try {
-        if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        if (
+          typeof window !== "undefined" &&
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ) {
           return;
         }
 
