@@ -338,7 +338,7 @@ export default function StoryAnimation({
                     vaultRect.top - sceneRect.top + vaultRect.height / 2;
 
                   // nudge the lock down slightly so it sits visually below the vault center
-                  const finalVaultY = vaultCenterY + Math.round(vaultRect.height * 0.12);
+                  const finalVaultY = vaultCenterY + Math.round(vaultRect.height * 0.28);
 
                   gsap.to(lockEl, {
                     left: `${vaultCenterX}px`,
