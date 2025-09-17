@@ -707,11 +707,11 @@ export default function StoryAnimation({
             transform: "translate(-50%,-50%)",
           }}
         >
-          <div className="size-14 rounded-full overflow-hidden bg-transparent">
+          <div className="size-14 flex items-center justify-center bg-transparent">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F01304b38e2b147e0ab91328119e9a69b%2F0f665063d39347a3804b57e915d4d442?format=webp&width=800"
               alt="IP Owner"
-              className="w-full h-full object-cover"
+              className="max-w-full max-h-full object-contain"
             />
           </div>
           <div className="mt-1 text-center text-xs opacity-80">IP Owner</div>
@@ -727,11 +727,11 @@ export default function StoryAnimation({
             transform: "translate(-50%,-50%)",
           }}
         >
-          <div className="size-14 rounded-full overflow-hidden bg-transparent">
+          <div className="size-14 flex items-center justify-center bg-transparent">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F01304b38e2b147e0ab91328119e9a69b%2Fd69846667a21481caa31c06bb3aa750b?format=webp&width=800"
               alt="Buyer"
-              className="w-full h-full object-cover"
+              className="max-w-full max-h-full object-contain"
             />
           </div>
           <div className="mt-1 text-center text-xs opacity-80">Buyer</div>
