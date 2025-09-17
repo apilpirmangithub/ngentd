@@ -56,12 +56,21 @@ export default function StoryAnimation({
   const unlockDelay = 0.15; // seconds delay before applying unlock after License OK appears (halved)
 
   const reset = () => {
+    // stop any existing idle animations
+    try {
+      ownerIdle.current?.kill();
+      buyerIdle.current?.kill();
+    } catch (e) {
+      /* ignore */
+    }
+
     gsap.set(ownerRef.current, {
       left: positions.owner,
       top: "62%",
       xPercent: -50,
       yPercent: -50,
       opacity: 1,
+      scale: 1,
     });
     gsap.set(docRef.current, {
       left: positions.owner,
@@ -78,6 +87,7 @@ export default function StoryAnimation({
       xPercent: -50,
       yPercent: -50,
       opacity: 1,
+      scale: 1,
     });
     gsap.set(licBadgeRef.current, { opacity: 0, y: 10 });
     if (attBadgeRef.current)
