@@ -660,10 +660,6 @@ export default function StoryAnimation({
         <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-30" />
         {/* Debug center dot */}
         <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-2 rounded-full bg-red-500" />
-        {/* Debug label */}
-        <div className="absolute left-2 top-2 text-[10px] text-white/70">
-          scene mounted
-        </div>
 
         {/* Vault */}
         <div
