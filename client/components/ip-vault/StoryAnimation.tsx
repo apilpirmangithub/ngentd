@@ -129,7 +129,7 @@ export default function StoryAnimation({
       // Set lock to locked visual state (green background, white icon)
       .to(
         lockRef.current,
-        { backgroundColor: "#10B981", color: "#ffffff", duration: 0.18 },
+        { backgroundColor: "#9CA3AF", color: "#000000", duration: 0.18 },
         ">",
       )
       .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.3 }, ">-");
@@ -336,15 +336,15 @@ export default function StoryAnimation({
                       // Ensure any interfering Tailwind classes are removed so inline styles take effect
                       try {
                         lockEl.classList.remove("bg-white/90", "text-black");
-                        lockEl.classList.add("bg-emerald-600", "text-white");
+                        lockEl.classList.add("bg-gray-400", "text-black");
                       } catch (e) {
                         /* ignore */
                       }
 
                       // Set final styles directly (more robust than animation for final state)
                       try {
-                        lockEl.style.backgroundColor = "#10B981";
-                        lockEl.style.color = "#ffffff";
+                        lockEl.style.backgroundColor = "#9CA3AF";
+                        lockEl.style.color = "#000000";
                         lockEl.style.opacity = "1";
                         lockEl.style.transform =
                           (lockEl.style.transform || "") + " scale(1.05)";
