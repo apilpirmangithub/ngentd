@@ -517,44 +517,34 @@ export default function StoryAnimation({
         transform: "translate(-50%,-50%)",
       });
 
-      // trigger unlock slightly before the doc reaches the buyer (at 75% of the travel time)
+      // trigger unlock immediately before the doc animation
       try {
-        gsap.delayedCall(0.03, () => {
+        const lockEl = lockRef.current;
+        if (lockEl) {
+          const unlockIcon = lockEl.querySelector(".unlock-icon") as HTMLElement | null;
+          const lockIcon = lockEl.querySelector(".lock-icon") as HTMLElement | null;
+
+          // show unlock icon, hide locked icon
+          unlockIcon?.classList.remove("opacity-0");
+          lockIcon?.classList.add("opacity-0");
+
+          // replace classes: remove locked gray, add unlock green
           try {
-            const lockEl = lockRef.current;
-            if (lockEl) {
-              const unlockIcon = lockEl.querySelector(
-                ".unlock-icon",
-              ) as HTMLElement | null;
-              const lockIcon = lockEl.querySelector(
-                ".lock-icon",
-              ) as HTMLElement | null;
-
-              // show unlock icon, hide locked icon
-              unlockIcon?.classList.remove("opacity-0");
-              lockIcon?.classList.add("opacity-0");
-
-              // replace classes: remove locked gray, add unlock green
-              try {
-                lockEl.classList.remove("bg-gray-400", "text-black");
-                lockEl.classList.add("bg-emerald-600", "text-white");
-              } catch (e) {
-                /* ignore */
-              }
-
-              // apply inline styles for final appearance and small pop
-              try {
-                lockEl.style.backgroundColor = "#10B981";
-                lockEl.style.color = "#ffffff";
-                gsap.fromTo(lockEl, { scale: 0.95 }, { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1 });
-              } catch (e) {
-                /* ignore */
-              }
-            }
+            lockEl.classList.remove("bg-gray-400", "text-black");
+            lockEl.classList.add("bg-emerald-600", "text-white");
           } catch (e) {
             /* ignore */
           }
-        });
+
+          // apply inline styles for final appearance and small pop
+          try {
+            lockEl.style.backgroundColor = "#10B981";
+            lockEl.style.color = "#ffffff";
+            gsap.fromTo(lockEl, { scale: 0.95 }, { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1 });
+          } catch (e) {
+            /* ignore */
+          }
+        }
       } catch (e) {
         /* ignore */
       }
