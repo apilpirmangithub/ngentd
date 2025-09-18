@@ -101,7 +101,12 @@ export default function StoryAnimation({
       }
     };
 
-    playTone = (freq: number, type: OscillatorType | string = "sine", duration = 0.12, decay = 0.02) => {
+    playTone = (
+      freq: number,
+      type: OscillatorType | string = "sine",
+      duration = 0.12,
+      decay = 0.02,
+    ) => {
       if (!this.ctx) return;
       const o = this.ctx.createOscillator();
       const g = this.ctx.createGain();
