@@ -499,6 +499,74 @@ export default function StoryAnimation({
       const ownerRect = ownerRef.current.getBoundingClientRect();
       const ipfsRect = ipfsBadge?.getBoundingClientRect();
       const vaultRect = vault?.getBoundingClientRect();
+
+      // Upload progress indicator under IP Owner
+      let uploadEl: HTMLDivElement | null = null;
+      let uploadBar: HTMLDivElement | null = null;
+      if (ipfsRect) {
+        try {
+          const ownerCenterX = ownerRect.left - sceneRect.left + ownerRect.width / 2;
+          const ownerBottomY = ownerRect.bottom - sceneRect.top + 12;
+
+          uploadEl = document.createElement("div");
+          uploadEl.className = "pointer-events-none";
+          Object.assign(uploadEl.style, {
+            position: "absolute",
+            left: `${ownerCenterX}px`,
+            top: `${ownerBottomY}px`,
+            width: `136px`,
+            transform: "translate3d(-50%,0,0)",
+            zIndex: "9998",
+            opacity: "0",
+          });
+
+          const box = document.createElement("div");
+          Object.assign(box.style, {
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "10px",
+            padding: "6px 8px",
+            backdropFilter: "blur(2px)",
+          });
+          uploadEl.appendChild(box);
+
+          const label = document.createElement("div");
+          label.textContent = "Mengunggah…";
+          Object.assign(label.style, {
+            fontSize: "10px",
+            color: "rgba(255,255,255,0.85)",
+            marginBottom: "4px",
+            textAlign: "center",
+          });
+          box.appendChild(label);
+
+          const track = document.createElement("div");
+          Object.assign(track.style, {
+            width: "100%",
+            height: "4px",
+            background: "rgba(255,255,255,0.15)",
+            borderRadius: "9999px",
+            overflow: "hidden",
+          });
+          box.appendChild(track);
+
+          uploadBar = document.createElement("div");
+          Object.assign(uploadBar.style, {
+            width: "0%",
+            height: "100%",
+            background: "linear-gradient(90deg, rgba(16,185,129,0.6), rgba(16,185,129,1))",
+            borderRadius: "9999px",
+          });
+          track.appendChild(uploadBar);
+
+          scene.appendChild(uploadEl);
+          gsap.to(uploadEl, { opacity: 1, duration: 0.15, ease: "power1.out" });
+          // advance progress while file moves to IPFS
+          gsap.to(uploadBar, { width: "80%", duration: 1.15, ease: "linear" });
+        } catch (e) {
+          /* ignore */
+        }
+      }
       // Prefer the top IPFS text element if present
       const ipfsTextEl = scene.querySelector(
         ".ipfs-text",
@@ -557,6 +625,19 @@ export default function StoryAnimation({
           duration: 1.15,
           ease: "power3.inOut",
           onComplete: () => {
+            // complete and remove upload indicator
+            try {
+              if (uploadBar) gsap.to(uploadBar, { width: "100%", duration: 0.3, ease: "linear" });
+              if (uploadEl)
+                gsap.to(uploadEl, {
+                  opacity: 0,
+                  duration: 0.2,
+                  delay: 0.15,
+                  onComplete: () => uploadEl && uploadEl.remove(),
+                });
+            } catch (e) {
+              /* ignore */
+            }
             // Morph the floating file into the IPFS badge
             try {
               // keep floating file appearance (do not change to 'IPFS')
