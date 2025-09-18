@@ -115,6 +115,18 @@ export default function StoryAnimation({
 
     setEnabled = (enabled: boolean) => {
       if (this.masterGain) this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
+      // also adjust direct-playback volumes in case WebAudio is unavailable
+      try {
+        Object.values(this.samples).forEach((s) => {
+          if (!s?.el) return;
+          if (this.ctx && this.eq) {
+            // use WA path, silence element output
+            s.el.volume = enabled ? 0 : 0;
+          } else {
+            s.el.volume = enabled ? this.defaultVolume : 0;
+          }
+        });
+      } catch {}
     };
 
     resumeIfNeeded = async () => {
@@ -129,14 +141,27 @@ export default function StoryAnimation({
 
     private createSample = (key: string, url: string) => {
       try {
-        if (!this.ctx || !this.eq) return;
         const el = new Audio(url);
         el.crossOrigin = "anonymous";
         el.preload = "auto";
-        el.volume = 0; // route via WebAudio
-        el.muted = true; // avoid double playback
-        const src = this.ctx.createMediaElementSource(el);
-        src.connect(this.eq);
+        // If WebAudio chain exists, let WA control volume (avoid double audio)
+        if (this.ctx && this.eq) {
+          el.volume = 0;
+          el.muted = false;
+        } else {
+          // Fallback: play directly with consistent volume
+          el.volume = this.defaultVolume;
+          el.muted = false;
+        }
+        let src: MediaElementAudioSourceNode | null = null;
+        try {
+          if (this.ctx && this.eq) {
+            src = this.ctx.createMediaElementSource(el);
+            src.connect(this.eq);
+          }
+        } catch (e) {
+          src = null;
+        }
         this.samples[key] = { el, src };
       } catch (e) {
         // ignore
@@ -148,7 +173,13 @@ export default function StoryAnimation({
       if (!s) return false;
       try {
         s.el.currentTime = 0;
-        s.el.muted = false; // unmute for routed playback
+        // ensure volume based on available pipeline
+        if (this.ctx && this.eq) {
+          s.el.volume = 0; // WA path only
+        } else {
+          s.el.volume = this.defaultVolume; // direct path
+        }
+        s.el.muted = false;
         s.el.play();
         return true;
       } catch (e) {
