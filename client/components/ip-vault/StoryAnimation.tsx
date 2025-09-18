@@ -1210,7 +1210,7 @@ export default function StoryAnimation({
               transform: "translateX(-50%)",
             }}
           >
-            <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
+            <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs font-bold text-sky-100">
               <Cpu className="size-2" /> TEE
             </div>
           </div>
@@ -1395,7 +1395,7 @@ export default function StoryAnimation({
             transform: "translateX(-50%)",
           }}
         >
-          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
+          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs font-bold text-sky-100">
             <Database className="size-2" />{" "}
             <span className="ipfs-text">IPFS</span>
           </div>
