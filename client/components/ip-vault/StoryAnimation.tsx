@@ -393,9 +393,8 @@ export default function StoryAnimation({
         delay: buyerMoveDelay,
       })
         .call(performTrailToBuyer)
-        .to({}, { duration: 0.6 })
-        // perform attestation check visual before showing License OK
-        .call(() => performAttestationReveal())
+        .call(performBuyerScan)
+        .to({}, { duration: 0.72 })
         // position License OK above the buyer when buyer has moved to the vault
         .call(() => {
           try {
@@ -438,6 +437,8 @@ export default function StoryAnimation({
             gsap.to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 });
           }
         })
+        // perform attestation check visual after showing License OK
+        .call(() => performAttestationReveal())
         .call(() => audioRef.current?.playSuccess())
         .call(() => gsap.delayedCall(unlockAfterLicenseDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
@@ -456,11 +457,13 @@ export default function StoryAnimation({
           if (teeRef.current)
             gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
         })
-        .call(performAttestationReveal)
         .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
         .to(buyerRef.current, { left: positions.tee, duration: 0.22 })
+        .call(performBuyerScan)
+        .to({}, { duration: 0.72 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
+        .call(performAttestationReveal)
         .call(() => audioRef.current?.playSuccess())
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
         .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 })
@@ -496,6 +499,76 @@ export default function StoryAnimation({
       const ownerRect = ownerRef.current.getBoundingClientRect();
       const ipfsRect = ipfsBadge?.getBoundingClientRect();
       const vaultRect = vault?.getBoundingClientRect();
+
+      // Upload progress indicator under IP Owner
+      let uploadEl: HTMLDivElement | null = null;
+      let uploadBar: HTMLDivElement | null = null;
+      if (ipfsRect) {
+        try {
+          const ownerCenterX =
+            ownerRect.left - sceneRect.left + ownerRect.width / 2;
+          const ownerBottomY = ownerRect.bottom - sceneRect.top + 12;
+
+          uploadEl = document.createElement("div");
+          uploadEl.className = "pointer-events-none";
+          Object.assign(uploadEl.style, {
+            position: "absolute",
+            left: `${ownerCenterX}px`,
+            top: `${ownerBottomY}px`,
+            width: `112px`,
+            transform: "translate3d(-50%,0,0)",
+            zIndex: "9998",
+            opacity: "0",
+          });
+
+          const box = document.createElement("div");
+          Object.assign(box.style, {
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "10px",
+            padding: "6px 8px",
+            backdropFilter: "blur(2px)",
+          });
+          uploadEl.appendChild(box);
+
+          const label = document.createElement("div");
+          label.textContent = "uploading..";
+          Object.assign(label.style, {
+            fontSize: "10px",
+            color: "rgba(255,255,255,0.85)",
+            marginBottom: "4px",
+            textAlign: "center",
+          });
+          box.appendChild(label);
+
+          const track = document.createElement("div");
+          Object.assign(track.style, {
+            width: "100%",
+            height: "4px",
+            background: "rgba(255,255,255,0.15)",
+            borderRadius: "9999px",
+            overflow: "hidden",
+          });
+          box.appendChild(track);
+
+          uploadBar = document.createElement("div");
+          Object.assign(uploadBar.style, {
+            width: "0%",
+            height: "100%",
+            background:
+              "linear-gradient(90deg, rgba(16,185,129,0.6), rgba(16,185,129,1))",
+            borderRadius: "9999px",
+          });
+          track.appendChild(uploadBar);
+
+          scene.appendChild(uploadEl);
+          gsap.to(uploadEl, { opacity: 1, duration: 0.15, ease: "power1.out" });
+          // advance progress while file moves to IPFS
+          gsap.to(uploadBar, { width: "80%", duration: 1.15, ease: "linear" });
+        } catch (e) {
+          /* ignore */
+        }
+      }
       // Prefer the top IPFS text element if present
       const ipfsTextEl = scene.querySelector(
         ".ipfs-text",
@@ -554,6 +627,24 @@ export default function StoryAnimation({
           duration: 1.15,
           ease: "power3.inOut",
           onComplete: () => {
+            // complete and remove upload indicator
+            try {
+              if (uploadBar)
+                gsap.to(uploadBar, {
+                  width: "100%",
+                  duration: 0.3,
+                  ease: "linear",
+                });
+              if (uploadEl)
+                gsap.to(uploadEl, {
+                  opacity: 0,
+                  duration: 0.2,
+                  delay: 0.15,
+                  onComplete: () => uploadEl && uploadEl.remove(),
+                });
+            } catch (e) {
+              /* ignore */
+            }
             // Morph the floating file into the IPFS badge
             try {
               // keep floating file appearance (do not change to 'IPFS')
@@ -779,49 +870,8 @@ export default function StoryAnimation({
   };
 
   const performTrailToBuyer = () => {
-    const scene = sceneRef.current;
-    const vaultEl = vaultRef.current;
-    const buyerEl = buyerRef.current;
-    if (!scene || !vaultEl || !buyerEl) return;
-    try {
-      const sceneRect = scene.getBoundingClientRect();
-      const vRect = vaultEl.getBoundingClientRect();
-      const bRect = buyerEl.getBoundingClientRect();
-      const vx = vRect.left - sceneRect.left + vRect.width / 2;
-      const vy = vRect.top - sceneRect.top + vRect.height / 2;
-      const bx = bRect.left - sceneRect.left + bRect.width / 2;
-      const by = bRect.top - sceneRect.top + bRect.height / 2;
-      const trail = document.createElement("div");
-      trail.className = "pointer-events-none";
-      Object.assign(trail.style, {
-        position: "absolute",
-        left: `${vx}px`,
-        top: `${vy}px`,
-        width: "6px",
-        height: "6px",
-        borderRadius: "999px",
-        background:
-          "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))",
-        transform: "translate3d(-50%,-50%,0)",
-        zIndex: "9999",
-      });
-      scene.appendChild(trail);
-      gsap.to(trail, {
-        left: `${bx}px`,
-        top: `${by}px`,
-        duration: 0.9,
-        ease: "power3.inOut",
-        onComplete: () => {
-          gsap.to(trail, {
-            opacity: 0,
-            duration: 0.25,
-            onComplete: () => trail.remove(),
-          });
-        },
-      });
-    } catch (e) {
-      /* ignore */
-    }
+    // Removed light dot/trail to IP Buyer per request
+    return;
   };
 
   const performAttestationReveal = () => {
@@ -894,61 +944,75 @@ export default function StoryAnimation({
   };
 
   const performOwnerToVaultTrail = () => {
+    // Remove light dot/trail; directly confirm ownership and continue sequence
+    try {
+      gsap.set(ownerCheckRef.current, { opacity: 1, y: 0 });
+      audioRef.current?.playSuccess();
+    } catch (e) {
+      /* ignore */
+    }
+    try {
+      gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
+    } catch (e) {
+      /* ignore */
+    }
+  };
+
+  const performBuyerScan = () => {
     const scene = sceneRef.current;
-    const ownerEl = ownerRef.current;
-    const vaultEl = vaultRef.current;
-    if (!scene || !ownerEl || !vaultEl) return;
+    const buyerEl = buyerRef.current;
+    if (!scene || !buyerEl) return;
     try {
       const sceneRect = scene.getBoundingClientRect();
-      const oRect = ownerEl.getBoundingClientRect();
-      const vRect = vaultEl.getBoundingClientRect();
-      const ox = oRect.left - sceneRect.left + oRect.width / 2;
-      const oy = oRect.top - sceneRect.top + oRect.height / 2;
-      const vx = vRect.left - sceneRect.left + vRect.width / 2;
-      const vy = vRect.top - sceneRect.top + vRect.height / 2;
-      const trail = document.createElement("div");
-      trail.className = "pointer-events-none";
-      Object.assign(trail.style, {
+      const bRect = buyerEl.getBoundingClientRect();
+      const left = bRect.left - sceneRect.left + bRect.width / 2;
+      const top = bRect.top - sceneRect.top + bRect.height / 2;
+      const pad = 16;
+      const w = Math.max(24, Math.round(bRect.width + pad));
+      const h = Math.max(24, Math.round(bRect.height + pad));
+
+      const container = document.createElement("div");
+      container.className = "pointer-events-none";
+      Object.assign(container.style, {
         position: "absolute",
-        left: `${vx}px`,
-        top: `${vy}px`,
-        width: "6px",
-        height: "6px",
-        borderRadius: "999px",
-        background:
-          "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))",
+        left: left + "px",
+        top: top + "px",
+        width: w + "px",
+        height: h + "px",
         transform: "translate3d(-50%,-50%,0)",
-        zIndex: "9999",
+        border: "2px solid rgba(255,255,255,0.28)",
+        borderRadius: "14px",
+        overflow: "hidden",
+        zIndex: "9998",
+        opacity: "0",
       });
-      scene.appendChild(trail);
-      gsap.to(trail, {
-        left: `${ox}px`,
-        top: `${oy}px`,
-        duration: 0.9,
-        ease: "power3.inOut",
-        onComplete: () => {
-          // instantly show Ownership OK upon arrival
-          try {
-            gsap.set(ownerCheckRef.current, { opacity: 1, y: 0 });
-            // play SFX immediately on ownership confirmation
-            audioRef.current?.playSuccess();
-          } catch (e) {
-            /* ignore */
-          }
-          // schedule buyer movement after a short delay
-          try {
-            gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
-          } catch (e) {
-            /* ignore */
-          }
-          // fade out and remove the trail independently
-          gsap.to(trail, {
+      scene.appendChild(container);
+
+      const line = document.createElement("div");
+      Object.assign(line.style, {
+        position: "absolute",
+        left: "0",
+        top: "-100%",
+        width: "100%",
+        height: "35%",
+        background:
+          "linear-gradient(to bottom, rgba(34,197,94,0) 0%, rgba(34,197,94,0.35) 50%, rgba(34,197,94,0) 100%)",
+      });
+      container.appendChild(line);
+
+      gsap.to(container, { opacity: 1, duration: 0.12, ease: "power1.out" });
+      const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+      tl.to(line, { top: "0%", duration: 0.35 })
+        .to(line, { top: "100%", duration: 0.35 })
+        .to(
+          container,
+          {
             opacity: 0,
-            duration: 0.15,
-            onComplete: () => trail.remove(),
-          });
-        },
-      });
+            duration: 0.12,
+            onComplete: () => container.remove(),
+          },
+          "-=0.05",
+        );
     } catch (e) {
       /* ignore */
     }
@@ -1238,7 +1302,11 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={
             mode === "tee"
-              ? { left: "50%", top: "72%", transform: "translateX(-50%)" }
+              ? {
+                  left: positions.tee,
+                  top: "36%",
+                  transform: "translateX(-50%)",
+                }
               : {
                   left: positions.buyer,
                   top: "46%",
