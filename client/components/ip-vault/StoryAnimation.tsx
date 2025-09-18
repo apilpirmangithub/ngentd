@@ -379,6 +379,19 @@ export default function StoryAnimation({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  // reflect external sound toggle
+  useEffect(() => {
+    try {
+      const mgr = audioRef.current as AudioManager | null;
+      if (mgr) {
+        mgr.setEnabled(!!sound);
+        if (sound) mgr.resumeIfNeeded?.();
+      }
+    } catch (e) {
+      /* ignore */
+    }
+  }, [sound]);
+
   // helper to set lock element to unlocked visual state
   const setLockToUnlock = () => {
     const lockEl = lockRef.current;
