@@ -728,23 +728,6 @@ export default function StoryAnimation({
                         /* ignore */
                       }
 
-                      // show ownership verification before buyer moves
-                      try {
-                        gsap.to(ownerCheckRef.current, {
-                          opacity: 1,
-                          y: 0,
-                          duration: 0.36,
-                          ease: "power3.out",
-                        });
-                      } catch (e) {
-                        /* ignore */
-                      }
-                      // trigger buyer sequence after a short delay to feel natural
-                      try {
-                        gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
-                      } catch (e) {
-                        /* ignore */
-                      }
                     },
                   });
                 }
@@ -896,7 +879,30 @@ export default function StoryAnimation({
         duration: 0.9,
         ease: "power3.inOut",
         onComplete: () => {
-          gsap.to(trail, { opacity: 0, duration: 0.25, onComplete: () => trail.remove() });
+          gsap.to(trail, {
+            opacity: 0,
+            duration: 0.25,
+            onComplete: () => {
+              trail.remove();
+              try {
+                gsap.to(ownerCheckRef.current, {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.36,
+                  ease: "power3.out",
+                  onComplete: () => {
+                    try {
+                      gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
+                    } catch (e) {
+                      /* ignore */
+                    }
+                  },
+                });
+              } catch (e) {
+                /* ignore */
+              }
+            },
+          });
         },
       });
     } catch (e) {
