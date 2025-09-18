@@ -269,7 +269,8 @@ export default function StoryAnimation({
         { backgroundColor: "#9CA3AF", color: "#000000", duration: 0.22 },
         ">",
       )
-      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">-");
+      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">-")
+      .call(() => audioRef.current?.playPop());
 
     // buyer movement is triggered after lock is engaged via startBuyerSequence();
     // no buyer movement added here to ensure lock completes before buyer moves.
