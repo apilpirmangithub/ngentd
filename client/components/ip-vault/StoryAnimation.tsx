@@ -84,7 +84,7 @@ export default function StoryAnimation({
         this.masterGain.gain.value = this.defaultVolume;
         this.masterGain.connect(this.ctx.destination);
         try {
-          const lock = new Audio("/sounds/lock.mp3");
+          const lock = new Audio("https://assets.mixkit.co/active_storage/sfx/2856/2856-preview.mp3");
           lock.crossOrigin = "anonymous";
           lock.preload = "auto";
           lock.volume = this.defaultVolume;
@@ -94,7 +94,7 @@ export default function StoryAnimation({
           this.lockAudio = null;
         }
         try {
-          const unlock = new Audio("/sounds/unlock.mp3");
+          const unlock = new Audio("https://assets.mixkit.co/active_storage/sfx/2848/2848-preview.mp3");
           unlock.crossOrigin = "anonymous";
           unlock.preload = "auto";
           unlock.volume = this.defaultVolume;
