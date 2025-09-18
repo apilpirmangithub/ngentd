@@ -429,6 +429,8 @@ export default function StoryAnimation({
             { scale: 1.06, yoyo: true, repeat: 1, duration: 0.18 },
           );
         }
+        // sound: release
+        audioRef.current?.playRelease();
       } catch (e) {
         /* ignore */
       }
