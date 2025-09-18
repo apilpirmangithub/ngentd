@@ -37,6 +37,7 @@ export default function StoryAnimation({
   const condRef = useRef<HTMLDivElement | null>(null);
   const writeCondRef = useRef<HTMLDivElement | null>(null);
   const readCondRef = useRef<HTMLDivElement | null>(null);
+  const ownerCheckRef = useRef<HTMLDivElement | null>(null);
   const masterRef = useRef<gsap.core.Timeline | null>(null);
 
   // idle animation refs
@@ -174,6 +175,8 @@ export default function StoryAnimation({
     if (attBadgeRef.current)
       gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
+    if (ownerCheckRef.current)
+      gsap.set(ownerCheckRef.current, { opacity: 0, y: 10 });
     // hide TEE badge initially; reveal when buyer reaches vault
     if (teeRef.current) gsap.set(teeRef.current, { opacity: 0, y: 8 });
     try {
@@ -389,6 +392,8 @@ export default function StoryAnimation({
         duration: 1.12,
         delay: buyerMoveDelay,
       })
+        .call(performTrailToBuyer)
+        .to({}, { duration: 0.6 })
         // perform attestation check visual before showing License OK
         .call(() => performAttestationReveal())
         // position License OK above the buyer when buyer has moved to the vault
@@ -452,6 +457,7 @@ export default function StoryAnimation({
             gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
         })
         .call(performAttestationReveal)
+        .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
         .to(buyerRef.current, { left: positions.tee, duration: 0.22 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
@@ -708,7 +714,7 @@ export default function StoryAnimation({
                             const vaultRect2 =
                               vaultRef.current.getBoundingClientRect();
                             const moveUp = Math.round(
-                              vaultRect2.height / 2 + 18,
+                              vaultRect2.height / 2 + 28,
                             );
                             gsap.to(storyRef.current, {
                               y: -moveUp,
@@ -719,16 +725,8 @@ export default function StoryAnimation({
                         } catch (e) {
                           /* ignore */
                         }
-                      } catch (e) {
-                        /* ignore */
-                      }
-
-                      // trigger buyer sequence after a short delay to feel natural
-                      try {
-                        gsap.delayedCall(
-                          postLockBuyerDelay,
-                          startBuyerSequence,
-                        );
+                        // create light trail from owner to vault
+                        performOwnerToVaultTrail();
                       } catch (e) {
                         /* ignore */
                       }
@@ -777,6 +775,52 @@ export default function StoryAnimation({
       // vault locking handled by lock animation from IPFS; no key element needed
 
       gsap.to(doc, { opacity: 0, duration: 0.2, delay: 0.15 });
+    }
+  };
+
+  const performTrailToBuyer = () => {
+    const scene = sceneRef.current;
+    const vaultEl = vaultRef.current;
+    const buyerEl = buyerRef.current;
+    if (!scene || !vaultEl || !buyerEl) return;
+    try {
+      const sceneRect = scene.getBoundingClientRect();
+      const vRect = vaultEl.getBoundingClientRect();
+      const bRect = buyerEl.getBoundingClientRect();
+      const vx = vRect.left - sceneRect.left + vRect.width / 2;
+      const vy = vRect.top - sceneRect.top + vRect.height / 2;
+      const bx = bRect.left - sceneRect.left + bRect.width / 2;
+      const by = bRect.top - sceneRect.top + bRect.height / 2;
+      const trail = document.createElement("div");
+      trail.className = "pointer-events-none";
+      Object.assign(trail.style, {
+        position: "absolute",
+        left: `${vx}px`,
+        top: `${vy}px`,
+        width: "6px",
+        height: "6px",
+        borderRadius: "999px",
+        background:
+          "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))",
+        transform: "translate3d(-50%,-50%,0)",
+        zIndex: "9999",
+      });
+      scene.appendChild(trail);
+      gsap.to(trail, {
+        left: `${bx}px`,
+        top: `${by}px`,
+        duration: 0.9,
+        ease: "power3.inOut",
+        onComplete: () => {
+          gsap.to(trail, {
+            opacity: 0,
+            duration: 0.25,
+            onComplete: () => trail.remove(),
+          });
+        },
+      });
+    } catch (e) {
+      /* ignore */
     }
   };
 
@@ -846,6 +890,67 @@ export default function StoryAnimation({
     } catch (e) {
       // fallback: just reveal
       gsap.to(attEl, { opacity: 1, y: 0, duration: 0.35 });
+    }
+  };
+
+  const performOwnerToVaultTrail = () => {
+    const scene = sceneRef.current;
+    const ownerEl = ownerRef.current;
+    const vaultEl = vaultRef.current;
+    if (!scene || !ownerEl || !vaultEl) return;
+    try {
+      const sceneRect = scene.getBoundingClientRect();
+      const oRect = ownerEl.getBoundingClientRect();
+      const vRect = vaultEl.getBoundingClientRect();
+      const ox = oRect.left - sceneRect.left + oRect.width / 2;
+      const oy = oRect.top - sceneRect.top + oRect.height / 2;
+      const vx = vRect.left - sceneRect.left + vRect.width / 2;
+      const vy = vRect.top - sceneRect.top + vRect.height / 2;
+      const trail = document.createElement("div");
+      trail.className = "pointer-events-none";
+      Object.assign(trail.style, {
+        position: "absolute",
+        left: `${vx}px`,
+        top: `${vy}px`,
+        width: "6px",
+        height: "6px",
+        borderRadius: "999px",
+        background:
+          "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))",
+        transform: "translate3d(-50%,-50%,0)",
+        zIndex: "9999",
+      });
+      scene.appendChild(trail);
+      gsap.to(trail, {
+        left: `${ox}px`,
+        top: `${oy}px`,
+        duration: 0.9,
+        ease: "power3.inOut",
+        onComplete: () => {
+          // instantly show Ownership OK upon arrival
+          try {
+            gsap.set(ownerCheckRef.current, { opacity: 1, y: 0 });
+            // play SFX immediately on ownership confirmation
+            audioRef.current?.playSuccess();
+          } catch (e) {
+            /* ignore */
+          }
+          // schedule buyer movement after a short delay
+          try {
+            gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
+          } catch (e) {
+            /* ignore */
+          }
+          // fade out and remove the trail independently
+          gsap.to(trail, {
+            opacity: 0,
+            duration: 0.15,
+            onComplete: () => trail.remove(),
+          });
+        },
+      });
+    } catch (e) {
+      /* ignore */
     }
   };
 
@@ -924,49 +1029,6 @@ export default function StoryAnimation({
         /* ignore */
       }
 
-      // create light trail from vault to buyer
-      try {
-        const vaultEl = vaultRef.current;
-        const buyerEl2 = buyerRef.current;
-        if (vaultEl && buyerEl2 && scene) {
-          const vRect = vaultEl.getBoundingClientRect();
-          const bRect = buyerEl2.getBoundingClientRect();
-          const vx = vRect.left - sceneRect.left + vRect.width / 2;
-          const vy = vRect.top - sceneRect.top + vRect.height / 2;
-          const bx = bRect.left - sceneRect.left + bRect.width / 2;
-          const by = bRect.top - sceneRect.top + bRect.height / 2;
-          const trail = document.createElement("div");
-          trail.className = "pointer-events-none";
-          trail.style.position = "absolute";
-          trail.style.left = `${vx}px`;
-          trail.style.top = `${vy}px`;
-          trail.style.width = "6px";
-          trail.style.height = "6px";
-          trail.style.borderRadius = "999px";
-          trail.style.background =
-            "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))";
-          trail.style.transform = "translate3d(-50%,-50%,0)";
-          trail.style.zIndex = "9999";
-          scene.appendChild(trail);
-
-          gsap.to(trail, {
-            left: `${bx}px`,
-            top: `${by}px`,
-            duration: 1.0,
-            ease: "power3.inOut",
-            onComplete: () => {
-              gsap.to(trail, {
-                opacity: 0,
-                duration: 0.28,
-                onComplete: () => trail.remove(),
-              });
-            },
-          });
-        }
-      } catch (e) {
-        /* ignore */
-      }
-
       gsap.to(docEl, {
         left: `${endX}px`,
         top: `${endY}px`,
@@ -1017,11 +1079,28 @@ export default function StoryAnimation({
         {/* Center label: Story Network */}
         <div
           ref={storyRef}
-          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-white/90 font-semibold"
+          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           aria-hidden
         >
-          Story Network
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F48906aed3c7344009a10a054f28b82c4%2F14c096d056a0405c8cbbd5daea44fefd?format=webp&width=800"
+            alt="Story Network"
+            className="h-8 md:h-10 opacity-90 select-none"
+            draggable="false"
+          />
         </div>
+
+        {/* Inner band border from IPFS to TEE */}
+        <div
+          className="absolute pointer-events-none rounded-xl border border-white/30"
+          style={{
+            left: `calc(${positions.ipfs} - 2cm)`,
+            width: `calc(${positions.tee} - ${positions.ipfs} + 4cm)`,
+            top: "18%",
+            bottom: "18%",
+          }}
+          aria-hidden
+        />
 
         {/* Vault */}
         <div
@@ -1064,7 +1143,7 @@ export default function StoryAnimation({
             }}
           >
             <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
-              <Cpu className="size-3" /> TEE
+              <Cpu className="size-2" /> TEE
             </div>
           </div>
         )}
@@ -1141,6 +1220,20 @@ export default function StoryAnimation({
 
         {/* Badges */}
         <div
+          ref={ownerCheckRef}
+          className="absolute transform-gpu"
+          style={{
+            left: positions.ipfs,
+            top: "42%",
+            transform: "translate(-50%,-100%)",
+          }}
+        >
+          <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
+            <ShieldCheck className="size-2" /> Ownership OK
+          </div>
+        </div>
+
+        <div
           ref={licBadgeRef}
           className="absolute transform-gpu"
           style={
@@ -1154,7 +1247,7 @@ export default function StoryAnimation({
           }
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-            <ShieldCheck className="size-3" /> License OK
+            <ShieldCheck className="size-2" /> License OK
           </div>
         </div>
         {mode === "tee" && (
@@ -1168,7 +1261,7 @@ export default function StoryAnimation({
             }}
           >
             <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-              <ShieldCheck className="size-3" /> Attestation OK
+              <ShieldCheck className="size-2" /> Attestation OK
             </div>
           </div>
         )}
@@ -1178,34 +1271,31 @@ export default function StoryAnimation({
             ref={condRef}
             className="absolute left-1/2 top-[82%] -translate-x-1/2 transform-gpu"
           >
-            <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/90 shadow-sm">
-              <div className="mb-1 font-semibold text-white/90">
-                Conditional Decryption
-              </div>
-              <div className="flex flex-wrap gap-1.5">
+            <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/90 shadow-sm scale-90">
+              <div className="flex flex-wrap gap-1">
                 <span
                   data-rule
-                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <EyeOff className="size-3" /> Output-only
+                  <EyeOff className="size-2" /> Output-only
                 </span>
                 <span
                   data-rule
-                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Scissors className="size-3" /> Partial access
+                  <Scissors className="size-2" /> Partial access
                 </span>
                 <span
                   data-rule
-                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Clock className="size-3" /> Time/usage
+                  <Clock className="size-2" /> Time/usage
                 </span>
                 <span
                   data-rule
-                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Monitor className="size-3" /> App-restricted
+                  <Monitor className="size-2" /> App-restricted
                 </span>
               </div>
             </div>
@@ -1234,7 +1324,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
-            <Database className="size-3" />{" "}
+            <Database className="size-2" />{" "}
             <span className="ipfs-text">IPFS</span>
           </div>
         </div>
