@@ -74,6 +74,8 @@ export default function StoryAnimation({
     ctx: AudioContext | null = null;
     masterGain: GainNode | null = null;
     defaultVolume = 0.12;
+    lockAudio: HTMLAudioElement | null = null;
+    unlockAudio: HTMLAudioElement | null = null;
     constructor() {
       try {
         this.ctx = new (window.AudioContext ||
@@ -81,14 +83,37 @@ export default function StoryAnimation({
         this.masterGain = this.ctx.createGain();
         this.masterGain.gain.value = this.defaultVolume;
         this.masterGain.connect(this.ctx.destination);
+        try {
+          const lock = new Audio("/sounds/lock.mp3");
+          lock.crossOrigin = "anonymous";
+          lock.preload = "auto";
+          lock.volume = this.defaultVolume;
+          lock.onerror = () => (this.lockAudio = null);
+          this.lockAudio = lock;
+        } catch (e) {
+          this.lockAudio = null;
+        }
+        try {
+          const unlock = new Audio("/sounds/unlock.mp3");
+          unlock.crossOrigin = "anonymous";
+          unlock.preload = "auto";
+          unlock.volume = this.defaultVolume;
+          unlock.onerror = () => (this.unlockAudio = null);
+          this.unlockAudio = unlock;
+        } catch (e) {
+          this.unlockAudio = null;
+        }
       } catch (e) {
         this.ctx = null;
       }
     }
 
     setEnabled = (enabled: boolean) => {
-      if (!this.masterGain) return;
-      this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
+      if (this.masterGain) {
+        this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
+      }
+      if (this.lockAudio) this.lockAudio.volume = enabled ? this.defaultVolume : 0;
+      if (this.unlockAudio) this.unlockAudio.volume = enabled ? this.defaultVolume : 0;
     };
 
     resumeIfNeeded = async () => {
@@ -136,11 +161,25 @@ export default function StoryAnimation({
     };
     // deeper, shorter lock click
     playLock = () => {
+      if (this.lockAudio) {
+        try {
+          this.lockAudio.currentTime = 0;
+          this.lockAudio.play();
+          return;
+        } catch (e) {}
+      }
       this.playTone(220, "square", 0.12);
       this.playTone(380, "sine", 0.08);
     };
     // bright unlock
     playUnlock = () => {
+      if (this.unlockAudio) {
+        try {
+          this.unlockAudio.currentTime = 0;
+          this.unlockAudio.play();
+          return;
+        } catch (e) {}
+      }
       this.playTone(1100, "sine", 0.09);
     };
     // success: bright short chord
