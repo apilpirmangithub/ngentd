@@ -61,6 +61,9 @@ export default function StoryAnimation({
   const postLockBuyerDelay = 0.25; // small delay between lock engage and buyer sequence
   // delay to unlock AFTER License OK is shown for non-TEE flow (tuned for good pacing)
   const unlockAfterLicenseDelay = 0.6;
+  // vault reveal pacing
+  const vaultRevealDelay = 0.2;
+  const vaultRevealDuration = 0.75;
 
   // simple audio manager using WebAudio (no external assets)
   const audioRef = useRef<any>(null);
@@ -793,7 +796,8 @@ export default function StoryAnimation({
                             opacity: 1,
                             scale: 1,
                             y: 0,
-                            duration: 0.36,
+                            duration: vaultRevealDuration,
+                            delay: vaultRevealDelay,
                             ease: "power3.out",
                           });
                           // small vault reveal sound
