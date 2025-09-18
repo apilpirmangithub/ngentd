@@ -389,7 +389,35 @@ export default function StoryAnimation({
       })
         // perform attestation check visual before showing License OK
         .call(() => performAttestationReveal())
-        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 })
+        // position License OK above the buyer when buyer has moved to the vault
+        .call(() => {
+          try {
+            const scene = sceneRef.current;
+            const buyerEl = buyerRef.current;
+            const licEl = licBadgeRef.current;
+            if (scene && buyerEl && licEl) {
+              const sceneRect = scene.getBoundingClientRect();
+              const buyerRect = buyerEl.getBoundingClientRect();
+              const left = buyerRect.left - sceneRect.left + buyerRect.width / 2;
+              // place slightly above buyer (use buyer height + offset)
+              const top = buyerRect.top - sceneRect.top - Math.round(buyerRect.height * 0.6);
+              // apply absolute pixel positioning and a translate to center above
+              Object.assign(licEl.style, {
+                left: `${left}px`,
+                top: `${top}px`,
+                transform: "translate(-50%,-50%)",
+                position: "absolute",
+              });
+              gsap.set(licEl, { opacity: 0, y: 6 });
+              gsap.to(licEl, { opacity: 1, y: 0, duration: 0.36, ease: "power3.out" });
+            } else {
+              // fallback to simple reveal
+              gsap.to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 });
+            }
+          } catch (e) {
+            gsap.to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 });
+          }
+        })
         .call(() => audioRef.current?.playSuccess())
         .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
