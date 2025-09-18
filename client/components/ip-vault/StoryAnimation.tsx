@@ -627,9 +627,9 @@ export default function StoryAnimation({
                         /* ignore */
                       }
 
-                      // trigger buyer sequence now that lock is engaged
+                      // trigger buyer sequence after a short delay to feel natural
                       try {
-                        startBuyerSequence();
+                        gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
                       } catch (e) {
                         /* ignore */
                       }
