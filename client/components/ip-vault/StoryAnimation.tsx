@@ -758,7 +758,7 @@ export default function StoryAnimation({
         <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-30" />
         {/* Center label: Story Network */}
         <div
-          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white/80 font-medium"
+          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-white/90 font-semibold"
           aria-hidden
         >
           Story Network
