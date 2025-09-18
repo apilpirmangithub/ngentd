@@ -1272,9 +1272,6 @@ export default function StoryAnimation({
             className="absolute left-1/2 top-[82%] -translate-x-1/2 transform-gpu"
           >
             <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/90 shadow-sm scale-90">
-              <div className="mb-1 font-semibold text-white/90">
-                Conditional Decryption
-              </div>
               <div className="flex flex-wrap gap-1">
                 <span
                   data-rule
