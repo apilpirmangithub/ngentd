@@ -421,7 +421,7 @@ export default function StoryAnimation({
           }
         })
         .call(() => audioRef.current?.playSuccess())
-        .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
+        .call(() => gsap.delayedCall(unlockAfterLicenseDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.36 })
