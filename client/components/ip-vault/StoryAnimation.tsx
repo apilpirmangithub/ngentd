@@ -927,6 +927,8 @@ export default function StoryAnimation({
           // instantly show Ownership OK upon arrival
           try {
             gsap.set(ownerCheckRef.current, { opacity: 1, y: 0 });
+            // play SFX immediately on ownership confirmation
+            audioRef.current?.playSuccess();
           } catch (e) {
             /* ignore */
           }
@@ -939,7 +941,7 @@ export default function StoryAnimation({
           // fade out and remove the trail independently
           gsap.to(trail, {
             opacity: 0,
-            duration: 0.2,
+            duration: 0.15,
             onComplete: () => trail.remove(),
           });
         },
