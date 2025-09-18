@@ -494,7 +494,7 @@ export default function StoryAnimation({
         .to({}, { duration: 0.6 })
         .call(() => audioRef.current?.playWhoosh())
         .to(doorRef.current, { width: "0%", duration: 0.36 })
-        .call(performDeliver)
+        .call(performDeliver);
     } else {
       tl.to(buyerRef.current, {
         left: positions.tee,
@@ -527,7 +527,7 @@ export default function StoryAnimation({
         .to({}, { duration: 0.6 })
         .call(() => audioRef.current?.playWhoosh())
         .to(doorRef.current, { width: "0%", duration: 0.36 })
-        .call(performDeliver)
+        .call(performDeliver);
     }
     return tl;
   }
