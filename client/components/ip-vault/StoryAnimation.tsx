@@ -976,6 +976,7 @@ export default function StoryAnimation({
             ease: "power3.inOut",
             delay: i * 0.08,
             onComplete: () => {
+              audioRef.current?.playPop();
               gsap.to(attEl, {
                 opacity: 1,
                 y: 0,
