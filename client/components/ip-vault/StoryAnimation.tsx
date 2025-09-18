@@ -531,7 +531,7 @@ export default function StoryAnimation({
           uploadEl.appendChild(box);
 
           const label = document.createElement("div");
-          label.textContent = "Mengunggah…";
+          label.textContent = "uploading..";
           Object.assign(label.style, {
             fontSize: "10px",
             color: "rgba(255,255,255,0.85)",
