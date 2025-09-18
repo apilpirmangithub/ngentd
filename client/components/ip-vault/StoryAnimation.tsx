@@ -714,7 +714,7 @@ export default function StoryAnimation({
                             const vaultRect2 =
                               vaultRef.current.getBoundingClientRect();
                             const moveUp = Math.round(
-                              vaultRect2.height / 2 + 18,
+                              vaultRect2.height / 2 + 28,
                             );
                             gsap.to(storyRef.current, {
                               y: -moveUp,
