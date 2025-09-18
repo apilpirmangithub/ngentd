@@ -1210,7 +1210,7 @@ export default function StoryAnimation({
               transform: "translateX(-50%)",
             }}
           >
-            <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
+            <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
               <Cpu className="size-2" /> TEE
             </div>
           </div>
