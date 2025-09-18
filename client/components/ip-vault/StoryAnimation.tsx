@@ -817,6 +817,44 @@ export default function StoryAnimation({
         /* ignore */
       }
 
+      // create light trail from vault to buyer
+      try {
+        const vaultEl = vaultRef.current;
+        const buyerEl2 = buyerRef.current;
+        if (vaultEl && buyerEl2 && scene) {
+          const vRect = vaultEl.getBoundingClientRect();
+          const bRect = buyerEl2.getBoundingClientRect();
+          const vx = vRect.left - sceneRect.left + vRect.width / 2;
+          const vy = vRect.top - sceneRect.top + vRect.height / 2;
+          const bx = bRect.left - sceneRect.left + bRect.width / 2;
+          const by = bRect.top - sceneRect.top + bRect.height / 2;
+          const trail = document.createElement("div");
+          trail.className = "pointer-events-none";
+          trail.style.position = "absolute";
+          trail.style.left = `${vx}px`;
+          trail.style.top = `${vy}px`;
+          trail.style.width = "6px";
+          trail.style.height = "6px";
+          trail.style.borderRadius = "999px";
+          trail.style.background = "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))";
+          trail.style.transform = "translate(-50%,-50%)";
+          trail.style.zIndex = "9999";
+          scene.appendChild(trail);
+
+          gsap.to(trail, {
+            left: `${bx}px`,
+            top: `${by}px`,
+            duration: 0.9,
+            ease: "power2.out",
+            onComplete: () => {
+              gsap.to(trail, { opacity: 0, duration: 0.18, onComplete: () => trail.remove() });
+            },
+          });
+        }
+      } catch (e) {
+        /* ignore */
+      }
+
       gsap.to(docEl, {
         left: `${endX}px`,
         top: `${endY}px`,
