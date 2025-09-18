@@ -73,47 +73,47 @@ export default function StoryAnimation({
   class AudioManager {
     ctx: AudioContext | null = null;
     masterGain: GainNode | null = null;
+    eq: BiquadFilterNode | null = null;
+    comp: DynamicsCompressorNode | null = null;
     defaultVolume = 0.12;
-    lockAudio: HTMLAudioElement | null = null;
-    unlockAudio: HTMLAudioElement | null = null;
+    samples: Record<string, { el: HTMLAudioElement; src: MediaElementAudioSourceNode | null }> = {};
     constructor() {
       try {
         this.ctx = new (window.AudioContext ||
           (window as any).webkitAudioContext)();
         this.masterGain = this.ctx.createGain();
         this.masterGain.gain.value = this.defaultVolume;
+        // node chain: [source] -> eq -> comp -> master -> dest
+        this.eq = this.ctx.createBiquadFilter();
+        this.eq.type = "lowshelf";
+        this.eq.frequency.value = 320;
+        this.eq.gain.value = -2;
+        this.comp = this.ctx.createDynamicsCompressor();
+        this.comp.threshold.value = -18;
+        this.comp.knee.value = 24;
+        this.comp.ratio.value = 6;
+        this.comp.attack.value = 0.003;
+        this.comp.release.value = 0.25;
+        this.eq.connect(this.comp);
+        this.comp.connect(this.masterGain);
         this.masterGain.connect(this.ctx.destination);
-        try {
-          const lock = new Audio("https://assets.mixkit.co/active_storage/sfx/2856/2856-preview.mp3");
-          lock.crossOrigin = "anonymous";
-          lock.preload = "auto";
-          lock.volume = this.defaultVolume;
-          lock.onerror = () => (this.lockAudio = null);
-          this.lockAudio = lock;
-        } catch (e) {
-          this.lockAudio = null;
-        }
-        try {
-          const unlock = new Audio("https://assets.mixkit.co/active_storage/sfx/2848/2848-preview.mp3");
-          unlock.crossOrigin = "anonymous";
-          unlock.preload = "auto";
-          unlock.volume = this.defaultVolume;
-          unlock.onerror = () => (this.unlockAudio = null);
-          this.unlockAudio = unlock;
-        } catch (e) {
-          this.unlockAudio = null;
-        }
+        // preload samples
+        this.createSample("lock","https://assets.mixkit.co/active_storage/sfx/2856/2856-preview.mp3");
+        this.createSample("unlock","https://assets.mixkit.co/active_storage/sfx/2848/2848-preview.mp3");
+        this.createSample("whoosh","https://assets.mixkit.co/active_storage/sfx/1714/1714-preview.mp3");
+        this.createSample("click","https://assets.mixkit.co/active_storage/sfx/1133/1133-preview.mp3");
+        this.createSample("pop","https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3");
+        this.createSample("success","https://assets.mixkit.co/active_storage/sfx/2039/2039-preview.mp3");
+        this.createSample("tick","https://assets.mixkit.co/active_storage/sfx/1059/1059-preview.mp3");
+        this.createSample("deliver","https://assets.mixkit.co/active_storage/sfx/1489/1489-preview.mp3");
+        this.createSample("vaultReveal","https://assets.mixkit.co/active_storage/sfx/960/960-preview.mp3");
       } catch (e) {
         this.ctx = null;
       }
     }
 
     setEnabled = (enabled: boolean) => {
-      if (this.masterGain) {
-        this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
-      }
-      if (this.lockAudio) this.lockAudio.volume = enabled ? this.defaultVolume : 0;
-      if (this.unlockAudio) this.unlockAudio.volume = enabled ? this.defaultVolume : 0;
+      if (this.masterGain) this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
     };
 
     resumeIfNeeded = async () => {
@@ -123,6 +123,35 @@ export default function StoryAnimation({
         }
       } catch (e) {
         /* ignore */
+      }
+    };
+
+    private createSample = (key: string, url: string) => {
+      try {
+        if (!this.ctx || !this.eq) return;
+        const el = new Audio(url);
+        el.crossOrigin = "anonymous";
+        el.preload = "auto";
+        el.volume = 0; // route via WebAudio
+        el.muted = true; // avoid double playback
+        const src = this.ctx.createMediaElementSource(el);
+        src.connect(this.eq);
+        this.samples[key] = { el, src };
+      } catch (e) {
+        // ignore
+      }
+    };
+
+    private playSample = (key: string): boolean => {
+      const s = this.samples[key];
+      if (!s) return false;
+      try {
+        s.el.currentTime = 0;
+        s.el.muted = false; // unmute for routed playback
+        s.el.play();
+        return true;
+      } catch (e) {
+        return false;
       }
     };
 
@@ -148,53 +177,20 @@ export default function StoryAnimation({
       o.stop(now + duration + decay + 0.02);
     };
 
-    playClick = () => this.playTone(880, "sine", 0.06);
-    playTick = () => this.playTone(720, "square", 0.05);
-    playPop = () => this.playTone(980, "sine", 0.07);
-    playWhoosh = () => {
-      this.playTone(900, "sine", 0.08);
-      this.playTone(600, "triangle", 0.12);
-    };
-    playRelease = () => {
-      this.playTone(520, "triangle", 0.08);
-      this.playTone(760, "sine", 0.07);
-    };
+    playClick = () => { if (this.playSample("click")) return; this.playTone(880, "sine", 0.06); };
+    playTick = () => { if (this.playSample("tick")) return; this.playTone(720, "square", 0.05); };
+    playPop = () => { if (this.playSample("pop")) return; this.playTone(980, "sine", 0.07); };
+    playWhoosh = () => { if (this.playSample("whoosh")) return; this.playTone(900, "sine", 0.08); this.playTone(600, "triangle", 0.12); };
+    playRelease = () => { if (this.playSample("release")) return; this.playTone(520, "triangle", 0.08); this.playTone(760, "sine", 0.07); };
     // deeper, shorter lock click
-    playLock = () => {
-      if (this.lockAudio) {
-        try {
-          this.lockAudio.currentTime = 0;
-          this.lockAudio.play();
-          return;
-        } catch (e) {}
-      }
-      this.playTone(220, "square", 0.12);
-      this.playTone(380, "sine", 0.08);
-    };
+    playLock = () => { if (this.playSample("lock")) return; this.playTone(220, "square", 0.12); this.playTone(380, "sine", 0.08); };
     // bright unlock
-    playUnlock = () => {
-      if (this.unlockAudio) {
-        try {
-          this.unlockAudio.currentTime = 0;
-          this.unlockAudio.play();
-          return;
-        } catch (e) {}
-      }
-      this.playTone(1100, "sine", 0.09);
-    };
+    playUnlock = () => { if (this.playSample("unlock")) return; this.playTone(1100, "sine", 0.09); };
     // success: bright short chord
-    playSuccess = () => {
-      this.playTone(1100, "sine", 0.08);
-      this.playTone(780, "sine", 0.09);
-    };
+    playSuccess = () => { if (this.playSample("success")) return; this.playTone(1100, "sine", 0.08); this.playTone(780, "sine", 0.09); };
     // deliver: swoosh-ish by quick descending tones
-    playDeliver = () => {
-      this.playTone(680, "sine", 0.12);
-      this.playTone(520, "triangle", 0.14);
-    };
-    playVaultReveal = () => {
-      this.playTone(420, "sine", 0.18);
-    };
+    playDeliver = () => { if (this.playSample("deliver")) return; this.playTone(680, "sine", 0.12); this.playTone(520, "triangle", 0.14); };
+    playVaultReveal = () => { if (this.playSample("vaultReveal")) return; this.playTone(420, "sine", 0.18); };
   }
 
   const reset = () => {
