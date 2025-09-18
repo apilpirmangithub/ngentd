@@ -1309,10 +1309,28 @@ export default function StoryAnimation({
   // External play trigger via `event` prop
   useEffect(() => {
     if (event) {
+      // ensure audio is resumed on play
+      try { (audioRef.current as any)?.resumeIfNeeded?.(); } catch {}
       // restart from beginning on each event change
       masterRef.current?.restart();
     }
   }, [event]);
+
+  // Resume AudioContext on first user interaction anywhere
+  useEffect(() => {
+    const mgr = audioRef.current as any;
+    const handler = () => {
+      try { mgr?.resumeIfNeeded?.(); } catch {}
+      window.removeEventListener("pointerdown", handler);
+      window.removeEventListener("keydown", handler);
+    };
+    window.addEventListener("pointerdown", handler, { once: true } as any);
+    window.addEventListener("keydown", handler, { once: true } as any);
+    return () => {
+      window.removeEventListener("pointerdown", handler);
+      window.removeEventListener("keydown", handler);
+    };
+  }, []);
 
   return (
     <div className="w-full max-w-[80rem]">
