@@ -18,17 +18,14 @@ export default function ExtensionErrorGuard() {
 
     const onError = (event: ErrorEvent) => {
       const filename = (event as any).filename || "";
-      if (
-        filename.startsWith("chrome-extension://") ||
-        isExtensionError(event.error)
-      ) {
+      if (filename.startsWith("chrome-extension://") || isBenignNoise(event.error)) {
         event.preventDefault();
         event.stopImmediatePropagation();
       }
     };
 
     const onRejection = (event: PromiseRejectionEvent) => {
-      if (isExtensionError(event.reason)) {
+      if (isBenignNoise(event.reason)) {
         event.preventDefault();
         event.stopImmediatePropagation();
       }
