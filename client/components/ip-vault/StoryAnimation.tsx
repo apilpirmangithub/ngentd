@@ -879,8 +879,8 @@ export default function StoryAnimation({
       trail.className = "pointer-events-none";
       Object.assign(trail.style, {
         position: "absolute",
-        left: `${ox}px`,
-        top: `${oy}px`,
+        left: `${vx}px`,
+        top: `${vy}px`,
         width: "6px",
         height: "6px",
         borderRadius: "999px",
@@ -891,8 +891,8 @@ export default function StoryAnimation({
       });
       scene.appendChild(trail);
       gsap.to(trail, {
-        left: `${vx}px`,
-        top: `${vy}px`,
+        left: `${ox}px`,
+        top: `${oy}px`,
         duration: 0.9,
         ease: "power3.inOut",
         onComplete: () => {
