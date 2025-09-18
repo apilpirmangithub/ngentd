@@ -18,9 +18,11 @@ import {
 export default function StoryAnimation({
   mode,
   event,
+  sound = true,
 }: {
   mode: "vault" | "tee";
   event?: string | null;
+  sound?: boolean;
 }) {
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const ownerRef = useRef<HTMLDivElement | null>(null);
