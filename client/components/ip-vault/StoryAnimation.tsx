@@ -1079,10 +1079,15 @@ export default function StoryAnimation({
         {/* Center label: Story Network */}
         <div
           ref={storyRef}
-          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-white/90 font-semibold"
+          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           aria-hidden
         >
-          Story Network
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F48906aed3c7344009a10a054f28b82c4%2Fdfd347cd736541389dda5e28361b2e2a?format=webp&width=800"
+            alt="Story Network"
+            className="h-10 md:h-12 opacity-90 select-none"
+            draggable="false"
+          />
         </div>
 
         {/* Inner band border from IPFS to TEE */}
