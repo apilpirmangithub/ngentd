@@ -73,19 +73,35 @@ export default function StoryAnimation({
   class AudioManager {
     ctx: AudioContext | null = null;
     masterGain: GainNode | null = null;
+    defaultVolume = 0.12;
     constructor() {
       try {
         this.ctx = new (window.AudioContext ||
           (window as any).webkitAudioContext)();
         this.masterGain = this.ctx.createGain();
-        this.masterGain.gain.value = 0.12;
+        this.masterGain.gain.value = this.defaultVolume;
         this.masterGain.connect(this.ctx.destination);
       } catch (e) {
         this.ctx = null;
       }
     }
 
-    playTone = (freq: number, type = "sine", duration = 0.12, decay = 0.02) => {
+    setEnabled = (enabled: boolean) => {
+      if (!this.masterGain) return;
+      this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
+    };
+
+    resumeIfNeeded = async () => {
+      try {
+        if (this.ctx && this.ctx.state === "suspended") {
+          await this.ctx.resume();
+        }
+      } catch (e) {
+        /* ignore */
+      }
+    };
+
+    playTone = (freq: number, type: OscillatorType | string = "sine", duration = 0.12, decay = 0.02) => {
       if (!this.ctx) return;
       const o = this.ctx.createOscillator();
       const g = this.ctx.createGain();
@@ -103,6 +119,12 @@ export default function StoryAnimation({
     };
 
     playClick = () => this.playTone(880, "sine", 0.06);
+    playTick = () => this.playTone(720, "square", 0.05);
+    playPop = () => this.playTone(980, "sine", 0.07);
+    playWhoosh = () => {
+      this.playTone(900, "sine", 0.08);
+      this.playTone(600, "triangle", 0.12);
+    };
     playRelease = () => {
       this.playTone(520, "triangle", 0.08);
       this.playTone(760, "sine", 0.07);
