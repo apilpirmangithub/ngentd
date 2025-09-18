@@ -1050,6 +1050,7 @@ export default function StoryAnimation({
       container.appendChild(line);
 
       gsap.to(container, { opacity: 1, duration: 0.12, ease: "power1.out" });
+      audioRef.current?.playTick();
       const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
       tl.to(line, { top: "0%", duration: 0.35 })
         .to(line, { top: "100%", duration: 0.35 })
