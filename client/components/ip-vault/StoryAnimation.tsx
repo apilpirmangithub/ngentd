@@ -505,7 +505,8 @@ export default function StoryAnimation({
       let uploadBar: HTMLDivElement | null = null;
       if (ipfsRect) {
         try {
-          const ownerCenterX = ownerRect.left - sceneRect.left + ownerRect.width / 2;
+          const ownerCenterX =
+            ownerRect.left - sceneRect.left + ownerRect.width / 2;
           const ownerBottomY = ownerRect.bottom - sceneRect.top + 12;
 
           uploadEl = document.createElement("div");
@@ -554,7 +555,8 @@ export default function StoryAnimation({
           Object.assign(uploadBar.style, {
             width: "0%",
             height: "100%",
-            background: "linear-gradient(90deg, rgba(16,185,129,0.6), rgba(16,185,129,1))",
+            background:
+              "linear-gradient(90deg, rgba(16,185,129,0.6), rgba(16,185,129,1))",
             borderRadius: "9999px",
           });
           track.appendChild(uploadBar);
@@ -627,7 +629,12 @@ export default function StoryAnimation({
           onComplete: () => {
             // complete and remove upload indicator
             try {
-              if (uploadBar) gsap.to(uploadBar, { width: "100%", duration: 0.3, ease: "linear" });
+              if (uploadBar)
+                gsap.to(uploadBar, {
+                  width: "100%",
+                  duration: 0.3,
+                  ease: "linear",
+                });
               if (uploadEl)
                 gsap.to(uploadEl, {
                   opacity: 0,
@@ -997,11 +1004,15 @@ export default function StoryAnimation({
       const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
       tl.to(line, { top: "0%", duration: 0.35 })
         .to(line, { top: "100%", duration: 0.35 })
-        .to(container, {
-          opacity: 0,
-          duration: 0.12,
-          onComplete: () => container.remove(),
-        }, "-=0.05");
+        .to(
+          container,
+          {
+            opacity: 0,
+            duration: 0.12,
+            onComplete: () => container.remove(),
+          },
+          "-=0.05",
+        );
     } catch (e) {
       /* ignore */
     }
@@ -1291,7 +1302,11 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={
             mode === "tee"
-              ? { left: positions.tee, top: "36%", transform: "translateX(-50%)" }
+              ? {
+                  left: positions.tee,
+                  top: "36%",
+                  transform: "translateX(-50%)",
+                }
               : {
                   left: positions.buyer,
                   top: "46%",
