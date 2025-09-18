@@ -1391,7 +1391,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "28%",
+            top: "27%",
             transform: "translateX(-50%)",
           }}
         >
