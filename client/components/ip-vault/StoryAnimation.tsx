@@ -400,9 +400,13 @@ export default function StoryAnimation({
             if (scene && buyerEl && licEl) {
               const sceneRect = scene.getBoundingClientRect();
               const buyerRect = buyerEl.getBoundingClientRect();
-              const left = buyerRect.left - sceneRect.left + buyerRect.width / 2;
+              const left =
+                buyerRect.left - sceneRect.left + buyerRect.width / 2;
               // place slightly above buyer (use buyer height + offset)
-              const top = buyerRect.top - sceneRect.top - Math.round(buyerRect.height * 0.6);
+              const top =
+                buyerRect.top -
+                sceneRect.top -
+                Math.round(buyerRect.height * 0.6);
               // apply absolute pixel positioning and a translate to center above
               Object.assign(licEl.style, {
                 left: `${left}px`,
@@ -411,10 +415,19 @@ export default function StoryAnimation({
                 position: "absolute",
               });
               gsap.set(licEl, { opacity: 0, y: 6 });
-              gsap.to(licEl, { opacity: 1, y: 0, duration: 0.36, ease: "power3.out" });
+              gsap.to(licEl, {
+                opacity: 1,
+                y: 0,
+                duration: 0.36,
+                ease: "power3.out",
+              });
             } else {
               // fallback to simple reveal
-              gsap.to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 });
+              gsap.to(licBadgeRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 0.36,
+              });
             }
           } catch (e) {
             gsap.to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 });
@@ -1133,7 +1146,11 @@ export default function StoryAnimation({
           style={
             mode === "tee"
               ? { left: "50%", top: "72%", transform: "translateX(-50%)" }
-              : { left: positions.buyer, top: "46%", transform: "translate(-50%,-100%)" }
+              : {
+                  left: positions.buyer,
+                  top: "46%",
+                  transform: "translate(-50%,-100%)",
+                }
           }
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
