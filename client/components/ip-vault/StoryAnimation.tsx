@@ -468,13 +468,13 @@ export default function StoryAnimation({
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
         .call(performAttestationReveal)
         .call(() => audioRef.current?.playSuccess())
-        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
-        .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 })
+        .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">+0.1")
         .from(
           condRef.current?.querySelectorAll("[data-rule]"),
           { opacity: 0, y: 6, stagger: 0.08, duration: 0.28 },
           "<",
         )
+        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
         .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.36 })
