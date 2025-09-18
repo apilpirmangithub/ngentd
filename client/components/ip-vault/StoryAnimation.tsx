@@ -960,6 +960,7 @@ export default function StoryAnimation({
       // animate temps to att badge center
       if (temps.length === 0) {
         // no source elements (TEE/MPC) to animate from — reveal attestation directly
+        audioRef.current?.playPop();
         gsap.to(attEl, {
           opacity: 1,
           y: 0,
