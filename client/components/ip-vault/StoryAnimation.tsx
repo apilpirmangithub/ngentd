@@ -73,22 +73,94 @@ export default function StoryAnimation({
   class AudioManager {
     ctx: AudioContext | null = null;
     masterGain: GainNode | null = null;
+    eq: BiquadFilterNode | null = null;
+    comp: DynamicsCompressorNode | null = null;
     defaultVolume = 0.12;
+    samples: Record<
+      string,
+      { el: HTMLAudioElement; src: MediaElementAudioSourceNode | null }
+    > = {};
     constructor() {
       try {
         this.ctx = new (window.AudioContext ||
           (window as any).webkitAudioContext)();
         this.masterGain = this.ctx.createGain();
         this.masterGain.gain.value = this.defaultVolume;
+        // node chain: [source] -> eq -> comp -> master -> dest
+        this.eq = this.ctx.createBiquadFilter();
+        this.eq.type = "lowshelf";
+        this.eq.frequency.value = 320;
+        this.eq.gain.value = -2;
+        this.comp = this.ctx.createDynamicsCompressor();
+        this.comp.threshold.value = -18;
+        this.comp.knee.value = 24;
+        this.comp.ratio.value = 6;
+        this.comp.attack.value = 0.003;
+        this.comp.release.value = 0.25;
+        this.eq.connect(this.comp);
+        this.comp.connect(this.masterGain);
         this.masterGain.connect(this.ctx.destination);
+        // preload samples
+        this.createSample(
+          "lock",
+          "https://assets.mixkit.co/active_storage/sfx/2856/2856-preview.mp3",
+        );
+        this.createSample(
+          "unlock",
+          "https://assets.mixkit.co/active_storage/sfx/2848/2848-preview.mp3",
+        );
+        this.createSample(
+          "whoosh",
+          "https://assets.mixkit.co/active_storage/sfx/1714/1714-preview.mp3",
+        );
+        this.createSample(
+          "click",
+          "https://assets.mixkit.co/active_storage/sfx/1133/1133-preview.mp3",
+        );
+        this.createSample(
+          "pop",
+          "https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3",
+        );
+        this.createSample(
+          "success",
+          "https://assets.mixkit.co/active_storage/sfx/2039/2039-preview.mp3",
+        );
+        this.createSample(
+          "tick",
+          "https://assets.mixkit.co/active_storage/sfx/1059/1059-preview.mp3",
+        );
+        this.createSample(
+          "deliver",
+          "https://assets.mixkit.co/active_storage/sfx/1489/1489-preview.mp3",
+        );
+        this.createSample(
+          "vaultReveal",
+          "https://assets.mixkit.co/active_storage/sfx/960/960-preview.mp3",
+        );
+        this.createSample(
+          "release",
+          "https://assets.mixkit.co/active_storage/sfx/2364/2364-preview.mp3",
+        );
       } catch (e) {
         this.ctx = null;
       }
     }
 
     setEnabled = (enabled: boolean) => {
-      if (!this.masterGain) return;
-      this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
+      if (this.masterGain)
+        this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
+      // also adjust direct-playback volumes in case WebAudio is unavailable
+      try {
+        Object.values(this.samples).forEach((s) => {
+          if (!s?.el) return;
+          if (this.ctx && this.eq) {
+            // use WA path, silence element output
+            s.el.volume = enabled ? 0 : 0;
+          } else {
+            s.el.volume = enabled ? this.defaultVolume : 0;
+          }
+        });
+      } catch {}
     };
 
     resumeIfNeeded = async () => {
@@ -98,6 +170,54 @@ export default function StoryAnimation({
         }
       } catch (e) {
         /* ignore */
+      }
+    };
+
+    private createSample = (key: string, url: string) => {
+      try {
+        const el = new Audio(url);
+        el.crossOrigin = "anonymous";
+        el.preload = "auto";
+        // If WebAudio chain exists, let WA control volume (avoid double audio)
+        if (this.ctx && this.eq) {
+          el.volume = 0;
+          el.muted = false;
+        } else {
+          // Fallback: play directly with consistent volume
+          el.volume = this.defaultVolume;
+          el.muted = false;
+        }
+        let src: MediaElementAudioSourceNode | null = null;
+        try {
+          if (this.ctx && this.eq) {
+            src = this.ctx.createMediaElementSource(el);
+            src.connect(this.eq);
+          }
+        } catch (e) {
+          src = null;
+        }
+        this.samples[key] = { el, src };
+      } catch (e) {
+        // ignore
+      }
+    };
+
+    private playSample = (key: string): boolean => {
+      const s = this.samples[key];
+      if (!s) return false;
+      try {
+        s.el.currentTime = 0;
+        // ensure volume based on available pipeline
+        if (this.ctx && this.eq) {
+          s.el.volume = 0; // WA path only
+        } else {
+          s.el.volume = this.defaultVolume; // direct path
+        }
+        s.el.muted = false;
+        s.el.play();
+        return true;
+      } catch (e) {
+        return false;
       }
     };
 
@@ -123,37 +243,53 @@ export default function StoryAnimation({
       o.stop(now + duration + decay + 0.02);
     };
 
-    playClick = () => this.playTone(880, "sine", 0.06);
-    playTick = () => this.playTone(720, "square", 0.05);
-    playPop = () => this.playTone(980, "sine", 0.07);
+    playClick = () => {
+      if (this.playSample("click")) return;
+      this.playTone(880, "sine", 0.06);
+    };
+    playTick = () => {
+      if (this.playSample("tick")) return;
+      this.playTone(720, "square", 0.05);
+    };
+    playPop = () => {
+      if (this.playSample("pop")) return;
+      this.playTone(980, "sine", 0.07);
+    };
     playWhoosh = () => {
+      if (this.playSample("whoosh")) return;
       this.playTone(900, "sine", 0.08);
       this.playTone(600, "triangle", 0.12);
     };
     playRelease = () => {
+      if (this.playSample("release")) return;
       this.playTone(520, "triangle", 0.08);
       this.playTone(760, "sine", 0.07);
     };
     // deeper, shorter lock click
     playLock = () => {
+      if (this.playSample("lock")) return;
       this.playTone(220, "square", 0.12);
       this.playTone(380, "sine", 0.08);
     };
     // bright unlock
     playUnlock = () => {
+      if (this.playSample("unlock")) return;
       this.playTone(1100, "sine", 0.09);
     };
     // success: bright short chord
     playSuccess = () => {
+      if (this.playSample("success")) return;
       this.playTone(1100, "sine", 0.08);
       this.playTone(780, "sine", 0.09);
     };
     // deliver: swoosh-ish by quick descending tones
     playDeliver = () => {
+      if (this.playSample("deliver")) return;
       this.playTone(680, "sine", 0.12);
       this.playTone(520, "triangle", 0.14);
     };
     playVaultReveal = () => {
+      if (this.playSample("vaultReveal")) return;
       this.playTone(420, "sine", 0.18);
     };
   }
@@ -274,8 +410,7 @@ export default function StoryAnimation({
         { backgroundColor: "#9CA3AF", color: "#000000", duration: 0.22 },
         ">",
       )
-      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">-")
-      .call(() => audioRef.current?.playPop());
+      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">-");
 
     // buyer movement is triggered after lock is engaged via startBuyerSequence();
     // no buyer movement added here to ensure lock completes before buyer moves.
@@ -490,7 +625,7 @@ export default function StoryAnimation({
         .call(() => audioRef.current?.playSuccess())
         .call(() => gsap.delayedCall(unlockAfterLicenseDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
-        .call(() => audioRef.current?.playPop())
+
         .to({}, { duration: 0.6 })
         .call(() => audioRef.current?.playWhoosh())
         .to(doorRef.current, { width: "0%", duration: 0.36 })
@@ -522,7 +657,7 @@ export default function StoryAnimation({
           "<",
         )
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
-        .call(() => audioRef.current?.playPop())
+
         .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to({}, { duration: 0.6 })
         .call(() => audioRef.current?.playWhoosh())
@@ -1273,10 +1408,32 @@ export default function StoryAnimation({
   // External play trigger via `event` prop
   useEffect(() => {
     if (event) {
+      // ensure audio is resumed on play
+      try {
+        (audioRef.current as any)?.resumeIfNeeded?.();
+      } catch {}
       // restart from beginning on each event change
       masterRef.current?.restart();
     }
   }, [event]);
+
+  // Resume AudioContext on first user interaction anywhere
+  useEffect(() => {
+    const mgr = audioRef.current as any;
+    const handler = () => {
+      try {
+        mgr?.resumeIfNeeded?.();
+      } catch {}
+      window.removeEventListener("pointerdown", handler);
+      window.removeEventListener("keydown", handler);
+    };
+    window.addEventListener("pointerdown", handler, { once: true } as any);
+    window.addEventListener("keydown", handler, { once: true } as any);
+    return () => {
+      window.removeEventListener("pointerdown", handler);
+      window.removeEventListener("keydown", handler);
+    };
+  }, []);
 
   return (
     <div className="w-full max-w-[80rem]">
