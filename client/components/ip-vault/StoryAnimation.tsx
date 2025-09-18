@@ -540,9 +540,16 @@ export default function StoryAnimation({
                         // move story label above vault
                         try {
                           if (vaultRef.current && storyRef.current) {
-                            const vaultRect2 = vaultRef.current.getBoundingClientRect();
-                            const moveUp = Math.round(vaultRect2.height / 2 + 18);
-                            gsap.to(storyRef.current, { y: -moveUp, duration: 0.32, ease: "power2.out" });
+                            const vaultRect2 =
+                              vaultRef.current.getBoundingClientRect();
+                            const moveUp = Math.round(
+                              vaultRect2.height / 2 + 18,
+                            );
+                            gsap.to(storyRef.current, {
+                              y: -moveUp,
+                              duration: 0.32,
+                              ease: "power2.out",
+                            });
                           }
                         } catch (e) {
                           /* ignore */
