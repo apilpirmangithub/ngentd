@@ -4,13 +4,15 @@ import { useEffect } from "react";
 
 export default function ExtensionErrorGuard() {
   useEffect(() => {
-    const isExtensionError = (err: unknown) => {
+    const isBenignNoise = (err: unknown) => {
       const msg = typeof err === "string" ? err : (err as any)?.message || "";
       const stack = (err as any)?.stack || "";
       return (
         msg.includes("Talisman extension") ||
         msg.includes("chrome-extension://") ||
-        stack.includes("chrome-extension://")
+        stack.includes("chrome-extension://") ||
+        msg.toLowerCase().includes("origins don't match") ||
+        msg.toLowerCase().includes("failed to execute 'postmessage'")
       );
     };
 
