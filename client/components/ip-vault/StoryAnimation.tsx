@@ -1305,8 +1305,8 @@ export default function StoryAnimation({
         <div
           className="absolute pointer-events-none rounded-xl border-2 border-white/30"
           style={{
-            left: `calc(${positions.ipfs} - 2.75cm)`,
-            width: `calc(${positions.tee} - ${positions.ipfs} + 5.5cm)`,
+            left: `calc(${positions.ipfs} - 2.7cm)`,
+            width: `calc(${positions.tee} - ${positions.ipfs} + 5.4cm)`,
             top: "18%",
             bottom: "18%",
           }}
