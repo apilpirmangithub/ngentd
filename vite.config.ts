@@ -1,6 +1,7 @@
 import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import type { IncomingMessage, ServerResponse } from "http";
 import { createServer } from "./server";
 
 // https://vitejs.dev/config/
@@ -32,11 +33,18 @@ function expressPlugin(): Plugin {
     configureServer(server) {
       const app = createServer();
 
+      type Next = (err?: any) => void;
+      const expressAsConnect = app as unknown as (
+        req: IncomingMessage,
+        res: ServerResponse,
+        next: Next
+      ) => void;
+
       // Add Express app as middleware to Vite dev server
       // Mount Express only for /api requests to avoid intercepting Vite assets and SPA routes
       server.middlewares.use((req, res, next) => {
         if (req.url && req.url.startsWith("/api")) {
-          return app(req, res, next);
+          return expressAsConnect(req, res, next);
         }
         next();
       });
