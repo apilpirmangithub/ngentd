@@ -348,6 +348,8 @@ export default function StoryAnimation({
         duration: 1.1,
         delay: buyerMoveDelay,
       })
+        // perform attestation check visual before showing License OK
+        .call(() => performAttestationReveal())
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .call(() => audioRef.current?.playSuccess())
         .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
