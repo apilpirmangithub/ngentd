@@ -1085,7 +1085,7 @@ export default function StoryAnimation({
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2F48906aed3c7344009a10a054f28b82c4%2F14c096d056a0405c8cbbd5daea44fefd?format=webp&width=800"
             alt="Story Network"
-            className="h-10 md:h-12 opacity-90 select-none"
+            className="h-8 md:h-10 opacity-90 select-none"
             draggable="false"
           />
         </div>
