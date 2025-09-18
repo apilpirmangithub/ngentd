@@ -579,6 +579,13 @@ export default function StoryAnimation({
 
                       // locked state applied instantly (no pulse)
 
+                      // sound: lock engaged
+                      try {
+                        audioRef.current?.playLock();
+                      } catch (e) {
+                        /* ignore */
+                      }
+
                       // reveal the vault now that it's locked
                       try {
                         if (vaultRef.current) {
@@ -588,6 +595,8 @@ export default function StoryAnimation({
                             y: 0,
                             duration: 0.28,
                           });
+                          // small vault reveal sound
+                          audioRef.current?.playVaultReveal();
                         }
                         // move story label above vault
                         try {
