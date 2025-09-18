@@ -879,8 +879,9 @@ export default function StoryAnimation({
       const bRect = buyerEl.getBoundingClientRect();
       const left = bRect.left - sceneRect.left + bRect.width / 2;
       const top = bRect.top - sceneRect.top + bRect.height / 2;
-      const w = Math.max(24, Math.round(bRect.width));
-      const h = Math.max(24, Math.round(bRect.height));
+      const pad = 16;
+      const w = Math.max(24, Math.round(bRect.width + pad));
+      const h = Math.max(24, Math.round(bRect.height + pad));
 
       const container = document.createElement("div");
       container.className = "pointer-events-none";
@@ -891,8 +892,8 @@ export default function StoryAnimation({
         width: w + "px",
         height: h + "px",
         transform: "translate3d(-50%,-50%,0)",
-        border: "1px solid rgba(255,255,255,0.25)",
-        borderRadius: "12px",
+        border: "2px solid rgba(255,255,255,0.28)",
+        borderRadius: "14px",
         overflow: "hidden",
         zIndex: "9998",
         opacity: "0",
