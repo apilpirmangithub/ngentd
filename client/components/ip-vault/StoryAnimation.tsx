@@ -733,6 +733,7 @@ export default function StoryAnimation({
                 }
               } catch (e) {
                 gsap.to(ipfsBadge, {
+                  onStart: () => audioRef.current?.playPop(),
                   opacity: 1,
                   y: 0,
                   duration: 0.28,
