@@ -924,29 +924,23 @@ export default function StoryAnimation({
         duration: 0.9,
         ease: "power3.inOut",
         onComplete: () => {
+          // instantly show Ownership OK upon arrival
+          try {
+            gsap.set(ownerCheckRef.current, { opacity: 1, y: 0 });
+          } catch (e) {
+            /* ignore */
+          }
+          // schedule buyer movement after a short delay
+          try {
+            gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
+          } catch (e) {
+            /* ignore */
+          }
+          // fade out and remove the trail independently
           gsap.to(trail, {
             opacity: 0,
-            duration: 0.25,
-            onComplete: () => {
-              trail.remove();
-              try {
-                gsap.to(ownerCheckRef.current, {
-                  opacity: 1,
-                  y: 0,
-                  duration: 0.36,
-                  ease: "power3.out",
-                  onComplete: () => {
-                    try {
-                      gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
-                    } catch (e) {
-                      /* ignore */
-                    }
-                  },
-                });
-              } catch (e) {
-                /* ignore */
-              }
-            },
+            duration: 0.2,
+            onComplete: () => trail.remove(),
           });
         },
       });
