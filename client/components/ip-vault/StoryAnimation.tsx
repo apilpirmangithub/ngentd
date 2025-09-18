@@ -327,6 +327,8 @@ export default function StoryAnimation({
       lockEl.style.color = "#ffffff";
       // ensure no transform for instant state
       lockEl.style.transform = "";
+      // sound: unlock
+      audioRef.current?.playUnlock();
     } catch (e) {
       /* ignore */
     }
