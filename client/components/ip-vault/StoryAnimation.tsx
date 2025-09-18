@@ -57,6 +57,7 @@ export default function StoryAnimation({
   // configurable delays
   const buyerMoveDelay = 0.6; // seconds delay before buyer starts moving
   const unlockDelay = 0.15; // seconds delay before applying unlock after License OK appears (halved)
+  const postLockBuyerDelay = 0.25; // small delay between lock engage and buyer sequence
 
   // simple audio manager using WebAudio (no external assets)
   const audioRef = useRef<any>(null);
@@ -86,7 +87,7 @@ export default function StoryAnimation({
       g.connect(this.masterGain!);
       const now = this.ctx.currentTime;
       g.gain.setValueAtTime(0, now);
-      g.gain.linearRampToValueAtTime(1, now + 0.01);
+      g.gain.linearRampToValueAtTime(1, now + 0.008);
       g.gain.exponentialRampToValueAtTime(0.001, now + duration + decay);
       o.start(now);
       o.stop(now + duration + decay + 0.02);
@@ -94,10 +95,14 @@ export default function StoryAnimation({
 
     playClick = () => this.playTone(880, "sine", 0.06);
     playRelease = () => { this.playTone(520, "triangle", 0.08); this.playTone(760, "sine", 0.07); };
-    playLock = () => { this.playTone(360, "sine", 0.14); };
-    playUnlock = () => { this.playTone(920, "sine", 0.12); };
-    playSuccess = () => { this.playTone(980, "sine", 0.12); this.playTone(660, "sine", 0.12); };
-    playDeliver = () => { this.playTone(700, "sine", 0.14); };
+    // deeper, shorter lock click
+    playLock = () => { this.playTone(220, "square", 0.12); this.playTone(380, "sine", 0.08); };
+    // bright unlock
+    playUnlock = () => { this.playTone(1100, "sine", 0.09); };
+    // success: bright short chord
+    playSuccess = () => { this.playTone(1100, "sine", 0.08); this.playTone(780, "sine", 0.09); };
+    // deliver: swoosh-ish by quick descending tones
+    playDeliver = () => { this.playTone(680, "sine", 0.12); this.playTone(520, "triangle", 0.14); };
     playVaultReveal = () => { this.playTone(420, "sine", 0.18); };
   }
 
