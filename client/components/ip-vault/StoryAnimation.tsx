@@ -1143,7 +1143,7 @@ export default function StoryAnimation({
             }}
           >
             <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
-              <Cpu className="size-3" /> TEE
+              <Cpu className="size-2" /> TEE
             </div>
           </div>
         )}
@@ -1229,7 +1229,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-            <ShieldCheck className="size-3" /> Ownership OK
+            <ShieldCheck className="size-2" /> Ownership OK
           </div>
         </div>
 
@@ -1247,7 +1247,7 @@ export default function StoryAnimation({
           }
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-            <ShieldCheck className="size-3" /> License OK
+            <ShieldCheck className="size-2" /> License OK
           </div>
         </div>
         {mode === "tee" && (
@@ -1261,7 +1261,7 @@ export default function StoryAnimation({
             }}
           >
             <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-              <ShieldCheck className="size-3" /> Attestation OK
+              <ShieldCheck className="size-2" /> Attestation OK
             </div>
           </div>
         )}
@@ -1271,34 +1271,34 @@ export default function StoryAnimation({
             ref={condRef}
             className="absolute left-1/2 top-[82%] -translate-x-1/2 transform-gpu"
           >
-            <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/90 shadow-sm">
+            <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/90 shadow-sm scale-90">
               <div className="mb-1 font-semibold text-white/90">
                 Conditional Decryption
               </div>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1">
                 <span
                   data-rule
-                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <EyeOff className="size-3" /> Output-only
+                  <EyeOff className="size-2" /> Output-only
                 </span>
                 <span
                   data-rule
-                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Scissors className="size-3" /> Partial access
+                  <Scissors className="size-2" /> Partial access
                 </span>
                 <span
                   data-rule
-                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Clock className="size-3" /> Time/usage
+                  <Clock className="size-2" /> Time/usage
                 </span>
                 <span
                   data-rule
-                  className="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-0.5"
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Monitor className="size-3" /> App-restricted
+                  <Monitor className="size-2" /> App-restricted
                 </span>
               </div>
             </div>
@@ -1327,7 +1327,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
-            <Database className="size-3" />{" "}
+            <Database className="size-2" />{" "}
             <span className="ipfs-text">IPFS</span>
           </div>
         </div>
