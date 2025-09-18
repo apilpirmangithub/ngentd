@@ -817,6 +817,9 @@ export default function StoryAnimation({
         duration: 1.0,
         ease: "power2.inOut",
         onComplete: () => {
+          // sound: delivered
+          audioRef.current?.playDeliver();
+
           gsap.fromTo(
             buyerEl,
             { scale: 1 },
