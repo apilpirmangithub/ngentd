@@ -1338,8 +1338,8 @@ export default function StoryAnimation({
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-black shadow z-50 inline-flex items-center justify-center opacity-0"
         >
-          <Unlock className="size-5 unlock-icon transition-opacity" />
-          <Lock className="size-5 lock-icon transition-opacity opacity-0 absolute" />
+          <Unlock className="size-4 unlock-icon transition-opacity" />
+          <Lock className="size-4 lock-icon transition-opacity opacity-0 absolute" />
         </div>
 
         {/* Safe room (TEE) */}
