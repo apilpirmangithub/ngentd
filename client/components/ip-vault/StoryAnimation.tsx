@@ -894,61 +894,15 @@ export default function StoryAnimation({
   };
 
   const performOwnerToVaultTrail = () => {
-    const scene = sceneRef.current;
-    const ownerEl = ownerRef.current;
-    const vaultEl = vaultRef.current;
-    if (!scene || !ownerEl || !vaultEl) return;
+    // Remove light dot/trail; directly confirm ownership and continue sequence
     try {
-      const sceneRect = scene.getBoundingClientRect();
-      const oRect = ownerEl.getBoundingClientRect();
-      const vRect = vaultEl.getBoundingClientRect();
-      const ox = oRect.left - sceneRect.left + oRect.width / 2;
-      const oy = oRect.top - sceneRect.top + oRect.height / 2;
-      const vx = vRect.left - sceneRect.left + vRect.width / 2;
-      const vy = vRect.top - sceneRect.top + vRect.height / 2;
-      const trail = document.createElement("div");
-      trail.className = "pointer-events-none";
-      Object.assign(trail.style, {
-        position: "absolute",
-        left: `${vx}px`,
-        top: `${vy}px`,
-        width: "6px",
-        height: "6px",
-        borderRadius: "999px",
-        background:
-          "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))",
-        transform: "translate3d(-50%,-50%,0)",
-        zIndex: "9999",
-      });
-      scene.appendChild(trail);
-      gsap.to(trail, {
-        left: `${ox}px`,
-        top: `${oy}px`,
-        duration: 0.9,
-        ease: "power3.inOut",
-        onComplete: () => {
-          // instantly show Ownership OK upon arrival
-          try {
-            gsap.set(ownerCheckRef.current, { opacity: 1, y: 0 });
-            // play SFX immediately on ownership confirmation
-            audioRef.current?.playSuccess();
-          } catch (e) {
-            /* ignore */
-          }
-          // schedule buyer movement after a short delay
-          try {
-            gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
-          } catch (e) {
-            /* ignore */
-          }
-          // fade out and remove the trail independently
-          gsap.to(trail, {
-            opacity: 0,
-            duration: 0.15,
-            onComplete: () => trail.remove(),
-          });
-        },
-      });
+      gsap.set(ownerCheckRef.current, { opacity: 1, y: 0 });
+      audioRef.current?.playSuccess();
+    } catch (e) {
+      /* ignore */
+    }
+    try {
+      gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
     } catch (e) {
       /* ignore */
     }
