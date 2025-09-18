@@ -43,6 +43,9 @@ export default function StoryAnimation({
   const ownerIdle = useRef<gsap.core.Tween | null>(null);
   const buyerIdle = useRef<gsap.core.Tween | null>(null);
 
+  // story label ref (to move above vault when it appears)
+  const storyRef = useRef<HTMLDivElement | null>(null);
+
   const positions = {
     owner: "12%",
     ipfs: "30%",
