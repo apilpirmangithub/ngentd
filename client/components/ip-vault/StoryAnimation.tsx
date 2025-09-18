@@ -362,6 +362,7 @@ export default function StoryAnimation({
     // initialize audio manager (will silently fail if AudioContext not available)
     try {
       audioRef.current = new AudioManager();
+      (audioRef.current as AudioManager).setEnabled(!!sound);
     } catch (e) {
       audioRef.current = null;
     }
