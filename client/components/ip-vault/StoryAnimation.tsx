@@ -140,7 +140,7 @@ export default function StoryAnimation({
 
     gsap.set(ownerRef.current, {
       left: positions.owner,
-      top: "62%",
+      top: "60%",
       xPercent: -50,
       yPercent: -50,
       opacity: 1,
@@ -167,7 +167,7 @@ export default function StoryAnimation({
     });
     gsap.set(buyerRef.current, {
       left: positions.buyer,
-      top: "62%",
+      top: "60%",
       xPercent: -50,
       yPercent: -50,
       opacity: 1,
@@ -1222,7 +1222,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.owner,
-            top: "62%",
+            top: "60%",
             transform: "translate(-50%,-50%)",
           }}
         >
@@ -1242,7 +1242,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.buyer,
-            top: "62%",
+            top: "60%",
             transform: "translate(-50%,-50%)",
           }}
         >
