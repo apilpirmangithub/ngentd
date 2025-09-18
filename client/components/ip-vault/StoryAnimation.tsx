@@ -1037,6 +1037,74 @@ export default function StoryAnimation({
       const ipfsRect = ipfsEl.getBoundingClientRect();
       const buyerRect = buyerEl.getBoundingClientRect();
 
+      // Download progress indicator under IP Buyer
+      let downloadEl: HTMLDivElement | null = null;
+      let downloadBar: HTMLDivElement | null = null;
+      try {
+        const buyerCenterX = buyerRect.left - sceneRect.left + buyerRect.width / 2;
+        const buyerBottomY = buyerRect.bottom - sceneRect.top + 12;
+
+        downloadEl = document.createElement("div");
+        downloadEl.className = "pointer-events-none";
+        Object.assign(downloadEl.style, {
+          position: "absolute",
+          left: `${buyerCenterX}px`,
+          top: `${buyerBottomY}px`,
+          width: `112px`,
+          transform: "translate3d(-50%,0,0)",
+          zIndex: "9998",
+          opacity: "0",
+        });
+
+        const box = document.createElement("div");
+        Object.assign(box.style, {
+          background: "rgba(255,255,255,0.08)",
+          border: "1px solid rgba(255,255,255,0.15)",
+          borderRadius: "10px",
+          padding: "6px 8px",
+          backdropFilter: "blur(2px)",
+        });
+        downloadEl.appendChild(box);
+
+        const label = document.createElement("div");
+        label.textContent = "downloading..";
+        Object.assign(label.style, {
+          fontSize: "10px",
+          color: "rgba(255,255,255,0.85)",
+          marginBottom: "4px",
+          textAlign: "center",
+        });
+        box.appendChild(label);
+
+        const track = document.createElement("div");
+        Object.assign(track.style, {
+          width: "100%",
+          height: "4px",
+          background: "rgba(255,255,255,0.15)",
+          borderRadius: "9999px",
+          overflow: "hidden",
+        });
+        box.appendChild(track);
+
+        downloadBar = document.createElement("div");
+        Object.assign(downloadBar.style, {
+          width: "0%",
+          height: "100%",
+          background:
+            "linear-gradient(90deg, rgba(16,185,129,0.6), rgba(16,185,129,1))",
+          borderRadius: "9999px",
+        });
+        track.appendChild(downloadBar);
+
+        scene.appendChild(downloadEl);
+        gsap.to(downloadEl, { opacity: 1, duration: 0.15, ease: "power1.out" });
+        if (downloadBar) {
+          gsap.to(downloadBar, { width: "80%", duration: 1.06, ease: "linear" });
+        }
+      } catch (e) {
+        /* ignore */
+      }
+
       const docEl = document.createElement("div");
       docEl.className =
         "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
@@ -1118,6 +1186,20 @@ export default function StoryAnimation({
               ease: "power1.out",
             },
           );
+
+          try {
+            if (downloadBar)
+              gsap.to(downloadBar, { width: "100%", duration: 0.3, ease: "linear" });
+            if (downloadEl)
+              gsap.to(downloadEl, {
+                opacity: 0,
+                duration: 0.2,
+                delay: 0.15,
+                onComplete: () => downloadEl && downloadEl.remove(),
+              });
+          } catch (e) {
+            /* ignore */
+          }
 
           setTimeout(() => docEl.remove(), 340);
         },
