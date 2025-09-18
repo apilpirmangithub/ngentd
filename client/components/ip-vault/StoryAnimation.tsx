@@ -76,7 +76,10 @@ export default function StoryAnimation({
     eq: BiquadFilterNode | null = null;
     comp: DynamicsCompressorNode | null = null;
     defaultVolume = 0.12;
-    samples: Record<string, { el: HTMLAudioElement; src: MediaElementAudioSourceNode | null }> = {};
+    samples: Record<
+      string,
+      { el: HTMLAudioElement; src: MediaElementAudioSourceNode | null }
+    > = {};
     constructor() {
       try {
         this.ctx = new (window.AudioContext ||
@@ -98,23 +101,54 @@ export default function StoryAnimation({
         this.comp.connect(this.masterGain);
         this.masterGain.connect(this.ctx.destination);
         // preload samples
-        this.createSample("lock","https://assets.mixkit.co/active_storage/sfx/2856/2856-preview.mp3");
-        this.createSample("unlock","https://assets.mixkit.co/active_storage/sfx/2848/2848-preview.mp3");
-        this.createSample("whoosh","https://assets.mixkit.co/active_storage/sfx/1714/1714-preview.mp3");
-        this.createSample("click","https://assets.mixkit.co/active_storage/sfx/1133/1133-preview.mp3");
-        this.createSample("pop","https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3");
-        this.createSample("success","https://assets.mixkit.co/active_storage/sfx/2039/2039-preview.mp3");
-        this.createSample("tick","https://assets.mixkit.co/active_storage/sfx/1059/1059-preview.mp3");
-        this.createSample("deliver","https://assets.mixkit.co/active_storage/sfx/1489/1489-preview.mp3");
-        this.createSample("vaultReveal","https://assets.mixkit.co/active_storage/sfx/960/960-preview.mp3");
-        this.createSample("release","https://assets.mixkit.co/active_storage/sfx/2364/2364-preview.mp3");
+        this.createSample(
+          "lock",
+          "https://assets.mixkit.co/active_storage/sfx/2856/2856-preview.mp3",
+        );
+        this.createSample(
+          "unlock",
+          "https://assets.mixkit.co/active_storage/sfx/2848/2848-preview.mp3",
+        );
+        this.createSample(
+          "whoosh",
+          "https://assets.mixkit.co/active_storage/sfx/1714/1714-preview.mp3",
+        );
+        this.createSample(
+          "click",
+          "https://assets.mixkit.co/active_storage/sfx/1133/1133-preview.mp3",
+        );
+        this.createSample(
+          "pop",
+          "https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3",
+        );
+        this.createSample(
+          "success",
+          "https://assets.mixkit.co/active_storage/sfx/2039/2039-preview.mp3",
+        );
+        this.createSample(
+          "tick",
+          "https://assets.mixkit.co/active_storage/sfx/1059/1059-preview.mp3",
+        );
+        this.createSample(
+          "deliver",
+          "https://assets.mixkit.co/active_storage/sfx/1489/1489-preview.mp3",
+        );
+        this.createSample(
+          "vaultReveal",
+          "https://assets.mixkit.co/active_storage/sfx/960/960-preview.mp3",
+        );
+        this.createSample(
+          "release",
+          "https://assets.mixkit.co/active_storage/sfx/2364/2364-preview.mp3",
+        );
       } catch (e) {
         this.ctx = null;
       }
     }
 
     setEnabled = (enabled: boolean) => {
-      if (this.masterGain) this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
+      if (this.masterGain)
+        this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
       // also adjust direct-playback volumes in case WebAudio is unavailable
       try {
         Object.values(this.samples).forEach((s) => {
@@ -209,20 +243,55 @@ export default function StoryAnimation({
       o.stop(now + duration + decay + 0.02);
     };
 
-    playClick = () => { if (this.playSample("click")) return; this.playTone(880, "sine", 0.06); };
-    playTick = () => { if (this.playSample("tick")) return; this.playTone(720, "square", 0.05); };
-    playPop = () => { if (this.playSample("pop")) return; this.playTone(980, "sine", 0.07); };
-    playWhoosh = () => { if (this.playSample("whoosh")) return; this.playTone(900, "sine", 0.08); this.playTone(600, "triangle", 0.12); };
-    playRelease = () => { if (this.playSample("release")) return; this.playTone(520, "triangle", 0.08); this.playTone(760, "sine", 0.07); };
+    playClick = () => {
+      if (this.playSample("click")) return;
+      this.playTone(880, "sine", 0.06);
+    };
+    playTick = () => {
+      if (this.playSample("tick")) return;
+      this.playTone(720, "square", 0.05);
+    };
+    playPop = () => {
+      if (this.playSample("pop")) return;
+      this.playTone(980, "sine", 0.07);
+    };
+    playWhoosh = () => {
+      if (this.playSample("whoosh")) return;
+      this.playTone(900, "sine", 0.08);
+      this.playTone(600, "triangle", 0.12);
+    };
+    playRelease = () => {
+      if (this.playSample("release")) return;
+      this.playTone(520, "triangle", 0.08);
+      this.playTone(760, "sine", 0.07);
+    };
     // deeper, shorter lock click
-    playLock = () => { if (this.playSample("lock")) return; this.playTone(220, "square", 0.12); this.playTone(380, "sine", 0.08); };
+    playLock = () => {
+      if (this.playSample("lock")) return;
+      this.playTone(220, "square", 0.12);
+      this.playTone(380, "sine", 0.08);
+    };
     // bright unlock
-    playUnlock = () => { if (this.playSample("unlock")) return; this.playTone(1100, "sine", 0.09); };
+    playUnlock = () => {
+      if (this.playSample("unlock")) return;
+      this.playTone(1100, "sine", 0.09);
+    };
     // success: bright short chord
-    playSuccess = () => { if (this.playSample("success")) return; this.playTone(1100, "sine", 0.08); this.playTone(780, "sine", 0.09); };
+    playSuccess = () => {
+      if (this.playSample("success")) return;
+      this.playTone(1100, "sine", 0.08);
+      this.playTone(780, "sine", 0.09);
+    };
     // deliver: swoosh-ish by quick descending tones
-    playDeliver = () => { if (this.playSample("deliver")) return; this.playTone(680, "sine", 0.12); this.playTone(520, "triangle", 0.14); };
-    playVaultReveal = () => { if (this.playSample("vaultReveal")) return; this.playTone(420, "sine", 0.18); };
+    playDeliver = () => {
+      if (this.playSample("deliver")) return;
+      this.playTone(680, "sine", 0.12);
+      this.playTone(520, "triangle", 0.14);
+    };
+    playVaultReveal = () => {
+      if (this.playSample("vaultReveal")) return;
+      this.playTone(420, "sine", 0.18);
+    };
   }
 
   const reset = () => {
@@ -341,8 +410,7 @@ export default function StoryAnimation({
         { backgroundColor: "#9CA3AF", color: "#000000", duration: 0.22 },
         ">",
       )
-      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">-")
-      ;
+      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">-");
 
     // buyer movement is triggered after lock is engaged via startBuyerSequence();
     // no buyer movement added here to ensure lock completes before buyer moves.
@@ -557,7 +625,7 @@ export default function StoryAnimation({
         .call(() => audioRef.current?.playSuccess())
         .call(() => gsap.delayedCall(unlockAfterLicenseDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
-        
+
         .to({}, { duration: 0.6 })
         .call(() => audioRef.current?.playWhoosh())
         .to(doorRef.current, { width: "0%", duration: 0.36 })
@@ -589,7 +657,7 @@ export default function StoryAnimation({
           "<",
         )
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
-        
+
         .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to({}, { duration: 0.6 })
         .call(() => audioRef.current?.playWhoosh())
@@ -1341,7 +1409,9 @@ export default function StoryAnimation({
   useEffect(() => {
     if (event) {
       // ensure audio is resumed on play
-      try { (audioRef.current as any)?.resumeIfNeeded?.(); } catch {}
+      try {
+        (audioRef.current as any)?.resumeIfNeeded?.();
+      } catch {}
       // restart from beginning on each event change
       masterRef.current?.restart();
     }
@@ -1351,7 +1421,9 @@ export default function StoryAnimation({
   useEffect(() => {
     const mgr = audioRef.current as any;
     const handler = () => {
-      try { mgr?.resumeIfNeeded?.(); } catch {}
+      try {
+        mgr?.resumeIfNeeded?.();
+      } catch {}
       window.removeEventListener("pointerdown", handler);
       window.removeEventListener("keydown", handler);
     };

@@ -18,7 +18,10 @@ export default function ExtensionErrorGuard() {
 
     const onError = (event: ErrorEvent) => {
       const filename = (event as any).filename || "";
-      if (filename.startsWith("chrome-extension://") || isBenignNoise(event.error)) {
+      if (
+        filename.startsWith("chrome-extension://") ||
+        isBenignNoise(event.error)
+      ) {
         event.preventDefault();
         event.stopImmediatePropagation();
       }
@@ -36,9 +39,10 @@ export default function ExtensionErrorGuard() {
     const origWarn = console.warn;
     const shouldSilenceConsole = (...args: unknown[]) => {
       try {
-        return args.some((a) =>
-          String(a).toLowerCase().includes("origins don't match") ||
-          String(a).toLowerCase().includes("failed to execute 'postmessage'")
+        return args.some(
+          (a) =>
+            String(a).toLowerCase().includes("origins don't match") ||
+            String(a).toLowerCase().includes("failed to execute 'postmessage'"),
         );
       } catch {
         return false;
