@@ -1238,7 +1238,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={
             mode === "tee"
-              ? { left: "50%", top: "72%", transform: "translateX(-50%)" }
+              ? { left: positions.tee, top: "36%", transform: "translateX(-50%)" }
               : {
                   left: positions.buyer,
                   top: "46%",
