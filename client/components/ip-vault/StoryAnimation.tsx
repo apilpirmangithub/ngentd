@@ -344,6 +344,7 @@ export default function StoryAnimation({
         delay: buyerMoveDelay,
       })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 })
+        .call(() => audioRef.current?.playSuccess())
         .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to({}, { duration: 0.6 })
