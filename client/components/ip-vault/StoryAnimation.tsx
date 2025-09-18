@@ -1303,7 +1303,7 @@ export default function StoryAnimation({
 
         {/* Inner band border from IPFS to TEE */}
         <div
-          className="absolute pointer-events-none rounded-xl border border-white/30"
+          className="absolute pointer-events-none rounded-xl border-2 border-white/30"
           style={{
             left: `calc(${positions.ipfs} - 2cm)`,
             width: `calc(${positions.tee} - ${positions.ipfs} + 4cm)`,
