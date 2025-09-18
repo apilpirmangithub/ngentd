@@ -1282,6 +1282,7 @@ export default function StoryAnimation({
       </div>
       <div
         ref={sceneRef}
+        onClick={() => (audioRef.current as any)?.resumeIfNeeded?.()}
         className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/30 bg-black transform-gpu"
       >
         {/* Debug grid overlay */}
