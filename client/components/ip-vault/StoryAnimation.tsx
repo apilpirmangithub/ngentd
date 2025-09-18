@@ -56,8 +56,10 @@ export default function StoryAnimation({
 
   // configurable delays
   const buyerMoveDelay = 0.6; // seconds delay before buyer starts moving
-  const unlockDelay = 0.15; // seconds delay before applying unlock after License OK appears (halved)
+  const unlockDelay = 0.15; // base unlock delay used for TEE flow
   const postLockBuyerDelay = 0.25; // small delay between lock engage and buyer sequence
+  // delay to unlock AFTER License OK is shown for non-TEE flow (tuned for good pacing)
+  const unlockAfterLicenseDelay = 0.6;
 
   // simple audio manager using WebAudio (no external assets)
   const audioRef = useRef<any>(null);
