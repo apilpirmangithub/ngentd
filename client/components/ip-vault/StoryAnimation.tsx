@@ -720,6 +720,7 @@ export default function StoryAnimation({
                     delay: 0.18,
                     ease: "power3.out",
                   });
+                  audioRef.current?.playPop();
                 } else {
                   gsap.to(ipfsBadge, {
                     opacity: 1,
