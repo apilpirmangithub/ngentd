@@ -18,9 +18,11 @@ import {
 export default function StoryAnimation({
   mode,
   event,
+  sound = true,
 }: {
   mode: "vault" | "tee";
   event?: string | null;
+  sound?: boolean;
 }) {
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const ownerRef = useRef<HTMLDivElement | null>(null);
@@ -71,19 +73,40 @@ export default function StoryAnimation({
   class AudioManager {
     ctx: AudioContext | null = null;
     masterGain: GainNode | null = null;
+    defaultVolume = 0.12;
     constructor() {
       try {
         this.ctx = new (window.AudioContext ||
           (window as any).webkitAudioContext)();
         this.masterGain = this.ctx.createGain();
-        this.masterGain.gain.value = 0.12;
+        this.masterGain.gain.value = this.defaultVolume;
         this.masterGain.connect(this.ctx.destination);
       } catch (e) {
         this.ctx = null;
       }
     }
 
-    playTone = (freq: number, type = "sine", duration = 0.12, decay = 0.02) => {
+    setEnabled = (enabled: boolean) => {
+      if (!this.masterGain) return;
+      this.masterGain.gain.value = enabled ? this.defaultVolume : 0;
+    };
+
+    resumeIfNeeded = async () => {
+      try {
+        if (this.ctx && this.ctx.state === "suspended") {
+          await this.ctx.resume();
+        }
+      } catch (e) {
+        /* ignore */
+      }
+    };
+
+    playTone = (
+      freq: number,
+      type: OscillatorType | string = "sine",
+      duration = 0.12,
+      decay = 0.02,
+    ) => {
       if (!this.ctx) return;
       const o = this.ctx.createOscillator();
       const g = this.ctx.createGain();
@@ -101,6 +124,12 @@ export default function StoryAnimation({
     };
 
     playClick = () => this.playTone(880, "sine", 0.06);
+    playTick = () => this.playTone(720, "square", 0.05);
+    playPop = () => this.playTone(980, "sine", 0.07);
+    playWhoosh = () => {
+      this.playTone(900, "sine", 0.08);
+      this.playTone(600, "triangle", 0.12);
+    };
     playRelease = () => {
       this.playTone(520, "triangle", 0.08);
       this.playTone(760, "sine", 0.07);
@@ -225,7 +254,8 @@ export default function StoryAnimation({
     const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
     const targetLeft = positions.tee;
     // Owner walks to IPFS carrying doc
-    tl.to(ownerRef.current, { left: "30%", duration: 1.2 })
+    tl.call(() => audioRef.current?.playWhoosh())
+      .to(ownerRef.current, { left: "30%", duration: 1.2 })
       .to(
         docRef.current,
         { left: "30%", xPercent: -50, yPercent: -50, duration: 1.2 },
@@ -244,7 +274,8 @@ export default function StoryAnimation({
         { backgroundColor: "#9CA3AF", color: "#000000", duration: 0.22 },
         ">",
       )
-      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">-");
+      .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">-")
+      .call(() => audioRef.current?.playPop());
 
     // buyer movement is triggered after lock is engaged via startBuyerSequence();
     // no buyer movement added here to ensure lock completes before buyer moves.
@@ -338,6 +369,7 @@ export default function StoryAnimation({
     // initialize audio manager (will silently fail if AudioContext not available)
     try {
       audioRef.current = new AudioManager();
+      (audioRef.current as AudioManager).setEnabled(!!sound);
     } catch (e) {
       audioRef.current = null;
     }
@@ -353,6 +385,19 @@ export default function StoryAnimation({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
+
+  // reflect external sound toggle
+  useEffect(() => {
+    try {
+      const mgr = audioRef.current as AudioManager | null;
+      if (mgr) {
+        mgr.setEnabled(!!sound);
+        if (sound) mgr.resumeIfNeeded?.();
+      }
+    } catch (e) {
+      /* ignore */
+    }
+  }, [sound]);
 
   // helper to set lock element to unlocked visual state
   const setLockToUnlock = () => {
@@ -445,7 +490,9 @@ export default function StoryAnimation({
         .call(() => audioRef.current?.playSuccess())
         .call(() => gsap.delayedCall(unlockAfterLicenseDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
+        .call(() => audioRef.current?.playPop())
         .to({}, { duration: 0.6 })
+        .call(() => audioRef.current?.playWhoosh())
         .to(doorRef.current, { width: "0%", duration: 0.36 })
         .call(performDeliver)
         .to(doorRef.current, { width: "100%", duration: 0.36 });
@@ -459,6 +506,7 @@ export default function StoryAnimation({
         .call(() => {
           if (teeRef.current)
             gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
+          audioRef.current?.playPop();
         })
         .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
@@ -475,8 +523,10 @@ export default function StoryAnimation({
           "<",
         )
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
+        .call(() => audioRef.current?.playPop())
         .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to({}, { duration: 0.6 })
+        .call(() => audioRef.current?.playWhoosh())
         .to(doorRef.current, { width: "0%", duration: 0.36 })
         .call(performDeliver)
         .to(doorRef.current, { width: "100%", duration: 0.36 });
@@ -675,6 +725,7 @@ export default function StoryAnimation({
                     delay: 0.18,
                     ease: "power3.out",
                   });
+                  audioRef.current?.playPop();
                 } else {
                   gsap.to(ipfsBadge, {
                     opacity: 1,
@@ -683,9 +734,11 @@ export default function StoryAnimation({
                     delay: 0.18,
                     ease: "power3.out",
                   });
+                  audioRef.current?.playPop();
                 }
               } catch (e) {
                 gsap.to(ipfsBadge, {
+                  onStart: () => audioRef.current?.playPop(),
                   opacity: 1,
                   y: 0,
                   duration: 0.28,
@@ -915,6 +968,7 @@ export default function StoryAnimation({
       // animate temps to att badge center
       if (temps.length === 0) {
         // no source elements (TEE/MPC) to animate from — reveal attestation directly
+        audioRef.current?.playPop();
         gsap.to(attEl, {
           opacity: 1,
           y: 0,
@@ -930,6 +984,7 @@ export default function StoryAnimation({
             ease: "power3.inOut",
             delay: i * 0.08,
             onComplete: () => {
+              audioRef.current?.playPop();
               gsap.to(attEl, {
                 opacity: 1,
                 y: 0,
@@ -1005,6 +1060,7 @@ export default function StoryAnimation({
       container.appendChild(line);
 
       gsap.to(container, { opacity: 1, duration: 0.12, ease: "power1.out" });
+      audioRef.current?.playTick();
       const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
       tl.to(line, { top: "0%", duration: 0.35 })
         .to(line, { top: "100%", duration: 0.35 })
@@ -1231,6 +1287,7 @@ export default function StoryAnimation({
       </div>
       <div
         ref={sceneRef}
+        onClick={() => (audioRef.current as any)?.resumeIfNeeded?.()}
         className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/30 bg-black transform-gpu"
       >
         {/* Debug grid overlay */}
@@ -1251,10 +1308,10 @@ export default function StoryAnimation({
 
         {/* Inner band border from IPFS to TEE */}
         <div
-          className="absolute pointer-events-none rounded-xl border border-white/30"
+          className="absolute pointer-events-none rounded-xl border-2 border-white/30"
           style={{
-            left: `calc(${positions.ipfs} - 2cm)`,
-            width: `calc(${positions.tee} - ${positions.ipfs} + 4cm)`,
+            left: `calc(${positions.ipfs} - 2.7cm)`,
+            width: `calc(${positions.tee} - ${positions.ipfs} + 5.4cm)`,
             top: "18%",
             bottom: "18%",
           }}
@@ -1264,7 +1321,7 @@ export default function StoryAnimation({
         {/* Vault */}
         <div
           ref={vaultRef}
-          className="absolute left-1/2 top-1/2 h-40 w-56 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)] overflow-hidden"
+          className="absolute left-1/2 top-1/2 h-36 w-52 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)] overflow-hidden"
         >
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2F75857544e65a4f6982333406121c72a7%2Fa9f23897196141cda50bf40c9cf505c4?format=webp&width=800"
@@ -1286,8 +1343,8 @@ export default function StoryAnimation({
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-black shadow z-50 inline-flex items-center justify-center opacity-0"
         >
-          <Unlock className="size-5 unlock-icon transition-opacity" />
-          <Lock className="size-5 lock-icon transition-opacity opacity-0 absolute" />
+          <Unlock className="size-4 unlock-icon transition-opacity" />
+          <Lock className="size-4 lock-icon transition-opacity opacity-0 absolute" />
         </div>
 
         {/* Safe room (TEE) */}
