@@ -468,7 +468,7 @@ export default function StoryAnimation({
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
         .call(performAttestationReveal)
         .call(() => audioRef.current?.playSuccess())
-        .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">+0.6")
+        .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">+0.8")
         .from(
           condRef.current?.querySelectorAll("[data-rule]"),
           { opacity: 0, y: 6, stagger: 0.08, duration: 0.28 },
