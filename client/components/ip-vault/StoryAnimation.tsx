@@ -518,8 +518,10 @@ export default function StoryAnimation({
           "<",
         )
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
+        .call(() => audioRef.current?.playPop())
         .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to({}, { duration: 0.6 })
+        .call(() => audioRef.current?.playWhoosh())
         .to(doorRef.current, { width: "0%", duration: 0.36 })
         .call(performDeliver)
         .to(doorRef.current, { width: "100%", duration: 0.36 });
