@@ -17,11 +17,12 @@ export function AnimatedDiagram({ active }: { active: number }) {
         className="absolute -inset-6 rounded-2xl bg-[radial-gradient(1200px_300px_at_50%_0%,hsl(75_95%_65%_/_0.25),transparent_60%)]"
         aria-hidden
       />
-      <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-black/60 shadow-[0_0_0_1px_hsl(var(--border)/0.3),0_10px_40px_hsl(75_95%_65%_/_0.15)]">
+      <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-black/60 shadow-[0_0_0_1px_hsl(var(--border)/0.3),0_10px_40px_rgba(0,0,0,0.15)]">
         <motion.svg
           viewBox={`0 0 ${width} ${height}`}
           className="w-full"
           initial={false}
+          style={{ willChange: "transform, opacity" }}
         >
           {/* Background grid tint */}
           <defs>
@@ -72,6 +73,7 @@ export function AnimatedDiagram({ active }: { active: number }) {
                   ? "drop-shadow(0 0 24px rgba(215,255,87,0.45))"
                   : "drop-shadow(0 0 0 rgba(0,0,0,0))") as any,
               }}
+              transition={{ duration: 0.45, ease: [0.22, 0.1, 0.22, 1] }}
             />
             <g>
               <rect
@@ -116,7 +118,8 @@ export function AnimatedDiagram({ active }: { active: number }) {
               stroke="#94A3B8"
               transform="rotate(45)"
               animate={{ rotate: isTEE ? 225 : 45 }}
-              transition={{ type: "spring", stiffness: 70, damping: 12 }}
+              transition={{ type: "spring", stiffness: 90, damping: 16 }}
+              style={{ willChange: "transform" }}
             />
             <Cpu x={-16} y={-16} width={32} height={32} color="#FDE047" />
             <text
@@ -171,10 +174,11 @@ export function AnimatedDiagram({ active }: { active: number }) {
                 key="packet1"
                 r={6}
                 fill="#60A5FA"
-                initial={{ cx: 186, cy: 180 }}
-                animate={{ cx: 430, cy: 180 }}
+                initial={{ cx: 186, cy: 180, opacity: 0.98 }}
+                animate={{ cx: 430, cy: 180, opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 1.4, ease: "easeInOut" }}
+                transition={{ duration: 1.6, ease: [0.22, 0.1, 0.22, 1] }}
+                style={{ willChange: "cx, cy, opacity" }}
               />
             )}
             {isAccess && (
@@ -182,10 +186,11 @@ export function AnimatedDiagram({ active }: { active: number }) {
                 key="packet2"
                 r={6}
                 fill="#22D3EE"
-                initial={{ cx: 770, cy: 180 }}
-                animate={{ cx: 1014, cy: 180 }}
+                initial={{ cx: 770, cy: 180, opacity: 0.98 }}
+                animate={{ cx: 1014, cy: 180, opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 1.8, ease: "easeInOut" }}
+                transition={{ duration: 1.9, ease: [0.22, 0.1, 0.22, 1] }}
+                style={{ willChange: "cx, cy, opacity" }}
               />
             )}
           </AnimatePresence>
@@ -255,8 +260,9 @@ export function AnimatedDiagram({ active }: { active: number }) {
           {isLicense && (
             <motion.g
               transform="translate(1045,110)"
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.36, ease: [0.22, 0.1, 0.22, 1] }}
             >
               <ShieldCheck width={28} height={28} color="#86EFAC" />
             </motion.g>
