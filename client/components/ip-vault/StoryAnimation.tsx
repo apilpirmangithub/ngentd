@@ -940,6 +940,7 @@ export default function StoryAnimation({
           }}
           onClick={() => {
             try {
+              audioRef.current?.playClick();
               performUploadSplit();
             } catch (e) {
               // fallback: show ipfs badge
