@@ -730,7 +730,6 @@ export default function StoryAnimation({
                       } catch (e) {
                         /* ignore */
                       }
-
                     },
                   });
                 }
@@ -813,7 +812,11 @@ export default function StoryAnimation({
         duration: 0.9,
         ease: "power3.inOut",
         onComplete: () => {
-          gsap.to(trail, { opacity: 0, duration: 0.25, onComplete: () => trail.remove() });
+          gsap.to(trail, {
+            opacity: 0,
+            duration: 0.25,
+            onComplete: () => trail.remove(),
+          });
         },
       });
     } catch (e) {
