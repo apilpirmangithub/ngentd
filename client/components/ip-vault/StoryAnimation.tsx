@@ -61,6 +61,9 @@ export default function StoryAnimation({
   const postLockBuyerDelay = 0.25; // small delay between lock engage and buyer sequence
   // delay to unlock AFTER License OK is shown for non-TEE flow (tuned for good pacing)
   const unlockAfterLicenseDelay = 0.6;
+  // vault reveal pacing
+  const vaultRevealDelay = 0.2;
+  const vaultRevealDuration = 0.75;
 
   // simple audio manager using WebAudio (no external assets)
   const audioRef = useRef<any>(null);
@@ -137,7 +140,7 @@ export default function StoryAnimation({
 
     gsap.set(ownerRef.current, {
       left: positions.owner,
-      top: "62%",
+      top: "60%",
       xPercent: -50,
       yPercent: -50,
       opacity: 1,
@@ -164,7 +167,7 @@ export default function StoryAnimation({
     });
     gsap.set(buyerRef.current, {
       left: positions.buyer,
-      top: "62%",
+      top: "60%",
       xPercent: -50,
       yPercent: -50,
       opacity: 1,
@@ -465,13 +468,13 @@ export default function StoryAnimation({
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
         .call(performAttestationReveal)
         .call(() => audioRef.current?.playSuccess())
-        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
-        .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 })
+        .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">+0.8")
         .from(
           condRef.current?.querySelectorAll("[data-rule]"),
           { opacity: 0, y: 6, stagger: 0.08, duration: 0.28 },
           "<",
         )
+        .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
         .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to({}, { duration: 0.6 })
         .to(doorRef.current, { width: "0%", duration: 0.36 })
@@ -532,7 +535,7 @@ export default function StoryAnimation({
           uploadEl.appendChild(box);
 
           const label = document.createElement("div");
-          label.textContent = "uploading..";
+          label.textContent = "Uploading..";
           Object.assign(label.style, {
             fontSize: "10px",
             color: "rgba(255,255,255,0.85)",
@@ -793,7 +796,8 @@ export default function StoryAnimation({
                             opacity: 1,
                             scale: 1,
                             y: 0,
-                            duration: 0.36,
+                            duration: vaultRevealDuration,
+                            delay: vaultRevealDelay,
                             ease: "power3.out",
                           });
                           // small vault reveal sound
@@ -1033,6 +1037,79 @@ export default function StoryAnimation({
       const ipfsRect = ipfsEl.getBoundingClientRect();
       const buyerRect = buyerEl.getBoundingClientRect();
 
+      // Download progress indicator under IP Buyer
+      let downloadEl: HTMLDivElement | null = null;
+      let downloadBar: HTMLDivElement | null = null;
+      try {
+        const buyerCenterX =
+          buyerRect.left - sceneRect.left + buyerRect.width / 2;
+        const buyerBottomY = buyerRect.bottom - sceneRect.top + 12;
+
+        downloadEl = document.createElement("div");
+        downloadEl.className = "pointer-events-none";
+        Object.assign(downloadEl.style, {
+          position: "absolute",
+          left: `${buyerCenterX}px`,
+          top: `${buyerBottomY}px`,
+          width: `112px`,
+          transform: "translate3d(-50%,0,0)",
+          zIndex: "9998",
+          opacity: "0",
+        });
+
+        const box = document.createElement("div");
+        Object.assign(box.style, {
+          background: "rgba(255,255,255,0.08)",
+          border: "1px solid rgba(255,255,255,0.15)",
+          borderRadius: "10px",
+          padding: "6px 8px",
+          backdropFilter: "blur(2px)",
+        });
+        downloadEl.appendChild(box);
+
+        const label = document.createElement("div");
+        label.textContent = "Downloading..";
+        Object.assign(label.style, {
+          fontSize: "10px",
+          color: "rgba(255,255,255,0.85)",
+          marginBottom: "4px",
+          textAlign: "center",
+        });
+        box.appendChild(label);
+
+        const track = document.createElement("div");
+        Object.assign(track.style, {
+          width: "100%",
+          height: "4px",
+          background: "rgba(255,255,255,0.15)",
+          borderRadius: "9999px",
+          overflow: "hidden",
+        });
+        box.appendChild(track);
+
+        downloadBar = document.createElement("div");
+        Object.assign(downloadBar.style, {
+          width: "0%",
+          height: "100%",
+          background:
+            "linear-gradient(90deg, rgba(16,185,129,0.6), rgba(16,185,129,1))",
+          borderRadius: "9999px",
+        });
+        track.appendChild(downloadBar);
+
+        scene.appendChild(downloadEl);
+        gsap.to(downloadEl, { opacity: 1, duration: 0.15, ease: "power1.out" });
+        if (downloadBar) {
+          gsap.to(downloadBar, {
+            width: "80%",
+            duration: 1.06,
+            ease: "linear",
+          });
+        }
+      } catch (e) {
+        /* ignore */
+      }
+
       const docEl = document.createElement("div");
       docEl.className =
         "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
@@ -1114,6 +1191,24 @@ export default function StoryAnimation({
               ease: "power1.out",
             },
           );
+
+          try {
+            if (downloadBar)
+              gsap.to(downloadBar, {
+                width: "100%",
+                duration: 0.3,
+                ease: "linear",
+              });
+            if (downloadEl)
+              gsap.to(downloadEl, {
+                opacity: 0,
+                duration: 0.2,
+                delay: 0.15,
+                onComplete: () => downloadEl && downloadEl.remove(),
+              });
+          } catch (e) {
+            /* ignore */
+          }
 
           setTimeout(() => docEl.remove(), 340);
         },
@@ -1206,7 +1301,7 @@ export default function StoryAnimation({
               transform: "translateX(-50%)",
             }}
           >
-            <div className="rounded-xl border border-white/10 bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200 inline-flex items-center gap-1">
+            <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs font-bold text-sky-100">
               <Cpu className="size-2" /> TEE
             </div>
           </div>
@@ -1218,7 +1313,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.owner,
-            top: "62%",
+            top: "60%",
             transform: "translate(-50%,-50%)",
           }}
         >
@@ -1238,7 +1333,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.buyer,
-            top: "62%",
+            top: "60%",
             transform: "translate(-50%,-50%)",
           }}
         >
@@ -1337,7 +1432,7 @@ export default function StoryAnimation({
         {mode === "tee" && (
           <div
             ref={condRef}
-            className="absolute left-1/2 top-[82%] -translate-x-1/2 transform-gpu"
+            className="absolute left-1/2 top-[70%] -translate-x-1/2 -translate-y-1/2 transform-gpu"
           >
             <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/90 shadow-sm scale-90">
               <div className="flex flex-wrap gap-1">
@@ -1387,11 +1482,11 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "26%",
+            top: "26.5%",
             transform: "translateX(-50%)",
           }}
         >
-          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
+          <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs font-bold text-sky-100">
             <Database className="size-2" />{" "}
             <span className="ipfs-text">IPFS</span>
           </div>
