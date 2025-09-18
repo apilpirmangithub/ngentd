@@ -393,7 +393,8 @@ export default function StoryAnimation({
         delay: buyerMoveDelay,
       })
         .call(performTrailToBuyer)
-        .to({}, { duration: 0.6 })
+        .call(performBuyerScan)
+        .to({}, { duration: 0.72 })
         // position License OK above the buyer when buyer has moved to the vault
         .call(() => {
           try {
@@ -459,6 +460,8 @@ export default function StoryAnimation({
         .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
         .to(buyerRef.current, { left: positions.tee, duration: 0.22 })
+        .call(performBuyerScan)
+        .to({}, { duration: 0.72 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
         .call(performAttestationReveal)
         .call(() => audioRef.current?.playSuccess())
@@ -862,6 +865,61 @@ export default function StoryAnimation({
     }
     try {
       gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
+    } catch (e) {
+      /* ignore */
+    }
+  };
+
+  const performBuyerScan = () => {
+    const scene = sceneRef.current;
+    const buyerEl = buyerRef.current;
+    if (!scene || !buyerEl) return;
+    try {
+      const sceneRect = scene.getBoundingClientRect();
+      const bRect = buyerEl.getBoundingClientRect();
+      const left = bRect.left - sceneRect.left + bRect.width / 2;
+      const top = bRect.top - sceneRect.top + bRect.height / 2;
+      const w = Math.max(24, Math.round(bRect.width));
+      const h = Math.max(24, Math.round(bRect.height));
+
+      const container = document.createElement("div");
+      container.className = "pointer-events-none";
+      Object.assign(container.style, {
+        position: "absolute",
+        left: left + "px",
+        top: top + "px",
+        width: w + "px",
+        height: h + "px",
+        transform: "translate3d(-50%,-50%,0)",
+        border: "1px solid rgba(255,255,255,0.25)",
+        borderRadius: "12px",
+        overflow: "hidden",
+        zIndex: "9998",
+        opacity: "0",
+      });
+      scene.appendChild(container);
+
+      const line = document.createElement("div");
+      Object.assign(line.style, {
+        position: "absolute",
+        left: "0",
+        top: "-100%",
+        width: "100%",
+        height: "35%",
+        background:
+          "linear-gradient(to bottom, rgba(34,197,94,0) 0%, rgba(34,197,94,0.35) 50%, rgba(34,197,94,0) 100%)",
+      });
+      container.appendChild(line);
+
+      gsap.to(container, { opacity: 1, duration: 0.12, ease: "power1.out" });
+      const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+      tl.to(line, { top: "0%", duration: 0.35 })
+        .to(line, { top: "100%", duration: 0.35 })
+        .to(container, {
+          opacity: 0,
+          duration: 0.12,
+          onComplete: () => container.remove(),
+        }, "-=0.05");
     } catch (e) {
       /* ignore */
     }
