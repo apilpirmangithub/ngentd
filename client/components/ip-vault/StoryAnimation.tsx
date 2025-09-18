@@ -1341,7 +1341,7 @@ export default function StoryAnimation({
         {mode === "tee" && (
           <div
             ref={condRef}
-            className="absolute left-1/2 top-[76%] -translate-x-1/2 -translate-y-1/2 transform-gpu"
+            className="absolute left-1/2 top-[72%] -translate-x-1/2 -translate-y-1/2 transform-gpu"
           >
             <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/90 shadow-sm scale-90">
               <div className="flex flex-wrap gap-1">
