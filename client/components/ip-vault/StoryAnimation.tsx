@@ -514,7 +514,7 @@ export default function StoryAnimation({
             position: "absolute",
             left: `${ownerCenterX}px`,
             top: `${ownerBottomY}px`,
-            width: `136px`,
+            width: `112px`,
             transform: "translate3d(-50%,0,0)",
             zIndex: "9998",
             opacity: "0",
