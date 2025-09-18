@@ -394,8 +394,6 @@ export default function StoryAnimation({
       })
         .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
-        // perform attestation check visual before showing License OK
-        .call(() => performAttestationReveal())
         // position License OK above the buyer when buyer has moved to the vault
         .call(() => {
           try {
@@ -438,6 +436,8 @@ export default function StoryAnimation({
             gsap.to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 });
           }
         })
+        // perform attestation check visual after showing License OK
+        .call(() => performAttestationReveal())
         .call(() => audioRef.current?.playSuccess())
         .call(() => gsap.delayedCall(unlockAfterLicenseDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
@@ -456,11 +456,11 @@ export default function StoryAnimation({
           if (teeRef.current)
             gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
         })
-        .call(performAttestationReveal)
         .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
         .to(buyerRef.current, { left: positions.tee, duration: 0.22 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
+        .call(performAttestationReveal)
         .call(() => audioRef.current?.playSuccess())
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
         .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 })
