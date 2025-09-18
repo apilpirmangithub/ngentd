@@ -283,6 +283,13 @@ export default function StoryAnimation({
 
     startIdleAnimations();
 
+    // initialize audio manager (will silently fail if AudioContext not available)
+    try {
+      audioRef.current = new AudioManager();
+    } catch (e) {
+      audioRef.current = null;
+    }
+
     return () => {
       masterRef.current?.kill();
       try {
