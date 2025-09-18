@@ -729,6 +729,7 @@ export default function StoryAnimation({
                     delay: 0.18,
                     ease: "power3.out",
                   });
+                  audioRef.current?.playPop();
                 }
               } catch (e) {
                 gsap.to(ipfsBadge, {
