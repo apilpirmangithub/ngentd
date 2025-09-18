@@ -37,6 +37,7 @@ export default function StoryAnimation({
   const condRef = useRef<HTMLDivElement | null>(null);
   const writeCondRef = useRef<HTMLDivElement | null>(null);
   const readCondRef = useRef<HTMLDivElement | null>(null);
+  const ownerCheckRef = useRef<HTMLDivElement | null>(null);
   const masterRef = useRef<gsap.core.Timeline | null>(null);
 
   // idle animation refs
@@ -174,6 +175,8 @@ export default function StoryAnimation({
     if (attBadgeRef.current)
       gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
+    if (ownerCheckRef.current)
+      gsap.set(ownerCheckRef.current, { opacity: 0, y: 10 });
     // hide TEE badge initially; reveal when buyer reaches vault
     if (teeRef.current) gsap.set(teeRef.current, { opacity: 0, y: 8 });
     try {
@@ -723,12 +726,20 @@ export default function StoryAnimation({
                         /* ignore */
                       }
 
+                      // show ownership verification before buyer moves
+                      try {
+                        gsap.to(ownerCheckRef.current, {
+                          opacity: 1,
+                          y: 0,
+                          duration: 0.36,
+                          ease: "power3.out",
+                        });
+                      } catch (e) {
+                        /* ignore */
+                      }
                       // trigger buyer sequence after a short delay to feel natural
                       try {
-                        gsap.delayedCall(
-                          postLockBuyerDelay,
-                          startBuyerSequence,
-                        );
+                        gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
                       } catch (e) {
                         /* ignore */
                       }
@@ -1140,6 +1151,20 @@ export default function StoryAnimation({
         </div>
 
         {/* Badges */}
+        <div
+          ref={ownerCheckRef}
+          className="absolute transform-gpu"
+          style={{
+            left: positions.owner,
+            top: "46%",
+            transform: "translate(-50%,-100%)",
+          }}
+        >
+          <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
+            <ShieldCheck className="size-3" /> Ownership OK
+          </div>
+        </div>
+
         <div
           ref={licBadgeRef}
           className="absolute transform-gpu"
