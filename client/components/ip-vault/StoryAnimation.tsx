@@ -365,7 +365,7 @@ export default function StoryAnimation({
         .call(performAttestationReveal)
         .to({}, { duration: 0.6 })
         .to(buyerRef.current, { left: positions.tee, duration: 0.2 })
-        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
+        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1").call(() => audioRef.current?.playSuccess())
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to(condRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .from(
