@@ -1041,7 +1041,8 @@ export default function StoryAnimation({
       let downloadEl: HTMLDivElement | null = null;
       let downloadBar: HTMLDivElement | null = null;
       try {
-        const buyerCenterX = buyerRect.left - sceneRect.left + buyerRect.width / 2;
+        const buyerCenterX =
+          buyerRect.left - sceneRect.left + buyerRect.width / 2;
         const buyerBottomY = buyerRect.bottom - sceneRect.top + 12;
 
         downloadEl = document.createElement("div");
@@ -1099,7 +1100,11 @@ export default function StoryAnimation({
         scene.appendChild(downloadEl);
         gsap.to(downloadEl, { opacity: 1, duration: 0.15, ease: "power1.out" });
         if (downloadBar) {
-          gsap.to(downloadBar, { width: "80%", duration: 1.06, ease: "linear" });
+          gsap.to(downloadBar, {
+            width: "80%",
+            duration: 1.06,
+            ease: "linear",
+          });
         }
       } catch (e) {
         /* ignore */
@@ -1189,7 +1194,11 @@ export default function StoryAnimation({
 
           try {
             if (downloadBar)
-              gsap.to(downloadBar, { width: "100%", duration: 0.3, ease: "linear" });
+              gsap.to(downloadBar, {
+                width: "100%",
+                duration: 0.3,
+                ease: "linear",
+              });
             if (downloadEl)
               gsap.to(downloadEl, {
                 opacity: 0,
