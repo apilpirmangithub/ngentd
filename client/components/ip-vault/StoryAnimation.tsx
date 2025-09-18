@@ -1085,6 +1085,18 @@ export default function StoryAnimation({
           Story Network
         </div>
 
+        {/* Inner band border from IPFS to TEE */}
+        <div
+          className="absolute pointer-events-none rounded-xl border border-white/30"
+          style={{
+            left: positions.ipfs,
+            width: `calc(${positions.tee} - ${positions.ipfs})`,
+            top: "18%",
+            height: "56%",
+          }}
+          aria-hidden
+        />
+
         {/* Vault */}
         <div
           ref={vaultRef}
