@@ -67,7 +67,8 @@ export default function StoryAnimation({
     masterGain: GainNode | null = null;
     constructor() {
       try {
-        this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        this.ctx = new (window.AudioContext ||
+          (window as any).webkitAudioContext)();
         this.masterGain = this.ctx.createGain();
         this.masterGain.gain.value = 0.12;
         this.masterGain.connect(this.ctx.destination);
@@ -168,15 +169,15 @@ export default function StoryAnimation({
       transform: "translate3d(-50%, -50%, 0)",
     });
     gsap.set(licBadgeRef.current, { opacity: 0, y: 10 });
-    if (attBadgeRef.current) gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
+    if (attBadgeRef.current)
+      gsap.set(attBadgeRef.current, { opacity: 0, y: 10 });
     gsap.set(ipfsBadgeRef.current, { opacity: 0, y: 10 });
     // hide TEE badge initially; reveal when buyer reaches vault
     if (teeRef.current) gsap.set(teeRef.current, { opacity: 0, y: 8 });
     try {
       const scene = sceneRef.current;
-      const topBadge = scene?.querySelector(".ipfs-text")?.parentElement as
-        | HTMLElement
-        | null;
+      const topBadge = scene?.querySelector(".ipfs-text")
+        ?.parentElement as HTMLElement | null;
       if (topBadge) {
         gsap.set(topBadge, { opacity: 1, y: 0 });
       }
@@ -244,7 +245,10 @@ export default function StoryAnimation({
 
   const build = () => {
     reset();
-    const master = gsap.timeline({ paused: true, defaults: { ease: "power3.inOut" } });
+    const master = gsap.timeline({
+      paused: true,
+      defaults: { ease: "power3.inOut" },
+    });
     master.add(playMain());
     return master;
   };
@@ -349,9 +353,7 @@ export default function StoryAnimation({
     const unlockIcon = lockEl.querySelector(
       ".unlock-icon",
     ) as HTMLElement | null;
-    const lockIcon = lockEl.querySelector(
-      ".lock-icon",
-    ) as HTMLElement | null;
+    const lockIcon = lockEl.querySelector(".lock-icon") as HTMLElement | null;
 
     // show unlock icon, hide locked icon
     unlockIcon?.classList.remove("opacity-0");
@@ -403,7 +405,8 @@ export default function StoryAnimation({
       })
         // reveal TEE badge when buyer reaches the vault (visual)
         .call(() => {
-          if (teeRef.current) gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
+          if (teeRef.current)
+            gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
         })
         .call(performAttestationReveal)
         .to({}, { duration: 0.6 })
@@ -473,7 +476,13 @@ export default function StoryAnimation({
           gsap.fromTo(
             ownerEl,
             { scale: 1 },
-            { scale: 1.06, yoyo: true, repeat: 1, duration: 0.2, ease: "power3.out" },
+            {
+              scale: 1.06,
+              yoyo: true,
+              repeat: 1,
+              duration: 0.2,
+              ease: "power3.out",
+            },
           );
         }
         // sound: release
@@ -511,7 +520,8 @@ export default function StoryAnimation({
 
               // update the top IPFS badge to show 'IPFS' and reveal it
               try {
-                const topBadge = scene.querySelector(".ipfs-text")?.parentElement as HTMLElement | null;
+                const topBadge = scene.querySelector(".ipfs-text")
+                  ?.parentElement as HTMLElement | null;
                 if (topBadge) {
                   topBadge.innerHTML = `\n                    <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"inline-block align-middle mr-1\"><path d=\"M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7\"></path><path d=\"M7 17a4 4 0 0 0 8 0\"></path></svg>\n                    <span class=\"text-xs font-medium\">IPFS</span>\n                  `;
                   gsap.set(topBadge, { opacity: 0, y: 8 });
@@ -543,7 +553,8 @@ export default function StoryAnimation({
 
               // ensure top badge DOM uses the same innerHTML as the ipfsBadgeRef (preserve Database icon)
               try {
-                const top = scene.querySelector(".ipfs-text")?.parentElement as HTMLElement | null;
+                const top = scene.querySelector(".ipfs-text")
+                  ?.parentElement as HTMLElement | null;
                 if (top && ipfsBadgeRef.current) {
                   top.innerHTML = ipfsBadgeRef.current.innerHTML;
                 }
@@ -593,7 +604,8 @@ export default function StoryAnimation({
                     vaultRect.top - sceneRect.top + vaultRect.height / 2;
 
                   // nudge the lock down slightly so it sits visually below the vault center
-                  const finalVaultY = vaultCenterY + Math.round(vaultRect.height * 0.28);
+                  const finalVaultY =
+                    vaultCenterY + Math.round(vaultRect.height * 0.28);
 
                   gsap.to(lockEl, {
                     left: `${vaultCenterX}px`,
@@ -650,8 +662,11 @@ export default function StoryAnimation({
                         // move story label above vault
                         try {
                           if (vaultRef.current && storyRef.current) {
-                            const vaultRect2 = vaultRef.current.getBoundingClientRect();
-                            const moveUp = Math.round(vaultRect2.height / 2 + 18);
+                            const vaultRect2 =
+                              vaultRef.current.getBoundingClientRect();
+                            const moveUp = Math.round(
+                              vaultRect2.height / 2 + 18,
+                            );
                             gsap.to(storyRef.current, {
                               y: -moveUp,
                               duration: 0.36,
@@ -667,7 +682,10 @@ export default function StoryAnimation({
 
                       // trigger buyer sequence after a short delay to feel natural
                       try {
-                        gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
+                        gsap.delayedCall(
+                          postLockBuyerDelay,
+                          startBuyerSequence,
+                        );
                       } catch (e) {
                         /* ignore */
                       }
@@ -756,7 +774,12 @@ export default function StoryAnimation({
       // animate temps to att badge center
       if (temps.length === 0) {
         // no source elements (TEE/MPC) to animate from — reveal attestation directly
-        gsap.to(attEl, { opacity: 1, y: 0, duration: 0.32, ease: "power3.out" });
+        gsap.to(attEl, {
+          opacity: 1,
+          y: 0,
+          duration: 0.32,
+          ease: "power3.out",
+        });
       } else {
         temps.forEach((temp, i) => {
           gsap.to(temp, {
@@ -766,7 +789,12 @@ export default function StoryAnimation({
             ease: "power3.inOut",
             delay: i * 0.08,
             onComplete: () => {
-              gsap.to(attEl, { opacity: 1, y: 0, duration: 0.32, ease: "power3.out" });
+              gsap.to(attEl, {
+                opacity: 1,
+                y: 0,
+                duration: 0.32,
+                ease: "power3.out",
+              });
               temp.remove();
             },
           });
@@ -909,7 +937,13 @@ export default function StoryAnimation({
           gsap.fromTo(
             buyerEl,
             { scale: 1 },
-            { scale: 1.08, yoyo: true, repeat: 1, duration: 0.22, ease: "power1.out" },
+            {
+              scale: 1.08,
+              yoyo: true,
+              repeat: 1,
+              duration: 0.22,
+              ease: "power1.out",
+            },
           );
 
           setTimeout(() => docEl.remove(), 340);
@@ -1093,7 +1127,9 @@ export default function StoryAnimation({
             className="absolute left-1/2 top-[82%] -translate-x-1/2 transform-gpu"
           >
             <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/90 shadow-sm">
-              <div className="mb-1 font-semibold text-white/90">Conditional Decryption</div>
+              <div className="mb-1 font-semibold text-white/90">
+                Conditional Decryption
+              </div>
               <div className="flex flex-wrap gap-1.5">
                 <span
                   data-rule
@@ -1146,7 +1182,8 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs text-sky-100">
-            <Database className="size-3" /> <span className="ipfs-text">IPFS</span>
+            <Database className="size-3" />{" "}
+            <span className="ipfs-text">IPFS</span>
           </div>
         </div>
       </div>
