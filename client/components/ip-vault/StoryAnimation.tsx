@@ -722,6 +722,8 @@ export default function StoryAnimation({
                         } catch (e) {
                           /* ignore */
                         }
+                        // create light trail from owner to vault
+                        performOwnerToVaultTrail();
                       } catch (e) {
                         /* ignore */
                       }
@@ -857,6 +859,48 @@ export default function StoryAnimation({
     } catch (e) {
       // fallback: just reveal
       gsap.to(attEl, { opacity: 1, y: 0, duration: 0.35 });
+    }
+  };
+
+  const performOwnerToVaultTrail = () => {
+    const scene = sceneRef.current;
+    const ownerEl = ownerRef.current;
+    const vaultEl = vaultRef.current;
+    if (!scene || !ownerEl || !vaultEl) return;
+    try {
+      const sceneRect = scene.getBoundingClientRect();
+      const oRect = ownerEl.getBoundingClientRect();
+      const vRect = vaultEl.getBoundingClientRect();
+      const ox = oRect.left - sceneRect.left + oRect.width / 2;
+      const oy = oRect.top - sceneRect.top + oRect.height / 2;
+      const vx = vRect.left - sceneRect.left + vRect.width / 2;
+      const vy = vRect.top - sceneRect.top + vRect.height / 2;
+      const trail = document.createElement("div");
+      trail.className = "pointer-events-none";
+      Object.assign(trail.style, {
+        position: "absolute",
+        left: `${ox}px`,
+        top: `${oy}px`,
+        width: "6px",
+        height: "6px",
+        borderRadius: "999px",
+        background:
+          "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))",
+        transform: "translate3d(-50%,-50%,0)",
+        zIndex: "9999",
+      });
+      scene.appendChild(trail);
+      gsap.to(trail, {
+        left: `${vx}px`,
+        top: `${vy}px`,
+        duration: 0.9,
+        ease: "power3.inOut",
+        onComplete: () => {
+          gsap.to(trail, { opacity: 0, duration: 0.25, onComplete: () => trail.remove() });
+        },
+      });
+    } catch (e) {
+      /* ignore */
     }
   };
 
