@@ -75,6 +75,14 @@ export default function StoryAnimation({
       opacity: 1,
       scale: 1,
     });
+    // reset story label position
+    if (storyRef.current) {
+      try {
+        gsap.set(storyRef.current, { y: 0, opacity: 1 });
+      } catch (e) {
+        /* ignore */
+      }
+    }
     gsap.set(docRef.current, {
       left: positions.owner,
       top: "44%",
