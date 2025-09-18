@@ -67,7 +67,8 @@ export default function StoryAnimation({
     masterGain: GainNode | null = null;
     constructor() {
       try {
-        this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        this.ctx = new (window.AudioContext ||
+          (window as any).webkitAudioContext)();
         this.masterGain = this.ctx.createGain();
         this.masterGain.gain.value = 0.12;
         this.masterGain.connect(this.ctx.destination);
@@ -94,16 +95,32 @@ export default function StoryAnimation({
     };
 
     playClick = () => this.playTone(880, "sine", 0.06);
-    playRelease = () => { this.playTone(520, "triangle", 0.08); this.playTone(760, "sine", 0.07); };
+    playRelease = () => {
+      this.playTone(520, "triangle", 0.08);
+      this.playTone(760, "sine", 0.07);
+    };
     // deeper, shorter lock click
-    playLock = () => { this.playTone(220, "square", 0.12); this.playTone(380, "sine", 0.08); };
+    playLock = () => {
+      this.playTone(220, "square", 0.12);
+      this.playTone(380, "sine", 0.08);
+    };
     // bright unlock
-    playUnlock = () => { this.playTone(1100, "sine", 0.09); };
+    playUnlock = () => {
+      this.playTone(1100, "sine", 0.09);
+    };
     // success: bright short chord
-    playSuccess = () => { this.playTone(1100, "sine", 0.08); this.playTone(780, "sine", 0.09); };
+    playSuccess = () => {
+      this.playTone(1100, "sine", 0.08);
+      this.playTone(780, "sine", 0.09);
+    };
     // deliver: swoosh-ish by quick descending tones
-    playDeliver = () => { this.playTone(680, "sine", 0.12); this.playTone(520, "triangle", 0.14); };
-    playVaultReveal = () => { this.playTone(420, "sine", 0.18); };
+    playDeliver = () => {
+      this.playTone(680, "sine", 0.12);
+      this.playTone(520, "triangle", 0.14);
+    };
+    playVaultReveal = () => {
+      this.playTone(420, "sine", 0.18);
+    };
   }
 
   const reset = () => {
@@ -372,7 +389,8 @@ export default function StoryAnimation({
         .call(performAttestationReveal)
         .to({}, { duration: 0.6 })
         .to(buyerRef.current, { left: positions.tee, duration: 0.2 })
-        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1").call(() => audioRef.current?.playSuccess())
+        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.35 }, "+=0.1")
+        .call(() => audioRef.current?.playSuccess())
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.3 })
         .to(condRef.current, { opacity: 1, y: 0, duration: 0.35 })
         .from(
@@ -631,7 +649,10 @@ export default function StoryAnimation({
 
                       // trigger buyer sequence after a short delay to feel natural
                       try {
-                        gsap.delayedCall(postLockBuyerDelay, startBuyerSequence);
+                        gsap.delayedCall(
+                          postLockBuyerDelay,
+                          startBuyerSequence,
+                        );
                       } catch (e) {
                         /* ignore */
                       }
@@ -836,7 +857,8 @@ export default function StoryAnimation({
           trail.style.width = "6px";
           trail.style.height = "6px";
           trail.style.borderRadius = "999px";
-          trail.style.background = "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))";
+          trail.style.background =
+            "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))";
           trail.style.transform = "translate(-50%,-50%)";
           trail.style.zIndex = "9999";
           scene.appendChild(trail);
@@ -847,7 +869,11 @@ export default function StoryAnimation({
             duration: 0.9,
             ease: "power2.out",
             onComplete: () => {
-              gsap.to(trail, { opacity: 0, duration: 0.18, onComplete: () => trail.remove() });
+              gsap.to(trail, {
+                opacity: 0,
+                duration: 0.18,
+                onComplete: () => trail.remove(),
+              });
             },
           });
         }
