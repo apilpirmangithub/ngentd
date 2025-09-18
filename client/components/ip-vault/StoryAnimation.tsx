@@ -107,6 +107,7 @@ export default function StoryAnimation({
         this.createSample("tick","https://assets.mixkit.co/active_storage/sfx/1059/1059-preview.mp3");
         this.createSample("deliver","https://assets.mixkit.co/active_storage/sfx/1489/1489-preview.mp3");
         this.createSample("vaultReveal","https://assets.mixkit.co/active_storage/sfx/960/960-preview.mp3");
+        this.createSample("release","https://assets.mixkit.co/active_storage/sfx/2364/2364-preview.mp3");
       } catch (e) {
         this.ctx = null;
       }
