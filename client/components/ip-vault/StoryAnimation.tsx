@@ -499,6 +499,7 @@ export default function StoryAnimation({
         .call(() => {
           if (teeRef.current)
             gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
+          audioRef.current?.playPop();
         })
         .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
