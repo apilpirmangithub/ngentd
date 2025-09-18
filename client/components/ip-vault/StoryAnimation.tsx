@@ -779,49 +779,8 @@ export default function StoryAnimation({
   };
 
   const performTrailToBuyer = () => {
-    const scene = sceneRef.current;
-    const vaultEl = vaultRef.current;
-    const buyerEl = buyerRef.current;
-    if (!scene || !vaultEl || !buyerEl) return;
-    try {
-      const sceneRect = scene.getBoundingClientRect();
-      const vRect = vaultEl.getBoundingClientRect();
-      const bRect = buyerEl.getBoundingClientRect();
-      const vx = vRect.left - sceneRect.left + vRect.width / 2;
-      const vy = vRect.top - sceneRect.top + vRect.height / 2;
-      const bx = bRect.left - sceneRect.left + bRect.width / 2;
-      const by = bRect.top - sceneRect.top + bRect.height / 2;
-      const trail = document.createElement("div");
-      trail.className = "pointer-events-none";
-      Object.assign(trail.style, {
-        position: "absolute",
-        left: `${vx}px`,
-        top: `${vy}px`,
-        width: "6px",
-        height: "6px",
-        borderRadius: "999px",
-        background:
-          "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.3))",
-        transform: "translate3d(-50%,-50%,0)",
-        zIndex: "9999",
-      });
-      scene.appendChild(trail);
-      gsap.to(trail, {
-        left: `${bx}px`,
-        top: `${by}px`,
-        duration: 0.9,
-        ease: "power3.inOut",
-        onComplete: () => {
-          gsap.to(trail, {
-            opacity: 0,
-            duration: 0.25,
-            onComplete: () => trail.remove(),
-          });
-        },
-      });
-    } catch (e) {
-      /* ignore */
-    }
+    // Removed light dot/trail to IP Buyer per request
+    return;
   };
 
   const performAttestationReveal = () => {
