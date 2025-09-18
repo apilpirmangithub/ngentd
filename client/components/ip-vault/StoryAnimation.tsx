@@ -535,7 +535,7 @@ export default function StoryAnimation({
           uploadEl.appendChild(box);
 
           const label = document.createElement("div");
-          label.textContent = "uploading..";
+          label.textContent = "Uploading..";
           Object.assign(label.style, {
             fontSize: "10px",
             color: "rgba(255,255,255,0.85)",
@@ -1067,7 +1067,7 @@ export default function StoryAnimation({
         downloadEl.appendChild(box);
 
         const label = document.createElement("div");
-        label.textContent = "downloading..";
+        label.textContent = "Downloading..";
         Object.assign(label.style, {
           fontSize: "10px",
           color: "rgba(255,255,255,0.85)",
