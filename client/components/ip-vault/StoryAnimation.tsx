@@ -275,7 +275,7 @@ export default function StoryAnimation({
         ">",
       )
       .to(writeCondRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">-")
-      .call(() => audioRef.current?.playPop());
+      ;
 
     // buyer movement is triggered after lock is engaged via startBuyerSequence();
     // no buyer movement added here to ensure lock completes before buyer moves.
@@ -490,7 +490,7 @@ export default function StoryAnimation({
         .call(() => audioRef.current?.playSuccess())
         .call(() => gsap.delayedCall(unlockAfterLicenseDelay, setLockToUnlock))
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
-        .call(() => audioRef.current?.playPop())
+        
         .to({}, { duration: 0.6 })
         .call(() => audioRef.current?.playWhoosh())
         .to(doorRef.current, { width: "0%", duration: 0.36 })
@@ -522,7 +522,7 @@ export default function StoryAnimation({
           "<",
         )
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
-        .call(() => audioRef.current?.playPop())
+        
         .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .to({}, { duration: 0.6 })
         .call(() => audioRef.current?.playWhoosh())
