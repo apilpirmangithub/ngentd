@@ -249,7 +249,8 @@ export default function StoryAnimation({
     const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
     const targetLeft = positions.tee;
     // Owner walks to IPFS carrying doc
-    tl.to(ownerRef.current, { left: "30%", duration: 1.2 })
+    tl.call(() => audioRef.current?.playWhoosh())
+      .to(ownerRef.current, { left: "30%", duration: 1.2 })
       .to(
         docRef.current,
         { left: "30%", xPercent: -50, yPercent: -50, duration: 1.2 },
