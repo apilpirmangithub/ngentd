@@ -1077,11 +1077,9 @@ export default function StoryAnimation({
                           if (vaultRef.current && storyRef.current) {
                             const vaultRect2 =
                               vaultRef.current.getBoundingClientRect();
-                            const moveUp = Math.round(
-                              vaultRect2.height / 2 + 28,
-                            );
+                            // instead of translating by pixels, animate the absolute top to 46%
                             gsap.to(storyRef.current, {
-                              y: -moveUp,
+                              top: "46%",
                               duration: 0.36,
                               ease: "power3.out",
                             });
