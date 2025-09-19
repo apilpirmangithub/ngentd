@@ -19,10 +19,12 @@ export default function StoryAnimation({
   mode,
   event,
   sound = true,
+  fullHeight = false,
 }: {
   mode: "vault" | "tee";
   event?: string | null;
   sound?: boolean;
+  fullHeight?: boolean;
 }) {
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const ownerRef = useRef<HTMLDivElement | null>(null);
@@ -1524,7 +1526,7 @@ export default function StoryAnimation({
       <div
         ref={sceneRef}
         onClick={() => (audioRef.current as any)?.resumeIfNeeded?.()}
-        className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/30 bg-black transform-gpu"
+        className={`relative ${fullHeight ? "h-[100svh] md:h-[100svh]" : "h-96 md:h-[28rem]"} w-full overflow-hidden rounded-2xl border border-white/30 bg-black transform-gpu`}
       >
         {/* Debug grid overlay */}
         <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-30" />
