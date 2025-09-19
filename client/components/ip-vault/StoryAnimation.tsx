@@ -69,7 +69,7 @@ export default function StoryAnimation({
   const vaultRevealDelay = 0.2;
   const vaultRevealDuration = 0.75;
   // visual tuning: how far above the buyer the License OK badge sits in vault (non-TEE) mode
-  const licenseBadgeAboveBuyerMultiplier = 0.56;
+  const licenseBadgeAboveBuyerMultiplier = 0.62;
 
   // simple audio manager using WebAudio (no external assets)
   const audioRef = useRef<any>(null);
