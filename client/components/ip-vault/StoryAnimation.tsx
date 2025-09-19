@@ -661,7 +661,7 @@ export default function StoryAnimation({
       })
         .call(performTrailToBuyer)
         .call(performBuyerScan)
-        .to({}, { duration: 0.72 })
+        .to({}, { duration: 0.25 })
         // position License OK above the buyer when buyer has moved to the vault
         .call(() => {
           try {
@@ -723,6 +723,7 @@ export default function StoryAnimation({
         // reveal TEE badge when buyer reaches the vault (visual)
         .call(performTrailToBuyer)
         .call(performBuyerScan)
+        .to({}, { duration: 0.25 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
         .call(() => {
           // reveal TEE only after License OK is visible
