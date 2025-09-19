@@ -1581,8 +1581,8 @@ export default function StoryAnimation({
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-[35%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-black shadow z-50 inline-flex items-center justify-center opacity-0"
         >
-          <Unlock className="size-4 unlock-icon transition-opacity" />
-          <Lock className="size-4 lock-icon transition-opacity opacity-0 absolute" />
+          <Unlock className="size-6 unlock-icon transition-opacity" />
+          <Lock className="size-6 lock-icon transition-opacity opacity-0 absolute" />
         </div>
 
         {/* Safe room (TEE) */}
@@ -1597,7 +1597,7 @@ export default function StoryAnimation({
             }}
           >
             <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs font-bold text-sky-100">
-              <Cpu className="size-2" /> TEE
+              <Cpu className="size-3" /> TEE
             </div>
           </div>
         )}
@@ -1667,7 +1667,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu cursor-pointer"
         >
           <div className="flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow">
-            <FileText className="size-4" />
+            <FileText className="size-5" />
             <span className="text-xs font-medium">IP File</span>
           </div>
         </div>
@@ -1683,7 +1683,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-            <ShieldCheck className="size-2" /> Ownership OK
+            <ShieldCheck className="size-3" /> Ownership OK
           </div>
         </div>
 
@@ -1705,7 +1705,7 @@ export default function StoryAnimation({
           }
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-            <ShieldCheck className="size-2" /> License OK
+            <ShieldCheck className="size-3" /> License OK
           </div>
         </div>
         {mode === "tee" && (
@@ -1719,7 +1719,7 @@ export default function StoryAnimation({
             }}
           >
             <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-              <ShieldCheck className="size-2" /> Attestation OK
+              <ShieldCheck className="size-3" /> Attestation OK
             </div>
           </div>
         )}
@@ -1735,25 +1735,25 @@ export default function StoryAnimation({
                   data-rule
                   className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <EyeOff className="size-2" /> Output-only
+                  <EyeOff className="size-3" /> Output-only
                 </span>
                 <span
                   data-rule
                   className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Scissors className="size-2" /> Partial access
+                  <Scissors className="size-3" /> Partial access
                 </span>
                 <span
                   data-rule
                   className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Clock className="size-2" /> Time/usage
+                  <Clock className="size-3" /> Time/usage
                 </span>
                 <span
                   data-rule
                   className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Monitor className="size-2" /> App-restricted
+                  <Monitor className="size-3" /> App-restricted
                 </span>
               </div>
             </div>
@@ -1782,7 +1782,7 @@ export default function StoryAnimation({
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs font-bold text-sky-100">
-            <Database className="size-2" />{" "}
+            <Database className="size-3" />{" "}
             <span className="ipfs-text">IPFS</span>
           </div>
         </div>
