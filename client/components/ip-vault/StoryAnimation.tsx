@@ -1533,7 +1533,8 @@ export default function StoryAnimation({
         {/* Center label: Story Network */}
         <div
           ref={storyRef}
-          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          className="pointer-events-none absolute left-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{ top: "42%" }}
           aria-hidden
         >
           <img
