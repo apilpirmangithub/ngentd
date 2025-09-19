@@ -24,6 +24,26 @@ export default function TabbedFlow() {
     };
   }, [type]);
 
+  // Keyboard shortcuts: 'f' plays Vault, 'g' plays TEE
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement | null)?.tagName?.toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select" || (e as any).isComposing) return;
+      if (e.repeat) return;
+      if (e.key === "f" || e.key === "F") {
+        e.preventDefault();
+        setType("vault");
+        setPlaySignal(String(Date.now()));
+      } else if (e.key === "g" || e.key === "G") {
+        e.preventDefault();
+        setType("tee");
+        setPlaySignal(String(Date.now()));
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   return (
     <section className="bg-black text-white flex flex-col items-center justify-center min-h-screen p-8 space-y-8 rounded-2xl">
       <h1 className="text-3xl font-bold text-center">IP Vault Flow</h1>
