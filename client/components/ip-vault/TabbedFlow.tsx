@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import StoryAnimation from "@/components/ip-vault/StoryAnimation";
+import SfxTester from "@/components/ip-vault/SfxTester";
 
 export default function TabbedFlow() {
   const [type, setType] = useState<"vault" | "tee">("vault");
@@ -63,9 +64,11 @@ export default function TabbedFlow() {
               : "bg-gray-600/40 hover:bg-gray-600 focus:ring-gray-300"
           }`}
           aria-pressed={sound}
+          aria-label={`Efek suara ${sound ? "aktif" : "nonaktif"}`}
         >
-          SFX: {sound ? "On" : "Off"}
+          Efek Suara: {sound ? "Aktif" : "Nonaktif"}
         </button>
+        <SfxTester enabled={sound} />
       </div>
 
       <div ref={containerRef} className="w-full space-y-8">

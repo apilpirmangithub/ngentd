@@ -356,6 +356,25 @@ export default function StoryAnimation({
         gain: 0.5,
       });
     };
+    // paper rustle for document arrival
+    playPaper = () => {
+      if (!this.ctx) return;
+      this.playNoiseBurst(0.08, {
+        filter: "bandpass",
+        from: 2500,
+        to: 1500,
+        q: 1.0,
+        gain: 0.35,
+      });
+      this.playNoiseBurst(0.06, {
+        filter: "bandpass",
+        from: 2200,
+        to: 1200,
+        q: 0.9,
+        gain: 0.28,
+      });
+      this.playTone(600, "triangle", 0.02, 0.01, 0.2);
+    };
     playVaultReveal = () => {
       if (!this.ctx) return;
       this.playTone(220, "sine", 0.24, 0.08, 0.9);
@@ -868,8 +887,8 @@ export default function StoryAnimation({
             },
           );
         }
-        // sound: release
-        audioRef.current?.playRelease();
+        // sound: paper rustle for release
+        audioRef.current?.playPaper();
       } catch (e) {
         /* ignore */
       }
@@ -1441,8 +1460,8 @@ export default function StoryAnimation({
         duration: 1.06,
         ease: "power3.inOut",
         onComplete: () => {
-          // sound: delivered
-          audioRef.current?.playDeliver();
+          // sound: delivered (paper)
+          audioRef.current?.playPaper();
 
           gsap.fromTo(
             buyerEl,
