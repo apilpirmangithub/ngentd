@@ -79,7 +79,11 @@ export default function StoryAnimation({
     defaultVolume = 0.22;
     samples: Record<
       string,
-      { el: HTMLAudioElement; src: MediaElementAudioSourceNode | null; routed: boolean }
+      {
+        el: HTMLAudioElement;
+        src: MediaElementAudioSourceNode | null;
+        routed: boolean;
+      }
     > = {};
     constructor() {
       try {
@@ -203,7 +207,10 @@ export default function StoryAnimation({
       const g = this.ctx.createGain();
       o.type = type as OscillatorType;
       o.frequency.setValueAtTime(startFreq, this.ctx.currentTime);
-      o.frequency.linearRampToValueAtTime(endFreq, this.ctx.currentTime + duration);
+      o.frequency.linearRampToValueAtTime(
+        endFreq,
+        this.ctx.currentTime + duration,
+      );
       g.gain.value = 0;
       o.connect(g);
       g.connect(this.masterGain!);
@@ -232,7 +239,13 @@ export default function StoryAnimation({
 
     private playNoiseBurst = (
       duration = 0.4,
-      opts: { filter?: BiquadFilterType; from?: number; to?: number; q?: number; gain?: number } = {},
+      opts: {
+        filter?: BiquadFilterType;
+        from?: number;
+        to?: number;
+        q?: number;
+        gain?: number;
+      } = {},
     ) => {
       if (!this.ctx) return;
       const buffer = this.getNoiseBuffer();
@@ -246,7 +259,8 @@ export default function StoryAnimation({
       if (opts.filter) {
         const f = this.ctx.createBiquadFilter();
         f.type = opts.filter;
-        if (typeof opts.from === "number") f.frequency.setValueAtTime(opts.from, this.ctx.currentTime);
+        if (typeof opts.from === "number")
+          f.frequency.setValueAtTime(opts.from, this.ctx.currentTime);
         if (typeof opts.q === "number") f.Q.value = opts.q;
         node.connect(f);
         node = f;
@@ -270,7 +284,13 @@ export default function StoryAnimation({
     private percussiveClick = (freq: number, duration = 0.06) => {
       if (!this.ctx) return;
       this.playTone(freq, "sine", duration, 0.02, 1);
-      this.playNoiseBurst(duration * 0.7, { filter: "highpass", from: 3000, to: 2500, q: 0.7, gain: 0.2 });
+      this.playNoiseBurst(duration * 0.7, {
+        filter: "highpass",
+        from: 3000,
+        to: 2500,
+        q: 0.7,
+        gain: 0.2,
+      });
     };
 
     private playChord = (freqs: number[], duration = 0.14) => {
@@ -291,12 +311,24 @@ export default function StoryAnimation({
     };
     playWhoosh = () => {
       if (!this.ctx) return;
-      this.playNoiseBurst(0.6, { filter: "bandpass", from: 4000, to: 900, q: 0.9, gain: 0.6 });
+      this.playNoiseBurst(0.6, {
+        filter: "bandpass",
+        from: 4000,
+        to: 900,
+        q: 0.9,
+        gain: 0.6,
+      });
     };
     playRelease = () => {
       if (!this.ctx) return;
       this.glideTone(520, 900, 0.12, "triangle", 0.9);
-      this.playNoiseBurst(0.12, { filter: "highpass", from: 3000, to: 1500, q: 0.7, gain: 0.25 });
+      this.playNoiseBurst(0.12, {
+        filter: "highpass",
+        from: 3000,
+        to: 1500,
+        q: 0.7,
+        gain: 0.25,
+      });
     };
     // deeper, shorter lock click
     playLock = () => {
@@ -316,12 +348,24 @@ export default function StoryAnimation({
     // deliver: whoosh
     playDeliver = () => {
       if (!this.ctx) return;
-      this.playNoiseBurst(0.4, { filter: "bandpass", from: 3000, to: 800, q: 1.2, gain: 0.5 });
+      this.playNoiseBurst(0.4, {
+        filter: "bandpass",
+        from: 3000,
+        to: 800,
+        q: 1.2,
+        gain: 0.5,
+      });
     };
     playVaultReveal = () => {
       if (!this.ctx) return;
       this.playTone(220, "sine", 0.24, 0.08, 0.9);
-      this.playNoiseBurst(0.18, { filter: "lowpass", from: 800, to: 300, q: 0.7, gain: 0.3 });
+      this.playNoiseBurst(0.18, {
+        filter: "lowpass",
+        from: 800,
+        to: 300,
+        q: 0.7,
+        gain: 0.3,
+      });
     };
   }
 
