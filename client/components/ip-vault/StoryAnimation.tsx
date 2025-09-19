@@ -59,7 +59,7 @@ export default function StoryAnimation({
 
   // configurable delays
   const buyerMoveDelay = 0.6; // seconds delay before buyer starts moving
-  const unlockDelay = 0.5; // base unlock delay used for TEE flow
+  const unlockDelay = 0.7; // base unlock delay used for TEE flow
   const postLockBuyerDelay = 0.25; // small delay between lock engage and buyer sequence
   // delay to unlock AFTER License OK is shown for non-TEE flow (tuned for good pacing)
   const unlockAfterLicenseDelay = 0.6;
