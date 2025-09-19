@@ -1712,7 +1712,7 @@ export default function StoryAnimation({
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
-              top: "46%",
+              top: "41%",
               transform: "translateX(-50%)",
             }}
           >
