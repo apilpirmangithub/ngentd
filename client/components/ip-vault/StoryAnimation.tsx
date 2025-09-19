@@ -887,8 +887,8 @@ export default function StoryAnimation({
             },
           );
         }
-        // sound: release
-        audioRef.current?.playRelease();
+        // sound: paper rustle for release
+        audioRef.current?.playPaper();
       } catch (e) {
         /* ignore */
       }
