@@ -1489,14 +1489,49 @@ export default function StoryAnimation({
   };
 
   // External play trigger via `event` prop
+  const lastPlayRef = useRef<number | null>(null);
   useEffect(() => {
-    if (event) {
-      // ensure audio is resumed on play
+    if (!event) return;
+    const now = Date.now();
+    // debounce rapid repeated triggers (ignore if within 700ms)
+    if (lastPlayRef.current && now - lastPlayRef.current < 700) return;
+    lastPlayRef.current = now;
+
+    // ensure audio is resumed on play
+    try {
+      (audioRef.current as any)?.resumeIfNeeded?.();
+    } catch {}
+
+    // If no master timeline present, build one
+    try {
+      if (!masterRef.current) {
+        masterRef.current = build();
+      }
+
+      // If timeline is currently active, kill and rebuild to avoid overlap
+      const isActive = (masterRef.current as any)?.isActive?.() as boolean | undefined;
+      if (isActive) {
+        try {
+          masterRef.current?.kill();
+        } catch (e) {
+          /* ignore */
+        }
+        masterRef.current = build();
+      }
+
+      // restart from beginning safely
       try {
-        (audioRef.current as any)?.resumeIfNeeded?.();
-      } catch {}
-      // restart from beginning on each event change
-      masterRef.current?.restart();
+        // forceRestart true ensures timeline restarts from 0
+        (masterRef.current as any)?.restart?.(true);
+      } catch (e) {
+        try {
+          masterRef.current?.restart();
+        } catch (e) {
+          /* ignore */
+        }
+      }
+    } catch (e) {
+      /* ignore */
     }
   }, [event]);
 
