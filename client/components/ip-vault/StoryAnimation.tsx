@@ -1546,12 +1546,12 @@ export default function StoryAnimation({
 
         {/* Inner band border from IPFS to TEE */}
         <div
-          className="absolute pointer-events-none rounded-xl border-2 border-white/30"
+          className="absolute pointer-events-none rounded-xl border-4 border-white/30"
           style={{
-            left: `calc(${positions.ipfs} - 2.7cm)`,
-            width: `calc(${positions.tee} - ${positions.ipfs} + 5.4cm)`,
-            top: "18%",
-            bottom: "18%",
+            left: `calc(${positions.ipfs} - 3.5cm)`,
+            width: `calc(${positions.tee} - ${positions.ipfs} + 7cm)`,
+            top: "10%",
+            bottom: "10%",
           }}
           aria-hidden
         />
@@ -1559,7 +1559,7 @@ export default function StoryAnimation({
         {/* Vault */}
         <div
           ref={vaultRef}
-          className="absolute left-1/2 top-[52%] h-36 w-52 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)] overflow-hidden"
+          className="absolute left-1/2 top-[52%] h-44 w-64 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)] overflow-hidden"
         >
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2F75857544e65a4f6982333406121c72a7%2Fa9f23897196141cda50bf40c9cf505c4?format=webp&width=800"
@@ -1612,7 +1612,7 @@ export default function StoryAnimation({
             transform: "translate(-50%,-50%)",
           }}
         >
-          <div className="size-14 flex items-center justify-center bg-transparent">
+          <div className="size-16 flex items-center justify-center bg-transparent">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F01304b38e2b147e0ab91328119e9a69b%2F0f665063d39347a3804b57e915d4d442?format=webp&width=800"
               alt="IP Owner"
@@ -1632,7 +1632,7 @@ export default function StoryAnimation({
             transform: "translate(-50%,-50%)",
           }}
         >
-          <div className="size-14 flex items-center justify-center bg-transparent">
+          <div className="size-16 flex items-center justify-center bg-transparent">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F01304b38e2b147e0ab91328119e9a69b%2Fd69846667a21481caa31c06bb3aa750b?format=webp&width=800"
               alt="Buyer"
