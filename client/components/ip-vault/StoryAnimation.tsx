@@ -53,10 +53,10 @@ export default function StoryAnimation({
 
   const positions = {
     owner: "12%",
-    ipfs: "30%",
+    ipfs: "26%",
     vault: "50%",
-    tee: "70%",
-    buyer: "88%",
+    tee: "74%",
+    buyer: "90%",
   } as const;
 
   // configurable delays
@@ -470,10 +470,10 @@ export default function StoryAnimation({
     const targetLeft = positions.tee;
     // Owner walks to IPFS carrying doc
     tl.call(() => audioRef.current?.playWhoosh())
-      .to(ownerRef.current, { left: "30%", duration: 1.2 })
+      .to(ownerRef.current, { left: positions.ipfs, duration: 1.2 })
       .to(
         docRef.current,
-        { left: "30%", xPercent: -50, yPercent: -50, duration: 1.2 },
+        { left: positions.ipfs, xPercent: -50, yPercent: -50, duration: 1.2 },
         "<",
       )
       // Document stored on IPFS (fade into storage)
@@ -1764,12 +1764,12 @@ export default function StoryAnimation({
         <div
           ref={writeCondRef}
           className="absolute transform-gpu"
-          style={{ left: "30%", top: "80%", transform: "translateX(-50%)" }}
+          style={{ left: positions.ipfs, top: "80%", transform: "translateX(-50%)" }}
         ></div>
         <div
           ref={readCondRef}
           className="absolute transform-gpu"
-          style={{ left: "70%", top: "80%", transform: "translateX(-50%)" }}
+          style={{ left: positions.tee, top: "80%", transform: "translateX(-50%)" }}
         ></div>
 
         <div
