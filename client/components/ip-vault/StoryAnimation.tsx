@@ -721,17 +721,17 @@ export default function StoryAnimation({
         delay: buyerMoveDelay,
       })
         // reveal TEE badge when buyer reaches the vault (visual)
-        .call(() => {
-          if (teeRef.current)
-            gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
-          audioRef.current?.playPop();
-        })
         .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
         .to(buyerRef.current, { left: positions.tee, duration: 0.22 })
         .call(performBuyerScan)
         .to({}, { duration: 0.72 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
+        .call(() => {
+          // reveal TEE only after License OK is visible
+          if (teeRef.current) gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
+          audioRef.current?.playPop();
+        })
         .call(performAttestationReveal)
         .call(() => audioRef.current?.playSuccess())
         .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">+0.8")
