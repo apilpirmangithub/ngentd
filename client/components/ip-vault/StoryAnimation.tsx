@@ -470,10 +470,10 @@ export default function StoryAnimation({
     const targetLeft = positions.tee;
     // Owner walks to IPFS carrying doc
     tl.call(() => audioRef.current?.playWhoosh())
-      .to(ownerRef.current, { left: positions.ipfs, duration: 1.2 })
+      .to(ownerRef.current, { left: `calc(${positions.ipfs} - 6%)`, duration: 1.2 })
       .to(
         docRef.current,
-        { left: positions.ipfs, xPercent: -50, yPercent: -50, duration: 1.2 },
+        { left: `calc(${positions.ipfs} - 6%)`, xPercent: -50, yPercent: -50, duration: 1.2 },
         "<",
       )
       // Document stored on IPFS (fade into storage)
