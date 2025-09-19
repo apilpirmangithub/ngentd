@@ -69,7 +69,7 @@ export default function StoryAnimation({
   const vaultRevealDelay = 0.2;
   const vaultRevealDuration = 0.75;
   // visual tuning: how far above the buyer the License OK badge sits in vault (non-TEE) mode
-  const licenseBadgeAboveBuyerMultiplier = 0.56;
+  const licenseBadgeAboveBuyerMultiplier = 0.68;
 
   // simple audio manager using WebAudio (no external assets)
   const audioRef = useRef<any>(null);
@@ -401,7 +401,7 @@ export default function StoryAnimation({
     }
     gsap.set(docRef.current, {
       left: positions.owner,
-      top: "44%",
+      top: "40%",
       xPercent: -50,
       yPercent: -50,
       opacity: 0,
@@ -661,7 +661,7 @@ export default function StoryAnimation({
       })
         .call(performTrailToBuyer)
         .call(performBuyerScan)
-        .to({}, { duration: 0.72 })
+        .to({}, { duration: 0.6 })
         // position License OK above the buyer when buyer has moved to the vault
         .call(() => {
           try {
@@ -721,17 +721,16 @@ export default function StoryAnimation({
         delay: buyerMoveDelay,
       })
         // reveal TEE badge when buyer reaches the vault (visual)
+        .call(performTrailToBuyer)
+        .call(performBuyerScan)
+        .to({}, { duration: 0.6 })
+        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
         .call(() => {
+          // reveal TEE only after License OK is visible
           if (teeRef.current)
             gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
           audioRef.current?.playPop();
         })
-        .call(performTrailToBuyer)
-        .to({}, { duration: 0.6 })
-        .to(buyerRef.current, { left: positions.tee, duration: 0.22 })
-        .call(performBuyerScan)
-        .to({}, { duration: 0.72 })
-        .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
         .call(performAttestationReveal)
         .call(() => audioRef.current?.playSuccess())
         .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">+0.8")
@@ -1077,11 +1076,9 @@ export default function StoryAnimation({
                           if (vaultRef.current && storyRef.current) {
                             const vaultRect2 =
                               vaultRef.current.getBoundingClientRect();
-                            const moveUp = Math.round(
-                              vaultRect2.height / 2 + 28,
-                            );
+                            // instead of translating by pixels, animate the absolute top to 46%
                             gsap.to(storyRef.current, {
-                              y: -moveUp,
+                              top: "30%",
                               duration: 0.36,
                               ease: "power3.out",
                             });
@@ -1110,7 +1107,7 @@ export default function StoryAnimation({
                     if (docRef.current) {
                       gsap.set(docRef.current, {
                         left: positions.owner,
-                        top: "44%",
+                        top: "40%",
                         xPercent: -50,
                         yPercent: -50,
                         opacity: 0,
@@ -1592,7 +1589,7 @@ export default function StoryAnimation({
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
-              top: "26%",
+              top: "34%",
               transform: "translateX(-50%)",
             }}
           >
@@ -1648,7 +1645,7 @@ export default function StoryAnimation({
           role="button"
           style={{
             left: positions.owner,
-            top: "44%",
+            top: "40%",
             transform: "translate(-50%,-50%)",
           }}
           onClick={() => {
@@ -1678,7 +1675,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "42%",
+            top: "46%",
             transform: "translate(-50%,-100%)",
           }}
         >
@@ -1694,7 +1691,7 @@ export default function StoryAnimation({
             mode === "tee"
               ? {
                   left: positions.tee,
-                  top: "36%",
+                  top: "46%",
                   transform: "translateX(-50%)",
                 }
               : {
@@ -1714,7 +1711,7 @@ export default function StoryAnimation({
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
-              top: "42%",
+              top: "41%",
               transform: "translateX(-50%)",
             }}
           >
@@ -1777,7 +1774,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "26.5%",
+            top: "34.5%",
             transform: "translateX(-50%)",
           }}
         >
