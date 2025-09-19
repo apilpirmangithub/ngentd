@@ -1380,9 +1380,9 @@ export default function StoryAnimation({
       }
 
       const docEl = document.createElement("div");
-  // In TEE mode the IP File moving to buyer should be gray
+  // In TEE mode the IP File moving to buyer should be dark gray
   docEl.className = mode === "tee"
-    ? "pointer-events-none rounded-md bg-gray-300/90 px-2.5 py-1.5 text-gray-900 shadow transform-gpu"
+    ? "pointer-events-none rounded-md bg-gray-700/95 px-2.5 py-1.5 text-gray-100 shadow transform-gpu"
     : "pointer-events-none rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow transform-gpu";
       docEl.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"inline-block align-middle mr-1\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg><span class=\"text-xs font-medium\">IP File</span>`;
       Object.assign(docEl.style, {
