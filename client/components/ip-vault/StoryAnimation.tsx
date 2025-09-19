@@ -1517,7 +1517,9 @@ export default function StoryAnimation({
       }
 
       // If timeline is currently active, kill and rebuild to avoid overlap
-      const isActive = (masterRef.current as any)?.isActive?.() as boolean | undefined;
+      const isActive = (masterRef.current as any)?.isActive?.() as
+        | boolean
+        | undefined;
       if (isActive) {
         try {
           masterRef.current?.kill();
