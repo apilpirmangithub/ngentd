@@ -1592,9 +1592,9 @@ export default function StoryAnimation({
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
-              top: "30%",
-              transform: "translateX(-50%)",
-            }}
+            top: "34%",
+            transform: "translateX(-50%)",
+          }}
           >
             <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs font-bold text-sky-100">
               <Cpu className="size-2" /> TEE
@@ -1777,7 +1777,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "30.5%",
+            top: "34.5%",
             transform: "translateX(-50%)",
           }}
         >
