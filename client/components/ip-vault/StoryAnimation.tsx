@@ -1607,7 +1607,7 @@ export default function StoryAnimation({
           ref={ownerRef}
           className="absolute transform-gpu"
           style={{
-            left: `calc(${positions.ipfs} - 2%)`,
+            left: `calc(${positions.ipfs} - 4%)`,
             top: "66%",
             transform: "translate(-50%,-50%)",
           }}
@@ -1627,7 +1627,7 @@ export default function StoryAnimation({
           ref={buyerRef}
           className="absolute transform-gpu"
           style={{
-            left: `calc(${positions.tee} + 2%)`,
+            left: `calc(${positions.tee} + 4%)`,
             top: "66%",
             transform: "translate(-50%,-50%)",
           }}
