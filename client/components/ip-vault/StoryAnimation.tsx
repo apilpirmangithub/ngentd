@@ -1534,7 +1534,7 @@ export default function StoryAnimation({
         <div
           ref={storyRef}
           className="pointer-events-none absolute left-1/2 -translate-x-1/2 -translate-y-1/2"
-          style={{ top: "40%" }}
+          style={{ top: "46%" }}
           aria-hidden
         >
           <img
