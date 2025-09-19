@@ -1616,7 +1616,7 @@ export default function StoryAnimation({
               className="max-w-full max-h-full object-contain"
             />
           </div>
-          <div className="mt-1 text-center text-xs opacity-80">IP Owner</div>
+          <div className="mt-1 text-center text-xs font-bold opacity-80">IP Owner</div>
         </div>
 
         {/* Buyer */}
