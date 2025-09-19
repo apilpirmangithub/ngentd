@@ -53,10 +53,10 @@ export default function StoryAnimation({
 
   const positions = {
     owner: "12%",
-    ipfs: "30%",
+    ipfs: "26%",
     vault: "50%",
-    tee: "70%",
-    buyer: "88%",
+    tee: "74%",
+    buyer: "90%",
   } as const;
 
   // configurable delays
@@ -470,10 +470,18 @@ export default function StoryAnimation({
     const targetLeft = positions.tee;
     // Owner walks to IPFS carrying doc
     tl.call(() => audioRef.current?.playWhoosh())
-      .to(ownerRef.current, { left: "30%", duration: 1.2 })
+      .to(ownerRef.current, {
+        left: `calc(${positions.ipfs} - 3%)`,
+        duration: 1.2,
+      })
       .to(
         docRef.current,
-        { left: "30%", xPercent: -50, yPercent: -50, duration: 1.2 },
+        {
+          left: `calc(${positions.ipfs} - 3%)`,
+          xPercent: -50,
+          yPercent: -50,
+          duration: 1.2,
+        },
         "<",
       )
       // Document stored on IPFS (fade into storage)
@@ -655,7 +663,7 @@ export default function StoryAnimation({
     const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
     if (mode === "vault") {
       tl.to(buyerRef.current, {
-        left: positions.tee,
+        left: `calc(${positions.tee} + 3%)`,
         duration: 1.12,
         delay: buyerMoveDelay,
       })
@@ -716,7 +724,7 @@ export default function StoryAnimation({
         .call(performDeliver);
     } else {
       tl.to(buyerRef.current, {
-        left: positions.tee,
+        left: `calc(${positions.tee} + 3%)`,
         duration: 1.02,
         delay: buyerMoveDelay,
       })
@@ -728,7 +736,10 @@ export default function StoryAnimation({
         })
         .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
-        .to(buyerRef.current, { left: positions.tee, duration: 0.22 })
+        .to(buyerRef.current, {
+          left: `calc(${positions.tee} + 3%)`,
+          duration: 0.22,
+        })
         .call(performBuyerScan)
         .to({}, { duration: 0.72 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
@@ -1110,7 +1121,7 @@ export default function StoryAnimation({
                     if (docRef.current) {
                       gsap.set(docRef.current, {
                         left: positions.owner,
-                        top: "44%",
+                        top: "40%",
                         xPercent: -50,
                         yPercent: -50,
                         opacity: 0,
@@ -1539,19 +1550,19 @@ export default function StoryAnimation({
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2F48906aed3c7344009a10a054f28b82c4%2F14c096d056a0405c8cbbd5daea44fefd?format=webp&width=800"
             alt="Story Network"
-            className="h-8 md:h-10 opacity-90 select-none"
+            className="h-10 md:h-12 opacity-90 select-none"
             draggable="false"
           />
         </div>
 
         {/* Inner band border from IPFS to TEE */}
         <div
-          className="absolute pointer-events-none rounded-xl border-2 border-white/30"
+          className="absolute pointer-events-none rounded-xl border-4 border-white/30"
           style={{
-            left: `calc(${positions.ipfs} - 2.7cm)`,
-            width: `calc(${positions.tee} - ${positions.ipfs} + 5.4cm)`,
-            top: "18%",
-            bottom: "18%",
+            left: `calc(${positions.ipfs} - 3.5cm)`,
+            width: `calc(${positions.tee} - ${positions.ipfs} + 7cm)`,
+            top: "12%",
+            bottom: "12%",
           }}
           aria-hidden
         />
@@ -1559,7 +1570,7 @@ export default function StoryAnimation({
         {/* Vault */}
         <div
           ref={vaultRef}
-          className="absolute left-1/2 top-[52%] h-36 w-52 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)] overflow-hidden"
+          className="absolute left-1/2 top-[52%] h-52 w-72 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)] overflow-hidden"
         >
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2F75857544e65a4f6982333406121c72a7%2Fa9f23897196141cda50bf40c9cf505c4?format=webp&width=800"
@@ -1579,10 +1590,10 @@ export default function StoryAnimation({
         <div
           ref={lockRef}
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-black shadow z-50 inline-flex items-center justify-center opacity-0"
+          className="pointer-events-none absolute left-1/2 top-[35%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-black shadow z-50 inline-flex items-center justify-center opacity-0"
         >
-          <Unlock className="size-4 unlock-icon transition-opacity" />
-          <Lock className="size-4 lock-icon transition-opacity opacity-0 absolute" />
+          <Unlock className="size-6 unlock-icon transition-opacity" />
+          <Lock className="size-6 lock-icon transition-opacity opacity-0 absolute" />
         </div>
 
         {/* Safe room (TEE) */}
@@ -1591,13 +1602,13 @@ export default function StoryAnimation({
             ref={teeRef}
             className="absolute transform-gpu"
             style={{
-              left: positions.tee,
-              top: "26%",
+              left: `calc(${positions.tee} + 2%)`,
+              top: "22%",
               transform: "translateX(-50%)",
             }}
           >
             <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs font-bold text-sky-100">
-              <Cpu className="size-2" /> TEE
+              <Cpu className="size-3" /> TEE
             </div>
           </div>
         )}
@@ -1607,12 +1618,12 @@ export default function StoryAnimation({
           ref={ownerRef}
           className="absolute transform-gpu"
           style={{
-            left: positions.owner,
-            top: "60%",
+            left: `calc(${positions.ipfs} - 4%)`,
+            top: "66%",
             transform: "translate(-50%,-50%)",
           }}
         >
-          <div className="size-14 flex items-center justify-center bg-transparent">
+          <div className="size-20 flex items-center justify-center bg-transparent">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F01304b38e2b147e0ab91328119e9a69b%2F0f665063d39347a3804b57e915d4d442?format=webp&width=800"
               alt="IP Owner"
@@ -1627,12 +1638,12 @@ export default function StoryAnimation({
           ref={buyerRef}
           className="absolute transform-gpu"
           style={{
-            left: positions.buyer,
-            top: "60%",
+            left: `calc(${positions.tee} + 4%)`,
+            top: "66%",
             transform: "translate(-50%,-50%)",
           }}
         >
-          <div className="size-14 flex items-center justify-center bg-transparent">
+          <div className="size-20 flex items-center justify-center bg-transparent">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F01304b38e2b147e0ab91328119e9a69b%2Fd69846667a21481caa31c06bb3aa750b?format=webp&width=800"
               alt="Buyer"
@@ -1648,7 +1659,7 @@ export default function StoryAnimation({
           role="button"
           style={{
             left: positions.owner,
-            top: "44%",
+            top: "40%",
             transform: "translate(-50%,-50%)",
           }}
           onClick={() => {
@@ -1667,7 +1678,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu cursor-pointer"
         >
           <div className="flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1.5 text-black shadow">
-            <FileText className="size-4" />
+            <FileText className="size-5" />
             <span className="text-xs font-medium">IP File</span>
           </div>
         </div>
@@ -1677,13 +1688,13 @@ export default function StoryAnimation({
           ref={ownerCheckRef}
           className="absolute transform-gpu"
           style={{
-            left: positions.ipfs,
-            top: "42%",
+            left: `calc(${positions.ipfs} - 2%)`,
+            top: "36%",
             transform: "translate(-50%,-100%)",
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-            <ShieldCheck className="size-2" /> Ownership OK
+            <ShieldCheck className="size-3" /> Ownership OK
           </div>
         </div>
 
@@ -1693,19 +1704,19 @@ export default function StoryAnimation({
           style={
             mode === "tee"
               ? {
-                  left: positions.tee,
-                  top: "36%",
+                  left: `calc(${positions.tee} + 2%)`,
+                  top: "32%",
                   transform: "translateX(-50%)",
                 }
               : {
-                  left: positions.buyer,
-                  top: "46%",
+                  left: `calc(${positions.buyer} + 2%)`,
+                  top: "42%",
                   transform: "translate(-50%,-100%)",
                 }
           }
         >
           <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-            <ShieldCheck className="size-2" /> License OK
+            <ShieldCheck className="size-3" /> License OK
           </div>
         </div>
         {mode === "tee" && (
@@ -1713,13 +1724,13 @@ export default function StoryAnimation({
             ref={attBadgeRef}
             className="absolute transform-gpu"
             style={{
-              left: positions.tee,
+              left: `calc(${positions.tee} + 2%)`,
               top: "42%",
               transform: "translateX(-50%)",
             }}
           >
             <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 text-xs">
-              <ShieldCheck className="size-2" /> Attestation OK
+              <ShieldCheck className="size-3" /> Attestation OK
             </div>
           </div>
         )}
@@ -1735,25 +1746,25 @@ export default function StoryAnimation({
                   data-rule
                   className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <EyeOff className="size-2" /> Output-only
+                  <EyeOff className="size-3" /> Output-only
                 </span>
                 <span
                   data-rule
                   className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Scissors className="size-2" /> Partial access
+                  <Scissors className="size-3" /> Partial access
                 </span>
                 <span
                   data-rule
                   className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Clock className="size-2" /> Time/usage
+                  <Clock className="size-3" /> Time/usage
                 </span>
                 <span
                   data-rule
                   className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5"
                 >
-                  <Monitor className="size-2" /> App-restricted
+                  <Monitor className="size-3" /> App-restricted
                 </span>
               </div>
             </div>
@@ -1764,25 +1775,33 @@ export default function StoryAnimation({
         <div
           ref={writeCondRef}
           className="absolute transform-gpu"
-          style={{ left: "30%", top: "80%", transform: "translateX(-50%)" }}
+          style={{
+            left: positions.ipfs,
+            top: "80%",
+            transform: "translateX(-50%)",
+          }}
         ></div>
         <div
           ref={readCondRef}
           className="absolute transform-gpu"
-          style={{ left: "70%", top: "80%", transform: "translateX(-50%)" }}
+          style={{
+            left: positions.tee,
+            top: "80%",
+            transform: "translateX(-50%)",
+          }}
         ></div>
 
         <div
           ref={ipfsBadgeRef}
           className="absolute transform-gpu"
           style={{
-            left: positions.ipfs,
-            top: "26.5%",
+            left: `calc(${positions.ipfs} - 2%)`,
+            top: "22%",
             transform: "translateX(-50%)",
           }}
         >
           <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs font-bold text-sky-100">
-            <Database className="size-2" />{" "}
+            <Database className="size-3" />{" "}
             <span className="ipfs-text">IPFS</span>
           </div>
         </div>
