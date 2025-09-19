@@ -1110,7 +1110,7 @@ export default function StoryAnimation({
                     if (docRef.current) {
                       gsap.set(docRef.current, {
                         left: positions.owner,
-                        top: "44%",
+                        top: "40%",
                         xPercent: -50,
                         yPercent: -50,
                         opacity: 0,
@@ -1579,7 +1579,7 @@ export default function StoryAnimation({
         <div
           ref={lockRef}
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-black shadow z-50 inline-flex items-center justify-center opacity-0"
+          className="pointer-events-none absolute left-1/2 top-[35%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-black shadow z-50 inline-flex items-center justify-center opacity-0"
         >
           <Unlock className="size-4 unlock-icon transition-opacity" />
           <Lock className="size-4 lock-icon transition-opacity opacity-0 absolute" />
@@ -1592,7 +1592,7 @@ export default function StoryAnimation({
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
-              top: "26%",
+              top: "22%",
               transform: "translateX(-50%)",
             }}
           >
@@ -1608,7 +1608,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.owner,
-            top: "60%",
+            top: "66%",
             transform: "translate(-50%,-50%)",
           }}
         >
@@ -1628,7 +1628,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.buyer,
-            top: "60%",
+            top: "66%",
             transform: "translate(-50%,-50%)",
           }}
         >
@@ -1648,7 +1648,7 @@ export default function StoryAnimation({
           role="button"
           style={{
             left: positions.owner,
-            top: "44%",
+            top: "40%",
             transform: "translate(-50%,-50%)",
           }}
           onClick={() => {
@@ -1678,7 +1678,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "42%",
+            top: "36%",
             transform: "translate(-50%,-100%)",
           }}
         >
@@ -1694,12 +1694,12 @@ export default function StoryAnimation({
             mode === "tee"
               ? {
                   left: positions.tee,
-                  top: "36%",
+                  top: "32%",
                   transform: "translateX(-50%)",
                 }
               : {
                   left: positions.buyer,
-                  top: "46%",
+                  top: "42%",
                   transform: "translate(-50%,-100%)",
                 }
           }
@@ -1777,7 +1777,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "26.5%",
+            top: "22%",
             transform: "translateX(-50%)",
           }}
         >
