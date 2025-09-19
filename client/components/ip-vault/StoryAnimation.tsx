@@ -401,7 +401,7 @@ export default function StoryAnimation({
     }
     gsap.set(docRef.current, {
       left: positions.owner,
-      top: "44%",
+      top: "40%",
       xPercent: -50,
       yPercent: -50,
       opacity: 0,
@@ -1110,7 +1110,7 @@ export default function StoryAnimation({
                     if (docRef.current) {
                       gsap.set(docRef.current, {
                         left: positions.owner,
-                        top: "44%",
+                        top: "40%",
                         xPercent: -50,
                         yPercent: -50,
                         opacity: 0,
@@ -1592,7 +1592,7 @@ export default function StoryAnimation({
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
-              top: "34%",
+              top: "30%",
               transform: "translateX(-50%)",
             }}
           >
@@ -1648,7 +1648,7 @@ export default function StoryAnimation({
           role="button"
           style={{
             left: positions.owner,
-            top: "44%",
+            top: "40%",
             transform: "translate(-50%,-50%)",
           }}
           onClick={() => {
@@ -1678,7 +1678,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "50%",
+            top: "46%",
             transform: "translate(-50%,-100%)",
           }}
         >
@@ -1694,7 +1694,7 @@ export default function StoryAnimation({
             mode === "tee"
               ? {
                   left: positions.tee,
-                  top: "44%",
+                  top: "40%",
                   transform: "translateX(-50%)",
                 }
               : {
@@ -1714,7 +1714,7 @@ export default function StoryAnimation({
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
-              top: "50%",
+              top: "46%",
               transform: "translateX(-50%)",
             }}
           >
@@ -1777,7 +1777,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "34.5%",
+            top: "30.5%",
             transform: "translateX(-50%)",
           }}
         >
