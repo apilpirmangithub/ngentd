@@ -391,10 +391,18 @@ export default function StoryAnimation({
       scale: 1,
       transform: "translate3d(-50%, -50%, 0)",
     });
-    // reset story label position
+    // reset story label position and ensure it's centered
     if (storyRef.current) {
       try {
-        gsap.set(storyRef.current, { y: 0, opacity: 1 });
+        // enforce pixel-independent centering using left/top + xPercent/yPercent
+        gsap.set(storyRef.current, {
+          left: "50%",
+          top: "50%",
+          xPercent: -50,
+          yPercent: -50,
+          y: 0,
+          opacity: 1,
+        });
       } catch (e) {
         /* ignore */
       }
