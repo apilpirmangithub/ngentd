@@ -19,10 +19,12 @@ export default function StoryAnimation({
   mode,
   event,
   sound = true,
+  fullHeight = false,
 }: {
   mode: "vault" | "tee";
   event?: string | null;
   sound?: boolean;
+  fullHeight?: boolean;
 }) {
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const ownerRef = useRef<HTMLDivElement | null>(null);
@@ -59,13 +61,15 @@ export default function StoryAnimation({
 
   // configurable delays
   const buyerMoveDelay = 0.6; // seconds delay before buyer starts moving
-  const unlockDelay = 0.15; // base unlock delay used for TEE flow
+  const unlockDelay = 0.65; // base unlock delay used for TEE flow
   const postLockBuyerDelay = 0.25; // small delay between lock engage and buyer sequence
   // delay to unlock AFTER License OK is shown for non-TEE flow (tuned for good pacing)
   const unlockAfterLicenseDelay = 0.6;
   // vault reveal pacing
   const vaultRevealDelay = 0.2;
   const vaultRevealDuration = 0.75;
+  // visual tuning: how far above the buyer the License OK badge sits in vault (non-TEE) mode
+  const licenseBadgeAboveBuyerMultiplier = 0.56;
 
   // simple audio manager using WebAudio (no external assets)
   const audioRef = useRef<any>(null);
@@ -473,7 +477,12 @@ export default function StoryAnimation({
         "<",
       )
       // Document stored on IPFS (fade into storage)
-      .to(ipfsBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 })
+      .to(ipfsBadgeRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.36,
+        onStart: () => audioRef.current?.playPop(),
+      })
       .to(docRef.current, { opacity: 0, duration: 0.28 })
       // trigger upload split animation (file -> ipfs -> lock slides to vault)
       .call(performUploadSplit)
@@ -668,7 +677,7 @@ export default function StoryAnimation({
               const top =
                 buyerRect.top -
                 sceneRect.top -
-                Math.round(buyerRect.height * 0.6);
+                Math.round(buyerRect.height * licenseBadgeAboveBuyerMultiplier);
               // apply absolute pixel positioning and a translate to center above
               Object.assign(licEl.style, {
                 left: `${left}px`,
@@ -726,15 +735,14 @@ export default function StoryAnimation({
         .call(performAttestationReveal)
         .call(() => audioRef.current?.playSuccess())
         .to(condRef.current, { opacity: 1, y: 0, duration: 0.36 }, ">+0.8")
+        .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
         .from(
           condRef.current?.querySelectorAll("[data-rule]"),
           { opacity: 0, y: 6, stagger: 0.08, duration: 0.28 },
           "<",
         )
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
-
-        .call(() => gsap.delayedCall(unlockDelay, setLockToUnlock))
-        .to({}, { duration: 0.6 })
+        .to({}, { duration: 0.05 })
         .call(() => audioRef.current?.playWhoosh())
         .to(doorRef.current, { width: "0%", duration: 0.36 })
         .call(performDeliver);
@@ -1518,7 +1526,7 @@ export default function StoryAnimation({
       <div
         ref={sceneRef}
         onClick={() => (audioRef.current as any)?.resumeIfNeeded?.()}
-        className="relative h-96 md:h-[28rem] w-full overflow-hidden rounded-2xl border border-white/30 bg-black transform-gpu"
+        className={`relative ${fullHeight ? "h-[100svh] md:h-[100svh]" : "h-96 md:h-[28rem]"} w-full overflow-hidden rounded-2xl border border-white/30 bg-black transform-gpu`}
       >
         {/* Debug grid overlay */}
         <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-30" />

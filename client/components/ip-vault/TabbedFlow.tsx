@@ -25,7 +25,7 @@ export default function TabbedFlow() {
   }, [type]);
 
   return (
-    <section className="bg-black text-white flex flex-col items-center justify-center min-h-[70vh] p-8 space-y-8 rounded-2xl">
+    <section className="bg-black text-white flex flex-col items-center justify-center min-h-screen p-8 space-y-8 rounded-2xl">
       <h1 className="text-3xl font-bold text-center">IP Vault Flow</h1>
 
       <div className="flex flex-wrap items-center gap-3">
@@ -69,7 +69,12 @@ export default function TabbedFlow() {
       </div>
 
       <div ref={containerRef} className="w-full space-y-8">
-        <StoryAnimation mode={type} event={playSignal} sound={sound} />
+        <StoryAnimation
+          mode={type}
+          event={playSignal}
+          sound={sound}
+          fullHeight
+        />
       </div>
     </section>
   );
