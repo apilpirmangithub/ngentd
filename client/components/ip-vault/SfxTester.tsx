@@ -11,7 +11,8 @@ export default function SfxTester({ enabled = true }: { enabled?: boolean }) {
       defaultVolume = 0.22;
       constructor() {
         try {
-          this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+          this.ctx = new (window.AudioContext ||
+            (window as any).webkitAudioContext)();
           this.masterGain = this.ctx.createGain();
           this.masterGain.gain.value = this.defaultVolume;
           this.masterGain.connect(this.ctx.destination);
@@ -20,11 +21,13 @@ export default function SfxTester({ enabled = true }: { enabled?: boolean }) {
         }
       }
       setEnabled = (on: boolean) => {
-        if (this.masterGain) this.masterGain.gain.value = on ? this.defaultVolume : 0;
+        if (this.masterGain)
+          this.masterGain.gain.value = on ? this.defaultVolume : 0;
       };
       resumeIfNeeded = async () => {
         try {
-          if (this.ctx && this.ctx.state === "suspended") await this.ctx.resume();
+          if (this.ctx && this.ctx.state === "suspended")
+            await this.ctx.resume();
         } catch {}
       };
       playTone = (
@@ -61,7 +64,10 @@ export default function SfxTester({ enabled = true }: { enabled?: boolean }) {
         const g = this.ctx.createGain();
         o.type = type as OscillatorType;
         o.frequency.setValueAtTime(startFreq, this.ctx.currentTime);
-        o.frequency.linearRampToValueAtTime(endFreq, this.ctx.currentTime + duration);
+        o.frequency.linearRampToValueAtTime(
+          endFreq,
+          this.ctx.currentTime + duration,
+        );
         g.gain.value = 0;
         o.connect(g);
         g.connect(this.masterGain!);
@@ -86,7 +92,13 @@ export default function SfxTester({ enabled = true }: { enabled?: boolean }) {
       };
       playNoiseBurst = (
         duration = 0.4,
-        opts: { filter?: BiquadFilterType; from?: number; to?: number; q?: number; gain?: number } = {},
+        opts: {
+          filter?: BiquadFilterType;
+          from?: number;
+          to?: number;
+          q?: number;
+          gain?: number;
+        } = {},
       ) => {
         if (!this.ctx) return;
         const buffer = this.getNoiseBuffer();
@@ -100,7 +112,8 @@ export default function SfxTester({ enabled = true }: { enabled?: boolean }) {
         if (opts.filter) {
           const f = this.ctx.createBiquadFilter();
           f.type = opts.filter;
-          if (typeof opts.from === "number") f.frequency.setValueAtTime(opts.from, this.ctx.currentTime);
+          if (typeof opts.from === "number")
+            f.frequency.setValueAtTime(opts.from, this.ctx.currentTime);
           if (typeof opts.q === "number") f.Q.value = opts.q;
           node.connect(f);
           node = f;
@@ -123,28 +136,67 @@ export default function SfxTester({ enabled = true }: { enabled?: boolean }) {
       click = () => this.percussiveClick(900, 0.05);
       tick = () => this.playTone(800, "square", 0.04, 0.02, 0.9);
       pop = () => this.glideTone(1200, 700, 0.08, "sine", 0.9);
-      whoosh = () => this.playNoiseBurst(0.6, { filter: "bandpass", from: 4000, to: 900, q: 0.9, gain: 0.6 });
+      whoosh = () =>
+        this.playNoiseBurst(0.6, {
+          filter: "bandpass",
+          from: 4000,
+          to: 900,
+          q: 0.9,
+          gain: 0.6,
+        });
       paper = () => {
-        this.playNoiseBurst(0.08, { filter: "bandpass", from: 2500, to: 1500, q: 1.0, gain: 0.35 });
-        this.playNoiseBurst(0.06, { filter: "bandpass", from: 2200, to: 1200, q: 0.9, gain: 0.28 });
+        this.playNoiseBurst(0.08, {
+          filter: "bandpass",
+          from: 2500,
+          to: 1500,
+          q: 1.0,
+          gain: 0.35,
+        });
+        this.playNoiseBurst(0.06, {
+          filter: "bandpass",
+          from: 2200,
+          to: 1200,
+          q: 0.9,
+          gain: 0.28,
+        });
         this.playTone(600, "triangle", 0.02, 0.01, 0.2);
       };
       release = () => {
         this.glideTone(520, 900, 0.12, "triangle", 0.9);
-        this.playNoiseBurst(0.12, { filter: "highpass", from: 3000, to: 1500, q: 0.7, gain: 0.25 });
+        this.playNoiseBurst(0.12, {
+          filter: "highpass",
+          from: 3000,
+          to: 1500,
+          q: 0.7,
+          gain: 0.25,
+        });
       };
       lock = () => this.percussiveClick(250, 0.08);
       unlock = () => this.percussiveClick(1100, 0.08);
       success = () => {
-        [880, 1320, 1760].forEach((f) => this.playTone(f, "sine", 0.12, 0.04, 0.8));
+        [880, 1320, 1760].forEach((f) =>
+          this.playTone(f, "sine", 0.12, 0.04, 0.8),
+        );
       };
       vaultReveal = () => {
         this.playTone(220, "sine", 0.24, 0.08, 0.9);
-        this.playNoiseBurst(0.18, { filter: "lowpass", from: 800, to: 300, q: 0.7, gain: 0.3 });
+        this.playNoiseBurst(0.18, {
+          filter: "lowpass",
+          from: 800,
+          to: 300,
+          q: 0.7,
+          gain: 0.3,
+        });
       };
       private percussiveClick = (freq: number, duration = 0.06) => {
         this.playTone(freq, "sine", duration, 0.02, 1);
-        this.playNoiseBurst(duration * 0.7, { filter: "highpass", from: 3000, to: 2500, q: 0.7, gain: 0.2 });
+        this.playNoiseBurst(duration * 0.7, {
+          filter: "highpass",
+          from: 3000,
+          to: 2500,
+          q: 0.7,
+          gain: 0.2,
+        });
       };
     }
 
@@ -207,13 +259,23 @@ export default function SfxTester({ enabled = true }: { enabled?: boolean }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span className="text-xs opacity-80">Coba:</span>
-      {(["Klik", "Pop", "Whoosh", "Kertas", "Sukses", "Kunci", "Buka", "Tick", "Vault"] as const).map(
-        (label) => (
-          <button key={label} onClick={() => play(label)} className={btn}>
-            {label}
-          </button>
-        ),
-      )}
+      {(
+        [
+          "Klik",
+          "Pop",
+          "Whoosh",
+          "Kertas",
+          "Sukses",
+          "Kunci",
+          "Buka",
+          "Tick",
+          "Vault",
+        ] as const
+      ).map((label) => (
+        <button key={label} onClick={() => play(label)} className={btn}>
+          {label}
+        </button>
+      ))}
     </div>
   );
 }
