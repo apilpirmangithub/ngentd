@@ -1592,7 +1592,7 @@ export default function StoryAnimation({
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
-              top: "26%",
+              top: "34%",
               transform: "translateX(-50%)",
             }}
           >
@@ -1678,7 +1678,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "42%",
+            top: "50%",
             transform: "translate(-50%,-100%)",
           }}
         >
@@ -1694,7 +1694,7 @@ export default function StoryAnimation({
             mode === "tee"
               ? {
                   left: positions.tee,
-                  top: "36%",
+                  top: "44%",
                   transform: "translateX(-50%)",
                 }
               : {
@@ -1714,7 +1714,7 @@ export default function StoryAnimation({
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
-              top: "42%",
+              top: "50%",
               transform: "translateX(-50%)",
             }}
           >
@@ -1777,7 +1777,7 @@ export default function StoryAnimation({
           className="absolute transform-gpu"
           style={{
             left: positions.ipfs,
-            top: "26.5%",
+            top: "34.5%",
             transform: "translateX(-50%)",
           }}
         >
