@@ -66,6 +66,8 @@ export default function StoryAnimation({
   // vault reveal pacing
   const vaultRevealDelay = 0.2;
   const vaultRevealDuration = 0.75;
+  // visual tuning: how far above the buyer the License OK badge sits in vault (non-TEE) mode
+  const licenseBadgeAboveBuyerMultiplier = 0.48;
 
   // simple audio manager using WebAudio (no external assets)
   const audioRef = useRef<any>(null);
@@ -668,7 +670,7 @@ export default function StoryAnimation({
               const top =
                 buyerRect.top -
                 sceneRect.top -
-                Math.round(buyerRect.height * 0.6);
+                Math.round(buyerRect.height * licenseBadgeAboveBuyerMultiplier);
               // apply absolute pixel positioning and a translate to center above
               Object.assign(licEl.style, {
                 left: `${left}px`,
