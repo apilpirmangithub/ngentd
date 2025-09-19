@@ -1550,8 +1550,8 @@ export default function StoryAnimation({
           style={{
             left: `calc(${positions.ipfs} - 3.5cm)`,
             width: `calc(${positions.tee} - ${positions.ipfs} + 7cm)`,
-            top: "10%",
-            bottom: "10%",
+            top: "16%",
+            bottom: "16%",
           }}
           aria-hidden
         />
