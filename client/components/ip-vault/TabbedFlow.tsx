@@ -28,7 +28,13 @@ export default function TabbedFlow() {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement | null)?.tagName?.toLowerCase();
-      if (tag === "input" || tag === "textarea" || tag === "select" || (e as any).isComposing) return;
+      if (
+        tag === "input" ||
+        tag === "textarea" ||
+        tag === "select" ||
+        (e as any).isComposing
+      )
+        return;
       if (e.repeat) return;
       if (e.key === "f" || e.key === "F") {
         e.preventDefault();
