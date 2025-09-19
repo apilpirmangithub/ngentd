@@ -735,7 +735,7 @@ export default function StoryAnimation({
           "<",
         )
         .to(readCondRef.current, { opacity: 1, y: 0, duration: 0.36 })
-        .to({}, { duration: 0.1 })
+        .to({}, { duration: 0.05 })
         .call(() => audioRef.current?.playWhoosh())
         .to(doorRef.current, { width: "0%", duration: 0.36 })
         .call(performDeliver);
