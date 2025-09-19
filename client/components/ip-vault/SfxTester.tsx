@@ -124,6 +124,11 @@ export default function SfxTester({ enabled = true }: { enabled?: boolean }) {
       tick = () => this.playTone(800, "square", 0.04, 0.02, 0.9);
       pop = () => this.glideTone(1200, 700, 0.08, "sine", 0.9);
       whoosh = () => this.playNoiseBurst(0.6, { filter: "bandpass", from: 4000, to: 900, q: 0.9, gain: 0.6 });
+      paper = () => {
+        this.playNoiseBurst(0.08, { filter: "bandpass", from: 2500, to: 1500, q: 1.0, gain: 0.35 });
+        this.playNoiseBurst(0.06, { filter: "bandpass", from: 2200, to: 1200, q: 0.9, gain: 0.28 });
+        this.playTone(600, "triangle", 0.02, 0.01, 0.2);
+      };
       release = () => {
         this.glideTone(520, 900, 0.12, "triangle", 0.9);
         this.playNoiseBurst(0.12, { filter: "highpass", from: 3000, to: 1500, q: 0.7, gain: 0.25 });
@@ -190,6 +195,9 @@ export default function SfxTester({ enabled = true }: { enabled?: boolean }) {
       case "Vault":
         m.vaultReveal?.();
         break;
+      case "Kertas":
+        m.paper?.();
+        break;
     }
   };
 
@@ -199,7 +207,7 @@ export default function SfxTester({ enabled = true }: { enabled?: boolean }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span className="text-xs opacity-80">Coba:</span>
-      {(["Klik", "Pop", "Whoosh", "Sukses", "Kunci", "Buka", "Tick", "Vault"] as const).map(
+      {(["Klik", "Pop", "Whoosh", "Kertas", "Sukses", "Kunci", "Buka", "Tick", "Vault"] as const).map(
         (label) => (
           <button key={label} onClick={() => play(label)} className={btn}>
             {label}
