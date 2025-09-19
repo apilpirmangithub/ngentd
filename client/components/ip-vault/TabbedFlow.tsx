@@ -63,8 +63,9 @@ export default function TabbedFlow() {
               : "bg-gray-600/40 hover:bg-gray-600 focus:ring-gray-300"
           }`}
           aria-pressed={sound}
+          aria-label={`Efek suara ${sound ? "aktif" : "nonaktif"}`}
         >
-          SFX: {sound ? "On" : "Off"}
+          Efek Suara: {sound ? "Aktif" : "Nonaktif"}
         </button>
       </div>
 
