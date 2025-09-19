@@ -75,10 +75,15 @@ export default function StoryAnimation({
     masterGain: GainNode | null = null;
     eq: BiquadFilterNode | null = null;
     comp: DynamicsCompressorNode | null = null;
-    defaultVolume = 0.12;
+    noiseBuffer: AudioBuffer | null = null;
+    defaultVolume = 0.22;
     samples: Record<
       string,
-      { el: HTMLAudioElement; src: MediaElementAudioSourceNode | null }
+      {
+        el: HTMLAudioElement;
+        src: MediaElementAudioSourceNode | null;
+        routed: boolean;
+      }
     > = {};
     constructor() {
       try {
@@ -100,47 +105,6 @@ export default function StoryAnimation({
         this.eq.connect(this.comp);
         this.comp.connect(this.masterGain);
         this.masterGain.connect(this.ctx.destination);
-        // preload samples
-        this.createSample(
-          "lock",
-          "https://assets.mixkit.co/active_storage/sfx/2856/2856-preview.mp3",
-        );
-        this.createSample(
-          "unlock",
-          "https://assets.mixkit.co/active_storage/sfx/2848/2848-preview.mp3",
-        );
-        this.createSample(
-          "whoosh",
-          "https://assets.mixkit.co/active_storage/sfx/1714/1714-preview.mp3",
-        );
-        this.createSample(
-          "click",
-          "https://assets.mixkit.co/active_storage/sfx/1133/1133-preview.mp3",
-        );
-        this.createSample(
-          "pop",
-          "https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3",
-        );
-        this.createSample(
-          "success",
-          "https://assets.mixkit.co/active_storage/sfx/2039/2039-preview.mp3",
-        );
-        this.createSample(
-          "tick",
-          "https://assets.mixkit.co/active_storage/sfx/1059/1059-preview.mp3",
-        );
-        this.createSample(
-          "deliver",
-          "https://assets.mixkit.co/active_storage/sfx/1489/1489-preview.mp3",
-        );
-        this.createSample(
-          "vaultReveal",
-          "https://assets.mixkit.co/active_storage/sfx/960/960-preview.mp3",
-        );
-        this.createSample(
-          "release",
-          "https://assets.mixkit.co/active_storage/sfx/2364/2364-preview.mp3",
-        );
       } catch (e) {
         this.ctx = null;
       }
@@ -153,9 +117,9 @@ export default function StoryAnimation({
       try {
         Object.values(this.samples).forEach((s) => {
           if (!s?.el) return;
-          if (this.ctx && this.eq) {
-            // use WA path, silence element output
-            s.el.volume = enabled ? 0 : 0;
+          if (s.routed) {
+            // using WebAudio chain
+            s.el.volume = 0;
           } else {
             s.el.volume = enabled ? this.defaultVolume : 0;
           }
@@ -178,47 +142,34 @@ export default function StoryAnimation({
         const el = new Audio(url);
         el.crossOrigin = "anonymous";
         el.preload = "auto";
-        // If WebAudio chain exists, let WA control volume (avoid double audio)
-        if (this.ctx && this.eq) {
-          el.volume = 0;
-          el.muted = false;
-        } else {
-          // Fallback: play directly with consistent volume
-          el.volume = this.defaultVolume;
-          el.muted = false;
-        }
         let src: MediaElementAudioSourceNode | null = null;
+        let routed = false;
         try {
           if (this.ctx && this.eq) {
             src = this.ctx.createMediaElementSource(el);
             src.connect(this.eq);
+            routed = true;
           }
         } catch (e) {
           src = null;
+          routed = false;
         }
-        this.samples[key] = { el, src };
+        // If routed through WebAudio, mute element volume to avoid double-audio; otherwise use direct volume
+        if (routed) {
+          el.volume = 0;
+          el.muted = false;
+        } else {
+          el.volume = this.defaultVolume;
+          el.muted = false;
+        }
+        this.samples[key] = { el, src, routed };
       } catch (e) {
         // ignore
       }
     };
 
-    private playSample = (key: string): boolean => {
-      const s = this.samples[key];
-      if (!s) return false;
-      try {
-        s.el.currentTime = 0;
-        // ensure volume based on available pipeline
-        if (this.ctx && this.eq) {
-          s.el.volume = 0; // WA path only
-        } else {
-          s.el.volume = this.defaultVolume; // direct path
-        }
-        s.el.muted = false;
-        s.el.play();
-        return true;
-      } catch (e) {
-        return false;
-      }
+    private playSample = (_key: string): boolean => {
+      return false;
     };
 
     playTone = (
@@ -226,6 +177,7 @@ export default function StoryAnimation({
       type: OscillatorType | string = "sine",
       duration = 0.12,
       decay = 0.02,
+      gain = 1,
     ) => {
       if (!this.ctx) return;
       const o = this.ctx.createOscillator();
@@ -237,60 +189,183 @@ export default function StoryAnimation({
       g.connect(this.masterGain!);
       const now = this.ctx.currentTime;
       g.gain.setValueAtTime(0, now);
-      g.gain.linearRampToValueAtTime(1, now + 0.008);
+      g.gain.linearRampToValueAtTime(0.8 * gain, now + 0.008);
       g.gain.exponentialRampToValueAtTime(0.001, now + duration + decay);
       o.start(now);
       o.stop(now + duration + decay + 0.02);
     };
 
+    private glideTone = (
+      startFreq: number,
+      endFreq: number,
+      duration = 0.12,
+      type: OscillatorType | string = "sine",
+      gain = 1,
+    ) => {
+      if (!this.ctx) return;
+      const o = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      o.type = type as OscillatorType;
+      o.frequency.setValueAtTime(startFreq, this.ctx.currentTime);
+      o.frequency.linearRampToValueAtTime(
+        endFreq,
+        this.ctx.currentTime + duration,
+      );
+      g.gain.value = 0;
+      o.connect(g);
+      g.connect(this.masterGain!);
+      const now = this.ctx.currentTime;
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(0.7 * gain, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, now + duration + 0.04);
+      o.start(now);
+      o.stop(now + duration + 0.06);
+    };
+
+    private getNoiseBuffer = () => {
+      if (!this.ctx) return null;
+      if (this.noiseBuffer) return this.noiseBuffer;
+      const sampleRate = this.ctx.sampleRate || 44100;
+      const duration = 1.0;
+      const bufferSize = Math.floor(sampleRate * duration);
+      const buffer = this.ctx.createBuffer(1, bufferSize, sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      this.noiseBuffer = buffer;
+      return buffer;
+    };
+
+    private playNoiseBurst = (
+      duration = 0.4,
+      opts: {
+        filter?: BiquadFilterType;
+        from?: number;
+        to?: number;
+        q?: number;
+        gain?: number;
+      } = {},
+    ) => {
+      if (!this.ctx) return;
+      const buffer = this.getNoiseBuffer();
+      if (!buffer) return;
+      const src = this.ctx.createBufferSource();
+      src.buffer = buffer;
+      src.loop = true;
+      const g = this.ctx.createGain();
+      g.gain.value = 0;
+      let node: AudioNode = src;
+      if (opts.filter) {
+        const f = this.ctx.createBiquadFilter();
+        f.type = opts.filter;
+        if (typeof opts.from === "number")
+          f.frequency.setValueAtTime(opts.from, this.ctx.currentTime);
+        if (typeof opts.q === "number") f.Q.value = opts.q;
+        node.connect(f);
+        node = f;
+        if (typeof opts.to === "number") {
+          const now = this.ctx.currentTime;
+          f.frequency.cancelScheduledValues(now);
+          f.frequency.setValueAtTime(opts.from ?? f.frequency.value, now);
+          f.frequency.linearRampToValueAtTime(opts.to, now + duration);
+        }
+      }
+      node.connect(g);
+      g.connect(this.masterGain!);
+      const now = this.ctx.currentTime;
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(0.6 * (opts.gain ?? 1), now + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+      src.start(now);
+      src.stop(now + duration + 0.02);
+    };
+
+    private percussiveClick = (freq: number, duration = 0.06) => {
+      if (!this.ctx) return;
+      this.playTone(freq, "sine", duration, 0.02, 1);
+      this.playNoiseBurst(duration * 0.7, {
+        filter: "highpass",
+        from: 3000,
+        to: 2500,
+        q: 0.7,
+        gain: 0.2,
+      });
+    };
+
+    private playChord = (freqs: number[], duration = 0.14) => {
+      freqs.forEach((f) => this.playTone(f, "sine", duration, 0.04, 0.8));
+    };
+
     playClick = () => {
-      if (this.playSample("click")) return;
-      this.playTone(880, "sine", 0.06);
+      if (!this.ctx) return;
+      this.percussiveClick(900, 0.05);
     };
     playTick = () => {
-      if (this.playSample("tick")) return;
-      this.playTone(720, "square", 0.05);
+      if (!this.ctx) return;
+      this.playTone(800, "square", 0.04, 0.02, 0.9);
     };
     playPop = () => {
-      if (this.playSample("pop")) return;
-      this.playTone(980, "sine", 0.07);
+      if (!this.ctx) return;
+      this.glideTone(1200, 700, 0.08, "sine", 0.9);
     };
     playWhoosh = () => {
-      if (this.playSample("whoosh")) return;
-      this.playTone(900, "sine", 0.08);
-      this.playTone(600, "triangle", 0.12);
+      if (!this.ctx) return;
+      this.playNoiseBurst(0.6, {
+        filter: "bandpass",
+        from: 4000,
+        to: 900,
+        q: 0.9,
+        gain: 0.6,
+      });
     };
     playRelease = () => {
-      if (this.playSample("release")) return;
-      this.playTone(520, "triangle", 0.08);
-      this.playTone(760, "sine", 0.07);
+      if (!this.ctx) return;
+      this.glideTone(520, 900, 0.12, "triangle", 0.9);
+      this.playNoiseBurst(0.12, {
+        filter: "highpass",
+        from: 3000,
+        to: 1500,
+        q: 0.7,
+        gain: 0.25,
+      });
     };
     // deeper, shorter lock click
     playLock = () => {
-      if (this.playSample("lock")) return;
-      this.playTone(220, "square", 0.12);
-      this.playTone(380, "sine", 0.08);
+      if (!this.ctx) return;
+      this.percussiveClick(250, 0.08);
     };
     // bright unlock
     playUnlock = () => {
-      if (this.playSample("unlock")) return;
-      this.playTone(1100, "sine", 0.09);
+      if (!this.ctx) return;
+      this.percussiveClick(1100, 0.08);
     };
     // success: bright short chord
     playSuccess = () => {
-      if (this.playSample("success")) return;
-      this.playTone(1100, "sine", 0.08);
-      this.playTone(780, "sine", 0.09);
+      if (!this.ctx) return;
+      this.playChord([880, 1320, 1760], 0.12);
     };
-    // deliver: swoosh-ish by quick descending tones
+    // deliver: whoosh
     playDeliver = () => {
-      if (this.playSample("deliver")) return;
-      this.playTone(680, "sine", 0.12);
-      this.playTone(520, "triangle", 0.14);
+      if (!this.ctx) return;
+      this.playNoiseBurst(0.4, {
+        filter: "bandpass",
+        from: 3000,
+        to: 800,
+        q: 1.2,
+        gain: 0.5,
+      });
     };
     playVaultReveal = () => {
-      if (this.playSample("vaultReveal")) return;
-      this.playTone(420, "sine", 0.18);
+      if (!this.ctx) return;
+      this.playTone(220, "sine", 0.24, 0.08, 0.9);
+      this.playNoiseBurst(0.18, {
+        filter: "lowpass",
+        from: 800,
+        to: 300,
+        q: 0.7,
+        gain: 0.3,
+      });
     };
   }
 
