@@ -1539,7 +1539,7 @@ export default function StoryAnimation({
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2F48906aed3c7344009a10a054f28b82c4%2F14c096d056a0405c8cbbd5daea44fefd?format=webp&width=800"
             alt="Story Network"
-            className="h-8 md:h-10 opacity-90 select-none"
+            className="h-10 md:h-12 opacity-90 select-none"
             draggable="false"
           />
         </div>
@@ -1550,8 +1550,8 @@ export default function StoryAnimation({
           style={{
             left: `calc(${positions.ipfs} - 3.5cm)`,
             width: `calc(${positions.tee} - ${positions.ipfs} + 7cm)`,
-            top: "16%",
-            bottom: "16%",
+            top: "12%",
+            bottom: "12%",
           }}
           aria-hidden
         />
@@ -1559,7 +1559,7 @@ export default function StoryAnimation({
         {/* Vault */}
         <div
           ref={vaultRef}
-          className="absolute left-1/2 top-[52%] h-44 w-64 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)] overflow-hidden"
+          className="absolute left-1/2 top-[52%] h-52 w-72 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-transparent text-black shadow-[0_0_0_1px_rgba(0,0,0,0.2)] overflow-hidden"
         >
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2F75857544e65a4f6982333406121c72a7%2Fa9f23897196141cda50bf40c9cf505c4?format=webp&width=800"
@@ -1612,7 +1612,7 @@ export default function StoryAnimation({
             transform: "translate(-50%,-50%)",
           }}
         >
-          <div className="size-16 flex items-center justify-center bg-transparent">
+          <div className="size-20 flex items-center justify-center bg-transparent">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F01304b38e2b147e0ab91328119e9a69b%2F0f665063d39347a3804b57e915d4d442?format=webp&width=800"
               alt="IP Owner"
@@ -1632,7 +1632,7 @@ export default function StoryAnimation({
             transform: "translate(-50%,-50%)",
           }}
         >
-          <div className="size-16 flex items-center justify-center bg-transparent">
+          <div className="size-20 flex items-center justify-center bg-transparent">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F01304b38e2b147e0ab91328119e9a69b%2Fd69846667a21481caa31c06bb3aa750b?format=webp&width=800"
               alt="Buyer"
