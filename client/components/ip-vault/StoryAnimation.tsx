@@ -727,7 +727,8 @@ export default function StoryAnimation({
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
         .call(() => {
           // reveal TEE only after License OK is visible
-          if (teeRef.current) gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
+          if (teeRef.current)
+            gsap.to(teeRef.current, { opacity: 1, y: 0, duration: 0.28 });
           audioRef.current?.playPop();
         })
         .call(performAttestationReveal)
@@ -1588,9 +1589,9 @@ export default function StoryAnimation({
             className="absolute transform-gpu"
             style={{
               left: positions.tee,
-            top: "34%",
-            transform: "translateX(-50%)",
-          }}
+              top: "34%",
+              transform: "translateX(-50%)",
+            }}
           >
             <div className="inline-flex items-center gap-1 rounded-md border border-sky-200/40 bg-sky-500/30 px-3 py-1 text-xs font-bold text-sky-100">
               <Cpu className="size-2" /> TEE
