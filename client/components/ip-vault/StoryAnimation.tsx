@@ -1694,7 +1694,7 @@ export default function StoryAnimation({
             mode === "tee"
               ? {
                   left: positions.tee,
-                  top: "43%",
+                  top: "41%",
                   transform: "translateX(-50%)",
                 }
               : {
