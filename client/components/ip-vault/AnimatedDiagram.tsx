@@ -50,7 +50,7 @@ export function AnimatedDiagram({ active }: { active: number }) {
               x={0}
               y={82}
               textAnchor="middle"
-              fontWeight="600"
+              fontWeight="800"
               fill="#0F172A"
               fontSize="16"
             >
@@ -152,7 +152,7 @@ export function AnimatedDiagram({ active }: { active: number }) {
               x={0}
               y={82}
               textAnchor="middle"
-              fontWeight="600"
+              fontWeight="800"
               fill="#0F172A"
               fontSize="16"
             >
