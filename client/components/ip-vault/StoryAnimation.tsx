@@ -1591,7 +1591,7 @@ export default function StoryAnimation({
             ref={teeRef}
             className="absolute transform-gpu"
             style={{
-              left: positions.tee,
+              left: `calc(${positions.tee} + 2%)`,
               top: "22%",
               transform: "translateX(-50%)",
             }}
@@ -1607,7 +1607,7 @@ export default function StoryAnimation({
           ref={ownerRef}
           className="absolute transform-gpu"
           style={{
-            left: positions.owner,
+            left: `calc(${positions.owner} - 2%)`,
             top: "66%",
             transform: "translate(-50%,-50%)",
           }}
@@ -1627,7 +1627,7 @@ export default function StoryAnimation({
           ref={buyerRef}
           className="absolute transform-gpu"
           style={{
-            left: positions.buyer,
+            left: `calc(${positions.buyer} + 2%)`,
             top: "66%",
             transform: "translate(-50%,-50%)",
           }}
@@ -1677,7 +1677,7 @@ export default function StoryAnimation({
           ref={ownerCheckRef}
           className="absolute transform-gpu"
           style={{
-            left: positions.ipfs,
+            left: `calc(${positions.ipfs} - 2%)`,
             top: "36%",
             transform: "translate(-50%,-100%)",
           }}
@@ -1693,12 +1693,12 @@ export default function StoryAnimation({
           style={
             mode === "tee"
               ? {
-                  left: positions.tee,
+                  left: `calc(${positions.tee} + 2%)`,
                   top: "32%",
                   transform: "translateX(-50%)",
                 }
               : {
-                  left: positions.buyer,
+                  left: `calc(${positions.buyer} + 2%)`,
                   top: "42%",
                   transform: "translate(-50%,-100%)",
                 }
@@ -1713,7 +1713,7 @@ export default function StoryAnimation({
             ref={attBadgeRef}
             className="absolute transform-gpu"
             style={{
-              left: positions.tee,
+              left: `calc(${positions.tee} + 2%)`,
               top: "42%",
               transform: "translateX(-50%)",
             }}
@@ -1776,7 +1776,7 @@ export default function StoryAnimation({
           ref={ipfsBadgeRef}
           className="absolute transform-gpu"
           style={{
-            left: positions.ipfs,
+            left: `calc(${positions.ipfs} - 2%)`,
             top: "22%",
             transform: "translateX(-50%)",
           }}
