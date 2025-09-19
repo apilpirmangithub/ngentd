@@ -1079,7 +1079,7 @@ export default function StoryAnimation({
                               vaultRef.current.getBoundingClientRect();
                             // instead of translating by pixels, animate the absolute top to 46%
                             gsap.to(storyRef.current, {
-                              top: "70%",
+                              top: "30%",
                               duration: 0.36,
                               ease: "power3.out",
                             });
