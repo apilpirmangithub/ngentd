@@ -470,10 +470,18 @@ export default function StoryAnimation({
     const targetLeft = positions.tee;
     // Owner walks to IPFS carrying doc
     tl.call(() => audioRef.current?.playWhoosh())
-      .to(ownerRef.current, { left: `calc(${positions.ipfs} - 3%)`, duration: 1.2 })
+      .to(ownerRef.current, {
+        left: `calc(${positions.ipfs} - 3%)`,
+        duration: 1.2,
+      })
       .to(
         docRef.current,
-        { left: `calc(${positions.ipfs} - 3%)`, xPercent: -50, yPercent: -50, duration: 1.2 },
+        {
+          left: `calc(${positions.ipfs} - 3%)`,
+          xPercent: -50,
+          yPercent: -50,
+          duration: 1.2,
+        },
         "<",
       )
       // Document stored on IPFS (fade into storage)
@@ -728,7 +736,10 @@ export default function StoryAnimation({
         })
         .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
-        .to(buyerRef.current, { left: `calc(${positions.tee} + 3%)`, duration: 0.22 })
+        .to(buyerRef.current, {
+          left: `calc(${positions.tee} + 3%)`,
+          duration: 0.22,
+        })
         .call(performBuyerScan)
         .to({}, { duration: 0.72 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
@@ -1764,12 +1775,20 @@ export default function StoryAnimation({
         <div
           ref={writeCondRef}
           className="absolute transform-gpu"
-          style={{ left: positions.ipfs, top: "80%", transform: "translateX(-50%)" }}
+          style={{
+            left: positions.ipfs,
+            top: "80%",
+            transform: "translateX(-50%)",
+          }}
         ></div>
         <div
           ref={readCondRef}
           className="absolute transform-gpu"
-          style={{ left: positions.tee, top: "80%", transform: "translateX(-50%)" }}
+          style={{
+            left: positions.tee,
+            top: "80%",
+            transform: "translateX(-50%)",
+          }}
         ></div>
 
         <div
