@@ -78,7 +78,7 @@ export default function StoryAnimation({
     defaultVolume = 0.12;
     samples: Record<
       string,
-      { el: HTMLAudioElement; src: MediaElementAudioSourceNode | null }
+      { el: HTMLAudioElement; src: MediaElementAudioSourceNode | null; routed: boolean }
     > = {};
     constructor() {
       try {
@@ -153,9 +153,9 @@ export default function StoryAnimation({
       try {
         Object.values(this.samples).forEach((s) => {
           if (!s?.el) return;
-          if (this.ctx && this.eq) {
-            // use WA path, silence element output
-            s.el.volume = enabled ? 0 : 0;
+          if (s.routed) {
+            // using WebAudio chain
+            s.el.volume = 0;
           } else {
             s.el.volume = enabled ? this.defaultVolume : 0;
           }
@@ -178,25 +178,27 @@ export default function StoryAnimation({
         const el = new Audio(url);
         el.crossOrigin = "anonymous";
         el.preload = "auto";
-        // If WebAudio chain exists, let WA control volume (avoid double audio)
-        if (this.ctx && this.eq) {
-          el.volume = 0;
-          el.muted = false;
-        } else {
-          // Fallback: play directly with consistent volume
-          el.volume = this.defaultVolume;
-          el.muted = false;
-        }
         let src: MediaElementAudioSourceNode | null = null;
+        let routed = false;
         try {
           if (this.ctx && this.eq) {
             src = this.ctx.createMediaElementSource(el);
             src.connect(this.eq);
+            routed = true;
           }
         } catch (e) {
           src = null;
+          routed = false;
         }
-        this.samples[key] = { el, src };
+        // If routed through WebAudio, mute element volume to avoid double-audio; otherwise use direct volume
+        if (routed) {
+          el.volume = 0;
+          el.muted = false;
+        } else {
+          el.volume = this.defaultVolume;
+          el.muted = false;
+        }
+        this.samples[key] = { el, src, routed };
       } catch (e) {
         // ignore
       }
@@ -207,14 +209,16 @@ export default function StoryAnimation({
       if (!s) return false;
       try {
         s.el.currentTime = 0;
-        // ensure volume based on available pipeline
-        if (this.ctx && this.eq) {
-          s.el.volume = 0; // WA path only
+        // ensure volume based on actual routing
+        if (s.routed) {
+          s.el.volume = 0; // audio flows via WebAudio chain
         } else {
-          s.el.volume = this.defaultVolume; // direct path
+          s.el.volume = this.defaultVolume; // direct media element playback
         }
         s.el.muted = false;
-        s.el.play();
+        const p = s.el.play();
+        // if play() returns a promise, catch rejections to allow tone fallback
+        if (p && typeof p.catch === "function") p.catch(() => {});
         return true;
       } catch (e) {
         return false;
