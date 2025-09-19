@@ -655,7 +655,7 @@ export default function StoryAnimation({
     const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
     if (mode === "vault") {
       tl.to(buyerRef.current, {
-        left: positions.tee,
+        left: `calc(${positions.tee} + 6%)`,
         duration: 1.12,
         delay: buyerMoveDelay,
       })
@@ -716,7 +716,7 @@ export default function StoryAnimation({
         .call(performDeliver);
     } else {
       tl.to(buyerRef.current, {
-        left: positions.tee,
+        left: `calc(${positions.tee} + 6%)`,
         duration: 1.02,
         delay: buyerMoveDelay,
       })
@@ -728,7 +728,7 @@ export default function StoryAnimation({
         })
         .call(performTrailToBuyer)
         .to({}, { duration: 0.6 })
-        .to(buyerRef.current, { left: positions.tee, duration: 0.22 })
+        .to(buyerRef.current, { left: `calc(${positions.tee} + 6%)`, duration: 0.22 })
         .call(performBuyerScan)
         .to({}, { duration: 0.72 })
         .to(licBadgeRef.current, { opacity: 1, y: 0, duration: 0.36 }, "+=0.1")
